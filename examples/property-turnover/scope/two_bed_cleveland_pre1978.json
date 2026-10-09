@@ -1,0 +1,99 @@
+{
+  "property": {
+    "zip": "44113",
+    "unit_type": "apartment",
+    "bedrooms": 2,
+    "bathrooms": "1",
+    "sq_ft": 880,
+    "year_built": 1962
+  },
+  "standards": {
+    "profile": "standard"
+  },
+  "findings": [
+    {
+      "id": "f1",
+      "location": {
+        "area": "bedroom",
+        "label": "Bedroom 2"
+      },
+      "code": "walls.large_hole"
+    },
+    {
+      "id": "f2",
+      "location": {
+        "area": "living_room",
+        "label": "Living room"
+      },
+      "code": "walls.paint_peeling",
+      "extent": "partial"
+    },
+    {
+      "id": "f3",
+      "location": {
+        "area": "bedroom",
+        "label": "Bedroom 1"
+      },
+      "code": "walls.nail_holes",
+      "extent": "partial"
+    },
+    {
+      "id": "f4",
+      "location": {
+        "area": "bathroom",
+        "label": "Bathroom"
+      },
+      "code": "tub.caulk_failed"
+    },
+    {
+      "id": "f5",
+      "location": {
+        "area": "kitchen",
+        "label": "Kitchen"
+      },
+      "code": "range.dirty"
+    },
+    {
+      "id": "f6",
+      "location": {
+        "area": "living_room",
+        "label": "Living room"
+      },
+      "code": "carpet.soiled",
+      "extent": "partial",
+      "quantity": {
+        "value": 240,
+        "uom": "sq_ft"
+      }
+    },
+    {
+      "id": "f7",
+      "location": {
+        "area": "bedroom",
+        "label": "Bedroom 1"
+      },
+      "code": "carpet.soiled",
+      "extent": "partial",
+      "quantity": {
+        "value": 130,
+        "uom": "sq_ft"
+      }
+    },
+    {
+      "id": "f8",
+      "location": {
+        "area": "bedroom",
+        "label": "Bedroom 2"
+      },
+      "code": "carpet.soiled",
+      "extent": "partial",
+      "quantity": {
+        "value": 120,
+        "uom": "sq_ft"
+      }
+    }
+  ],
+  "client_refs": {
+    "unit_id": "example-2bed-cleveland-1962"
+  }
+}

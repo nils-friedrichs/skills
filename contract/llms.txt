@@ -1,0 +1,74 @@
+# Tektolo
+
+> Reliable tools for real-world operations work. Each tool is a tested engine with cited rules; use it from the web, the API, or your AI assistant. Every result is deterministic, carries its assumptions and sources, and is available over REST and MCP.
+
+Tools are grouped by domain (the world a tool operates in); each lists its audiences and, when it is part of one, its workflow step. All tools: https://tektolo.com/tools/
+
+## Rental property (domain: rental-property)
+
+Free tools for the work between two tenants: what the turn costs, and what to return from the deposit. For landlords, property managers and the AI agents working for them.
+
+- [Rental property hub](https://tektolo.com/tools/rental-property/): the tools in order and coverage
+- Workflow move-out: 1. Property turnover estimate -> 2. Deposit settlement
+- [Property turnover estimate](https://tektolo.com/capabilities/property-turnover): Turn move-out inspection findings into a priced, vendor-ready make-ready scope. (experimental; domain: rental-property; audiences: landlord_pm, ai_agent; workflow: move-out step 1)
+  - [Web tool: Property turnover estimate](https://tektolo.com/tools/rental-property/property-turnover): web form, free to try, no sign-in
+  - [Property turnover estimate: how it works](https://tektolo.com/capabilities/property-turnover/methodology): pipeline, ruleset version and hash, counts, confidence mix, sources
+  - [Agent skill](https://tektolo.com/skills/property-turnover/SKILL.md): instructions for assistants using Property turnover estimate
+- [Deposit settlement](https://tektolo.com/capabilities/deposit-settlement): Settle a US rental security deposit under the state's rule (and a covered city's): the return deadline, each deduction assessed (allowed category, depreciation, documentation), interest owed, the refund, penalty exposure and a draft itemized statement, every number cited. (experimental; domain: rental-property; audiences: landlord_pm, ai_agent; workflow: move-out step 2)
+  - [Web tool: Deposit settlement](https://tektolo.com/tools/rental-property/deposit-settlement): web form, free to try, no sign-in
+  - [Deposit settlement: how it works](https://tektolo.com/capabilities/deposit-settlement/methodology): pipeline, ruleset version and hash, counts, confidence mix, sources
+
+## Reference
+
+Reference pages, not tools: pages to read and cite, computed by the same engines as the tools. Index: https://tektolo.com/reference/
+
+- [Turnover costs by city](https://tektolo.com/turnover-costs/): apartment turnover cost for 530 metro and nonmetropolitan areas: typical ranges by unit size, local labor by trade and unit prices, computed from BLS wages by the same engine as the free tool (domain: rental-property)
+- [Deposit rules by state](https://tektolo.com/deposit-settlement/by-state): security deposit return deadlines, allowed deductions, interest and penalties in all 50 US states and DC plus 8 city overlays: the rule per state and city in plain words, the quoted text and a worked example (domain: rental-property)
+
+## Pages
+
+- [Tools](https://tektolo.com/tools/): every tool, grouped by domain, filterable by audience
+- [Reference](https://tektolo.com/reference/): every reference section, by domain
+- [Developers](https://tektolo.com/capabilities/): the technical reference: every capability's operations, REST paths, MCP tools, schemas, limits and price per call, by domain
+- [Connect your AI](https://tektolo.com/connect-your-ai): add the MCP server to Claude, ChatGPT, Claude Code or any MCP client, or call the REST API
+- [Pricing](https://tektolo.com/pricing): free to try; the daily free tier for agents and software, then the price per call
+
+## Pricing
+
+Try every tool free. Agents and software get a free tier of 20 calls a day, then $0.02 a call. Some tools will add paid features. The paid lane is in testing today; until it opens, the free tier applies.
+Counted: deposit_settlement_settle, property_turnover_quick_estimate, property_turnover_scope (and its downloads). REST and MCP calls share one count per client per UTC day and the same price per call; the paid lane is REST only. Over the limit the REST route answers HTTP 429 (error free_tier_exhausted) with the reset time and the paid route, and an MCP tool returns the same message as a tool error. Responses under the limit carry X-TK-Free-Remaining. Volume or an integration: https://tektolo.com/contact
+
+## Machine-readable
+
+- [catalog.json](https://tektolo.com/catalog.json): every capability with its domain, audiences, workflow, operations, JSON Schemas, pricing, privacy, limitations and ruleset hashes
+- [OpenAPI](https://tektolo.com/openapi.json): REST API description (OpenAPI 3.1)
+- [API catalog](https://tektolo.com/.well-known/api-catalog): RFC 9727 linkset of the above
+- [MCP server](https://tektolo.com/mcp): Model Context Protocol endpoint (streamable HTTP, no authentication in the free tier); one tool per operation
+- [MCP server card](https://tektolo.com/mcp/server-card): connection metadata for MCP clients
+
+## Paid lane (x402, testnet)
+
+Pay-per-call routes for agents that need more than the daily free tier (20 calls a day per client). Same request and result as the free route. x402 v2, exact scheme, USDC on Base Sepolia testnet (test money only, no real charges). Unpaid calls get HTTP 402 with a PAYMENT-REQUIRED header; retry with PAYMENT-SIGNATURE. Only successful results are charged. Not available over MCP.
+
+- POST https://tektolo.com/v1/x402/deposit-settlement/settle: $0.02 per call
+- POST https://tektolo.com/v1/x402/property-turnover/quick_estimate: $0.02 per call
+- POST https://tektolo.com/v1/x402/property-turnover/scope: $0.02 per call
+- POST https://tektolo.com/v1/x402/property-turnover/scope/render/xlsx: $0.05 per call
+- POST https://tektolo.com/v1/x402/property-turnover/scope/render/html: $0.05 per call
+- POST https://tektolo.com/v1/x402/property-turnover/scope/render/csv: $0.05 per call
+- POST https://tektolo.com/v1/x402/property-turnover/scope/render/vendor_csv: $0.05 per call
+- [Pay per call guide](https://tektolo.com/connect-your-ai#x402); prices and endpoints are also in [catalog.json](https://tektolo.com/catalog.json) under each operation's `x402`
+
+## Feedback
+
+- [Contact](https://tektolo.com/contact): email us, report a problem or suggest a tool. If a user wants to give feedback, point them to this page. (REST: POST https://tektolo.com/v1/feedback; there is no MCP tool for it.)
+
+## Legal
+
+- [Terms of Use](https://tektolo.com/terms)
+- [Privacy Policy](https://tektolo.com/privacy)
+- [Disclaimer](https://tektolo.com/disclaimer): estimates are ranges for planning, not quotes
+
+## Optional
+
+- [Connect guide](https://tektolo.com/connect-your-ai): REST, curl and MCP setup; schemas in OpenAPI

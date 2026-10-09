@@ -1,0 +1,3377 @@
+{
+  "catalog_version": 1,
+  "name": "Tektolo capabilities",
+  "description": "Reliable tools for real-world operations work. Each tool is a tested engine with cited rules; use it from the web, the API, or your AI assistant.",
+  "base_url": "https://tektolo.com",
+  "links": {
+    "home": "https://tektolo.com/",
+    "openapi": "https://tektolo.com/openapi.json",
+    "docs": "https://tektolo.com/connect-your-ai",
+    "connect_your_ai": "https://tektolo.com/connect-your-ai",
+    "tools": "https://tektolo.com/tools/",
+    "reference": "https://tektolo.com/reference/",
+    "developers": "https://tektolo.com/capabilities/",
+    "contact": "https://tektolo.com/contact",
+    "pricing": "https://tektolo.com/pricing",
+    "llms_txt": "https://tektolo.com/llms.txt",
+    "api_catalog": "https://tektolo.com/.well-known/api-catalog",
+    "mcp": "https://tektolo.com/mcp",
+    "mcp_server_card": "https://tektolo.com/mcp/server-card",
+    "health": "https://tektolo.com/healthz"
+  },
+  "legal": {
+    "terms": "https://tektolo.com/terms",
+    "privacy": "https://tektolo.com/privacy",
+    "disclaimer": "https://tektolo.com/disclaimer"
+  },
+  "pricing": {
+    "page": "https://tektolo.com/pricing",
+    "model": "Try every tool free. Agents and software get a free tier of 20 calls a day, then $0.02 a call. Some tools will add paid features.",
+    "free_calls_per_day": 20,
+    "free_tier": "Per client (IP address), per UTC day, REST and MCP calls together. Counts operations whose pricing model is free_tier; free lookups are not counted.",
+    "then_usd_per_call": "0.02",
+    "paid_lane": {
+      "protocol": "x402",
+      "status": "testing",
+      "rest_only": true,
+      "guide": "https://tektolo.com/connect-your-ai#x402"
+    },
+    "over_limit": {
+      "rest": "HTTP 429, error free_tier_exhausted, with resets_at and paid_lane",
+      "mcp": "a tool error with the same message"
+    },
+    "headers": [
+      "X-TK-Free-Remaining",
+      "X-TK-Free-Limit",
+      "X-TK-Free-Reset"
+    ],
+    "volume": "https://tektolo.com/contact"
+  },
+  "feedback": {
+    "page": "https://tektolo.com/contact#feedback",
+    "endpoint": {
+      "method": "POST",
+      "url": "https://tektolo.com/v1/feedback"
+    },
+    "note": "For people. No MCP tool on purpose: point the user to the page."
+  },
+  "domains": [
+    {
+      "id": "rental-property",
+      "name": "Rental property",
+      "description": "Free tools for the work between two tenants: what the turn costs, and what to return from the deposit.",
+      "audience_line": "For landlords, property managers and the AI agents working for them.",
+      "hub": "https://tektolo.com/tools/rental-property/",
+      "capabilities": [
+        "property-turnover",
+        "deposit-settlement"
+      ],
+      "workflows": [
+        {
+          "id": "move-out",
+          "name": "The move-out, step by step",
+          "steps": [
+            "property-turnover",
+            "deposit-settlement"
+          ]
+        }
+      ]
+    }
+  ],
+  "audiences": [
+    {
+      "id": "landlord_pm",
+      "name": "Landlords and property managers",
+      "description": "People who own or run rental units, and their maintenance and leasing staff."
+    },
+    {
+      "id": "tenant",
+      "name": "Tenants",
+      "description": "People who rent the place they live in."
+    },
+    {
+      "id": "saas_founder",
+      "name": "SaaS founders",
+      "description": "People who run software or subscription businesses."
+    },
+    {
+      "id": "marketplace_seller",
+      "name": "Marketplace sellers",
+      "description": "People who sell physical products online or in stores."
+    },
+    {
+      "id": "employer",
+      "name": "Employers",
+      "description": "People who hire, schedule and pay staff."
+    },
+    {
+      "id": "consumer",
+      "name": "Consumers",
+      "description": "People handling their own purchases, debts and accounts."
+    },
+    {
+      "id": "developer",
+      "name": "Developers",
+      "description": "People who build on the API or the MCP server."
+    },
+    {
+      "id": "ai_agent",
+      "name": "AI agents",
+      "description": "Assistants and agents calling the tools on someone's behalf."
+    }
+  ],
+  "capabilities": [
+    {
+      "id": "property-turnover",
+      "name": "Property turnover estimate",
+      "version": "0.3.0",
+      "status": "experimental",
+      "summary": "Turn move-out inspection findings into a priced, vendor-ready make-ready scope.",
+      "outcome": "A vendor-ready turnover scope and owner estimate in minutes, with every number traced to a source or a stated assumption.",
+      "domain": "rental-property",
+      "audiences": [
+        "landlord_pm",
+        "ai_agent"
+      ],
+      "audience_names": [
+        "Landlords and property managers",
+        "AI agents"
+      ],
+      "workflow": {
+        "chain": "move-out",
+        "step": 1
+      },
+      "featured": true,
+      "tags": [
+        "property-management",
+        "turnover",
+        "make-ready",
+        "maintenance",
+        "estimating"
+      ],
+      "determinism": "strict",
+      "coverage": {
+        "regions": [
+          "US"
+        ],
+        "as_of_input": false
+      },
+      "operations": [
+        {
+          "id": "quick_estimate",
+          "title": "Quick turnover estimate (start here)",
+          "kind": "deterministic",
+          "summary": "The easiest way to estimate a US rental turnover: a ZIP, bedrooms, bathrooms and a list of plain-English issues in, a priced make-ready estimate out (same engine and result as property_turnover_scope, short summary by default).",
+          "rest": {
+            "method": "POST",
+            "url": "https://tektolo.com/v1/property-turnover/quick_estimate"
+          },
+          "mcp_tool": "property_turnover_quick_estimate",
+          "schemas": {
+            "input": "https://tektolo.com/v1/capabilities/property-turnover/schemas/quick_estimate/input.json",
+            "output": "https://tektolo.com/v1/capabilities/property-turnover/schemas/quick_estimate/output.json"
+          },
+          "artifacts": {},
+          "requires_key": false,
+          "pricing": {
+            "model": "free_tier",
+            "free_calls_per_day": 20,
+            "free_tier_scope": "per client, UTC day, REST and MCP together",
+            "then_usd_per_call": "0.02",
+            "paid_lane": "x402",
+            "paid_lane_status": "testing"
+          },
+          "agent": {
+            "when_to_use": "Start here when the user describes a move-out or turnover in words (\"carpet stained in both bedrooms, oven filthy\") and wants a cost estimate or what to tell vendors. Use property_turnover_scope instead for rate cards, owner decisions, measured quantities or per-finding control.",
+            "when_not_to_use": "Diagnosing hazards (they come back as refer-outs to a licensed professional); legal advice on deposits; remodel bids; properties outside the US.",
+            "tips": [
+              "If the ZIP is missing or not exactly 5 digits, ask the user; never guess or pad it.",
+              "Relay refer_outs first, then the totals; say the numbers are estimates, not quotes."
+            ],
+            "example": "{\"zip\": \"43215\", \"bedrooms\": 2, \"bathrooms\": 1, \"issues\": [\"stained carpet in both bedrooms\", \"nail holes everywhere\", \"oven is filthy\"]}"
+          },
+          "examples": [],
+          "x402": {
+            "protocol": "x402",
+            "x402_version": 2,
+            "scheme": "exact",
+            "network": "eip155:84532",
+            "network_name": "Base Sepolia",
+            "testnet": true,
+            "asset": {
+              "symbol": "USDC",
+              "address": "0x036CbD53842c5426634e7929541eC2318f3dCF7e",
+              "decimals": 6
+            },
+            "facilitator": "https://x402.org/facilitator",
+            "price_usd": "0.02",
+            "endpoint": {
+              "method": "POST",
+              "url": "https://tektolo.com/v1/x402/property-turnover/quick_estimate"
+            },
+            "artifacts": {},
+            "headers": {
+              "request": "PAYMENT-SIGNATURE",
+              "challenge": "PAYMENT-REQUIRED",
+              "receipt": "PAYMENT-RESPONSE"
+            },
+            "note": "Optional paid lane above the free limits; the free REST and MCP routes stay free. Not available over MCP."
+          }
+        },
+        {
+          "id": "scope",
+          "title": "Scope a property turnover",
+          "kind": "deterministic",
+          "summary": "Turn move-out / turnover inspection findings for a US rental unit into a priced make-ready scope: standardized tasks by trade, regional low/expected/high costs, must/should/could priorities, vendor scopes, refer-outs to licensed professionals, and every assumption stated.",
+          "rest": {
+            "method": "POST",
+            "url": "https://tektolo.com/v1/property-turnover/scope"
+          },
+          "mcp_tool": "property_turnover_scope",
+          "schemas": {
+            "input": "https://tektolo.com/v1/capabilities/property-turnover/schemas/scope/input.json",
+            "output": "https://tektolo.com/v1/capabilities/property-turnover/schemas/scope/output.json"
+          },
+          "artifacts": {
+            "xlsx": {
+              "rest": "https://tektolo.com/v1/property-turnover/scope/render/xlsx",
+              "method": "POST",
+              "media_type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+            },
+            "html": {
+              "rest": "https://tektolo.com/v1/property-turnover/scope/render/html",
+              "method": "POST",
+              "media_type": "text/html; charset=utf-8"
+            },
+            "csv": {
+              "rest": "https://tektolo.com/v1/property-turnover/scope/render/csv",
+              "method": "POST",
+              "media_type": "text/csv; charset=utf-8"
+            },
+            "vendor_csv": {
+              "rest": "https://tektolo.com/v1/property-turnover/scope/render/vendor_csv",
+              "method": "POST",
+              "media_type": "application/zip"
+            }
+          },
+          "requires_key": false,
+          "pricing": {
+            "model": "free_tier",
+            "free_calls_per_day": 20,
+            "free_tier_scope": "per client, UTC day, REST and MCP together",
+            "then_usd_per_call": "0.02",
+            "paid_lane": "x402",
+            "paid_lane_status": "testing"
+          },
+          "agent": {
+            "when_to_use": "Turnover findings for a US rental unit when you need control: rooms, measured quantities, the manager's own prices (rate_card) or owner approve/decline decisions. For a plain-English estimate, property_turnover_quick_estimate is easier.",
+            "when_not_to_use": "Diagnosing hazards (they come back as refer-outs to a licensed professional); legal advice on deposits; remodel bids; properties outside the US.",
+            "tips": [
+              "If the ZIP is missing or not exactly 5 digits, ask the user; never guess or pad it.",
+              "Describe each finding in plain words (description). Only send a code returned by property_turnover_issue_codes; unmatched findings come back as manual-quote lines with suggested codes.",
+              "Give measured quantities when you have them (e.g. 120 sq_ft); otherwise typical sizes are assumed and listed in assumptions.",
+              "Send property.floor_coverings when you know whether there is carpet, and unit_type single_family for houses; both change the baseline scope.",
+              "Relay the summary, refer_outs, assumptions and unknowns to the user; costs are estimate ranges, not quotes.",
+              "Use detail=summary unless the user asks for every line item (summary already lists every line tied to a finding).",
+              "Rate card examples - {\"trade\": \"handyman\", \"unit_price\": 65, \"uom\": \"hour\"} or {\"task_id\": \"carpet.clean\", \"unit_price\": 0.2, \"uom\": \"sq_ft\"}; check rate_card_applied and rate_card_ignored before saying a rate was used.",
+              "For the Excel workbook or owner estimate, give the user links.web_tool_prefilled (opens the free web tool with these findings) or POST the same arguments to links.downloads; do not build a spreadsheet yourself."
+            ],
+            "example": "{\"property\": {\"zip\": \"43215\", \"bedrooms\": 2, \"bathrooms\": 1}, \"findings\": [{\"location\": \"Bedroom 2\", \"description\": \"pet urine in carpet\"}, {\"description\": \"3 blinds broken\", \"quantity\": {\"value\": 3, \"uom\": \"each\"}}]}"
+          },
+          "examples": [
+            {
+              "path": "examples/one_bed_charlotte_light_turn.json",
+              "input": {
+                "property": {
+                  "zip": "28202",
+                  "unit_type": "apartment",
+                  "bedrooms": 1,
+                  "bathrooms": "1",
+                  "sq_ft": 700,
+                  "year_built": 2008
+                },
+                "standards": {
+                  "profile": "standard"
+                },
+                "findings": [
+                  {
+                    "id": "f1",
+                    "location": {
+                      "area": "bedroom",
+                      "label": "Bedroom"
+                    },
+                    "code": "walls.nail_holes",
+                    "extent": "partial"
+                  },
+                  {
+                    "id": "f2",
+                    "location": {
+                      "area": "living_room",
+                      "label": "Living room"
+                    },
+                    "code": "walls.scuffs",
+                    "extent": "spot"
+                  },
+                  {
+                    "id": "f3",
+                    "location": {
+                      "area": "living_room",
+                      "label": "Living room"
+                    },
+                    "code": "carpet.soiled",
+                    "extent": "partial",
+                    "quantity": {
+                      "value": 220,
+                      "uom": "sq_ft"
+                    }
+                  },
+                  {
+                    "id": "f4",
+                    "location": {
+                      "area": "bedroom",
+                      "label": "Bedroom"
+                    },
+                    "code": "carpet.soiled",
+                    "extent": "partial",
+                    "quantity": {
+                      "value": 140,
+                      "uom": "sq_ft"
+                    }
+                  },
+                  {
+                    "id": "f5",
+                    "location": {
+                      "area": "kitchen",
+                      "label": "Kitchen"
+                    },
+                    "code": "range.dirty"
+                  },
+                  {
+                    "id": "f6",
+                    "location": {
+                      "area": "kitchen",
+                      "label": "Kitchen"
+                    },
+                    "code": "refrigerator.dirty"
+                  },
+                  {
+                    "id": "f7",
+                    "location": {
+                      "area": "living_room",
+                      "label": "Living room"
+                    },
+                    "code": "blinds.bent_missing",
+                    "quantity": {
+                      "value": 1,
+                      "uom": "each"
+                    }
+                  }
+                ],
+                "client_refs": {
+                  "unit_id": "example-1bed-charlotte"
+                }
+              }
+            },
+            {
+              "path": "examples/three_bed_phoenix_pet_damage.json",
+              "input": {
+                "property": {
+                  "zip": "85032",
+                  "unit_type": "single_family",
+                  "bedrooms": 3,
+                  "bathrooms": "2",
+                  "sq_ft": 1600,
+                  "year_built": 1998
+                },
+                "standards": {
+                  "profile": "standard"
+                },
+                "findings": [
+                  {
+                    "id": "f1",
+                    "location": {
+                      "area": "bedroom",
+                      "label": "Bedroom 2"
+                    },
+                    "code": "carpet.pet_urine",
+                    "extent": "partial",
+                    "quantity": {
+                      "value": 150,
+                      "uom": "sq_ft"
+                    }
+                  },
+                  {
+                    "id": "f2",
+                    "location": {
+                      "area": "bedroom",
+                      "label": "Bedroom 3"
+                    },
+                    "code": "carpet.pet_urine",
+                    "extent": "partial",
+                    "quantity": {
+                      "value": 140,
+                      "uom": "sq_ft"
+                    }
+                  },
+                  {
+                    "id": "f3",
+                    "location": {
+                      "area": "living_room",
+                      "label": "Living room"
+                    },
+                    "code": "carpet.pet_urine",
+                    "extent": "partial",
+                    "quantity": {
+                      "value": 280,
+                      "uom": "sq_ft"
+                    }
+                  },
+                  {
+                    "id": "f4",
+                    "location": {
+                      "area": "whole_unit",
+                      "label": "Whole unit"
+                    },
+                    "code": "trim.baseboard_damaged",
+                    "extent": "partial",
+                    "quantity": {
+                      "value": 45,
+                      "uom": "linear_ft"
+                    }
+                  },
+                  {
+                    "id": "f5",
+                    "location": {
+                      "area": "bedroom",
+                      "label": "Bedroom 2"
+                    },
+                    "code": "door.interior_hole",
+                    "extent": "partial"
+                  },
+                  {
+                    "id": "f6",
+                    "location": {
+                      "area": "whole_unit",
+                      "label": "Whole unit"
+                    },
+                    "code": "walls.paint_aged",
+                    "extent": "full"
+                  },
+                  {
+                    "id": "f7",
+                    "location": {
+                      "area": "whole_unit",
+                      "label": "Whole unit"
+                    },
+                    "code": "clean.heavy_soil",
+                    "extent": "partial",
+                    "quantity": {
+                      "value": 6,
+                      "uom": "hour"
+                    }
+                  },
+                  {
+                    "id": "f8",
+                    "location": {
+                      "area": "yard",
+                      "label": "Back yard"
+                    },
+                    "code": "yard.debris"
+                  },
+                  {
+                    "id": "f9",
+                    "location": {
+                      "area": "whole_unit",
+                      "label": "Whole unit"
+                    },
+                    "code": "trash.heavy",
+                    "extent": "partial",
+                    "quantity": {
+                      "value": 8,
+                      "uom": "cu_yd"
+                    }
+                  },
+                  {
+                    "id": "f10",
+                    "location": {
+                      "area": "bedroom",
+                      "label": "Bedroom 3"
+                    },
+                    "code": "window.screen_torn",
+                    "quantity": {
+                      "value": 3,
+                      "uom": "each"
+                    }
+                  },
+                  {
+                    "id": "f11",
+                    "location": {
+                      "area": "whole_unit",
+                      "label": "Whole unit"
+                    },
+                    "code": "blinds.bent_missing",
+                    "extent": "partial"
+                  },
+                  {
+                    "id": "f12",
+                    "location": {
+                      "area": "kitchen",
+                      "label": "Kitchen"
+                    },
+                    "code": "range.dirty"
+                  },
+                  {
+                    "id": "f13",
+                    "location": {
+                      "area": "kitchen",
+                      "label": "Kitchen"
+                    },
+                    "code": "refrigerator.dirty"
+                  },
+                  {
+                    "id": "f14",
+                    "location": {
+                      "area": "bathroom",
+                      "label": "Hall bath"
+                    },
+                    "code": "tile.grout_dirty"
+                  },
+                  {
+                    "id": "f15",
+                    "location": {
+                      "area": "entry",
+                      "label": "Entry"
+                    },
+                    "code": "key.missing"
+                  },
+                  {
+                    "id": "f16",
+                    "location": {
+                      "area": "bedroom",
+                      "label": "Bedroom 2"
+                    },
+                    "code": "walls.holes_many",
+                    "extent": "partial"
+                  },
+                  {
+                    "id": "f17",
+                    "location": {
+                      "area": "whole_unit",
+                      "label": "Whole unit"
+                    },
+                    "code": "odor.general",
+                    "extent": "partial",
+                    "notes": "Strong pet odor throughout"
+                  }
+                ],
+                "client_refs": {
+                  "unit_id": "example-3bed-phoenix-pets"
+                }
+              }
+            },
+            {
+              "path": "examples/two_bed_cleveland_pre1978.json",
+              "input": {
+                "property": {
+                  "zip": "44113",
+                  "unit_type": "apartment",
+                  "bedrooms": 2,
+                  "bathrooms": "1",
+                  "sq_ft": 880,
+                  "year_built": 1962
+                },
+                "standards": {
+                  "profile": "standard"
+                },
+                "findings": [
+                  {
+                    "id": "f1",
+                    "location": {
+                      "area": "bedroom",
+                      "label": "Bedroom 2"
+                    },
+                    "code": "walls.large_hole"
+                  },
+                  {
+                    "id": "f2",
+                    "location": {
+                      "area": "living_room",
+                      "label": "Living room"
+                    },
+                    "code": "walls.paint_peeling",
+                    "extent": "partial"
+                  },
+                  {
+                    "id": "f3",
+                    "location": {
+                      "area": "bedroom",
+                      "label": "Bedroom 1"
+                    },
+                    "code": "walls.nail_holes",
+                    "extent": "partial"
+                  },
+                  {
+                    "id": "f4",
+                    "location": {
+                      "area": "bathroom",
+                      "label": "Bathroom"
+                    },
+                    "code": "tub.caulk_failed"
+                  },
+                  {
+                    "id": "f5",
+                    "location": {
+                      "area": "kitchen",
+                      "label": "Kitchen"
+                    },
+                    "code": "range.dirty"
+                  },
+                  {
+                    "id": "f6",
+                    "location": {
+                      "area": "living_room",
+                      "label": "Living room"
+                    },
+                    "code": "carpet.soiled",
+                    "extent": "partial",
+                    "quantity": {
+                      "value": 240,
+                      "uom": "sq_ft"
+                    }
+                  },
+                  {
+                    "id": "f7",
+                    "location": {
+                      "area": "bedroom",
+                      "label": "Bedroom 1"
+                    },
+                    "code": "carpet.soiled",
+                    "extent": "partial",
+                    "quantity": {
+                      "value": 130,
+                      "uom": "sq_ft"
+                    }
+                  },
+                  {
+                    "id": "f8",
+                    "location": {
+                      "area": "bedroom",
+                      "label": "Bedroom 2"
+                    },
+                    "code": "carpet.soiled",
+                    "extent": "partial",
+                    "quantity": {
+                      "value": 120,
+                      "uom": "sq_ft"
+                    }
+                  }
+                ],
+                "client_refs": {
+                  "unit_id": "example-2bed-cleveland-1962"
+                }
+              }
+            },
+            {
+              "path": "examples/studio_descriptions_only_no_metro.json",
+              "input": {
+                "property": {
+                  "zip": "83843",
+                  "unit_type": "apartment",
+                  "bedrooms": 0,
+                  "bathrooms": "1",
+                  "year_built": 1985
+                },
+                "standards": {
+                  "profile": "standard"
+                },
+                "findings": [
+                  {
+                    "id": "f1",
+                    "location": {
+                      "area": "living_room",
+                      "label": "Main room"
+                    },
+                    "description": "carpet is dirty with a few stains near the window"
+                  },
+                  {
+                    "id": "f2",
+                    "location": {
+                      "area": "living_room",
+                      "label": "Main room"
+                    },
+                    "description": "a few nail holes in the walls from pictures"
+                  },
+                  {
+                    "id": "f3",
+                    "location": {
+                      "area": "bathroom",
+                      "label": "Bathroom"
+                    },
+                    "description": "bathroom fan is loud and barely works"
+                  },
+                  {
+                    "id": "f4",
+                    "location": {
+                      "area": "whole_unit",
+                      "label": "Whole unit"
+                    },
+                    "description": "smoke detector is chirping"
+                  },
+                  {
+                    "id": "f5",
+                    "location": {
+                      "area": "kitchen",
+                      "label": "Kitchen"
+                    },
+                    "description": "fridge smells and needs cleaning"
+                  },
+                  {
+                    "id": "f6",
+                    "location": {
+                      "area": "kitchen",
+                      "label": "Kitchen"
+                    },
+                    "description": "dishwasher not draining"
+                  },
+                  {
+                    "id": "f7",
+                    "location": {
+                      "area": "living_room",
+                      "label": "Main room"
+                    },
+                    "description": "tenant left a sticky residue along the window sills"
+                  }
+                ]
+              }
+            }
+          ],
+          "x402": {
+            "protocol": "x402",
+            "x402_version": 2,
+            "scheme": "exact",
+            "network": "eip155:84532",
+            "network_name": "Base Sepolia",
+            "testnet": true,
+            "asset": {
+              "symbol": "USDC",
+              "address": "0x036CbD53842c5426634e7929541eC2318f3dCF7e",
+              "decimals": 6
+            },
+            "facilitator": "https://x402.org/facilitator",
+            "price_usd": "0.02",
+            "endpoint": {
+              "method": "POST",
+              "url": "https://tektolo.com/v1/x402/property-turnover/scope"
+            },
+            "artifacts": {
+              "xlsx": {
+                "method": "POST",
+                "url": "https://tektolo.com/v1/x402/property-turnover/scope/render/xlsx",
+                "price_usd": "0.05"
+              },
+              "html": {
+                "method": "POST",
+                "url": "https://tektolo.com/v1/x402/property-turnover/scope/render/html",
+                "price_usd": "0.05"
+              },
+              "csv": {
+                "method": "POST",
+                "url": "https://tektolo.com/v1/x402/property-turnover/scope/render/csv",
+                "price_usd": "0.05"
+              },
+              "vendor_csv": {
+                "method": "POST",
+                "url": "https://tektolo.com/v1/x402/property-turnover/scope/render/vendor_csv",
+                "price_usd": "0.05"
+              }
+            },
+            "headers": {
+              "request": "PAYMENT-SIGNATURE",
+              "challenge": "PAYMENT-REQUIRED",
+              "receipt": "PAYMENT-RESPONSE"
+            },
+            "note": "Optional paid lane above the free limits; the free REST and MCP routes stay free. Not available over MCP."
+          }
+        },
+        {
+          "id": "issue_codes",
+          "title": "Look up turnover issue codes",
+          "kind": "deterministic",
+          "summary": "Search the standard taxonomy of rental-unit turnover issues (component.issue codes) by keyword or area.",
+          "rest": {
+            "method": "POST",
+            "url": "https://tektolo.com/v1/property-turnover/issue_codes"
+          },
+          "mcp_tool": "property_turnover_issue_codes",
+          "schemas": {
+            "input": "https://tektolo.com/v1/capabilities/property-turnover/schemas/issue_codes/input.json",
+            "output": "https://tektolo.com/v1/capabilities/property-turnover/schemas/issue_codes/output.json"
+          },
+          "artifacts": {},
+          "requires_key": false,
+          "pricing": {
+            "model": "free",
+            "note": "Free lookup; not counted toward the daily free tier."
+          },
+          "agent": {
+            "when_to_use": "Only while preparing findings for a turnover cost estimate, to find the standard issue code for something observed (e.g. \"pet stain on carpet\"). Never needed to answer a question; call with no arguments to list the taxonomy areas and the first codes.",
+            "when_not_to_use": "Legal or security-deposit questions; anything outside rental turnover and make-ready work. Not needed before quick_estimate or scope: a plain description works there.",
+            "tips": [
+              "Call with no arguments to list the taxonomy areas (in `areas`) and the first codes.",
+              "Codes are optional for scoping; a plain description also works."
+            ],
+            "example": "{} lists the areas and the first codes; {\"query\": \"pet stain carpet\"} searches; {\"area\": \"flooring\", \"limit\": 50} lists one area."
+          },
+          "examples": []
+        }
+      ],
+      "privacy": {
+        "retention_days": 730,
+        "trains_models": false,
+        "personal_data": "Inputs need a ZIP code, not an address. Request bodies and free-text notes are never logged or stored. Each estimate leaves one anonymized record: first 3 digits of the ZIP, size and age in coarse buckets, issue codes, totals and a daily-rotating anonymous client fingerprint; no notes, labels, names, vendors, rate-card prices, IP address or user agent. Descriptions of issues the taxonomy could not match are kept with digits, emails and links removed. These records are deleted 730 days after they are written and are not used to train models. Optional feedback (a rating, a note, an email only if typed) is stored separately, with a few estimate identifiers (hashes, versions, region, total) but never the request or notes."
+      },
+      "limitations": [
+        "Estimate ranges, not quotes. Prices vary by vendor, market and condition.",
+        "Does not diagnose structural, electrical, gas, mold, asbestos or lead hazards; those are referred to licensed professionals.",
+        "Responsibility labels (wear vs damage) are hints, not legal determinations; deposit rules vary by state."
+      ],
+      "ruleset": {
+        "version": "pt-2026.10.3",
+        "hash": "sha256:376e6a62ee5dd8a3be85fcc0eb633330902847a97256c27bd9d0610bf77cb643",
+        "sources": [
+          {
+            "id": "hud.nspire.index",
+            "title": "NSPIRE Standards index (per-standard PDFs, changelogs)",
+            "publisher": "HUD REAC",
+            "url": "https://www.hud.gov/reac/nspire-standards"
+          },
+          {
+            "id": "hud.nspire.terms",
+            "title": "NSPIRE Terms and Definitions",
+            "publisher": "HUD REAC",
+            "url": "https://www.hud.gov/reac/nspire-terms"
+          },
+          {
+            "id": "hud.nspire.standards",
+            "title": "NSPIRE individual standards v3.0 (2023-06-20 and 2023-08-11)",
+            "publisher": "HUD REAC",
+            "url": "https://www.hud.gov/reac/nspire-standards"
+          },
+          {
+            "id": "hud.nspire.final-rule",
+            "title": "NSPIRE final rule, 88 FR 30442 (2023-05-11)",
+            "publisher": "HUD / Federal Register",
+            "url": "https://www.federalregister.gov/documents/2023/05/11/2023-09693/economic-growth-regulatory-relief-and-consumer-protection-act-implementation-of-national-standards"
+          },
+          {
+            "id": "hud.nspire.scoring",
+            "title": "NSPIRE scoring notice (FR 2023-13293) and NLIHC summary",
+            "publisher": "HUD / NLIHC",
+            "url": "https://www.govinfo.gov/content/pkg/FR-2023-06-22/html/2023-13293.htm"
+          },
+          {
+            "id": "hud.pih-2026-18",
+            "title": "Notice PIH 2026-18, NSPIRE administrative procedures for voucher programs (2026-07-15)",
+            "publisher": "HUD PIH",
+            "url": "https://www.hud.gov/sites/default/files/PIH/documents/PIH-2026-18.pdf"
+          },
+          {
+            "id": "hud.nspire.hcv-extension",
+            "title": "NSPIRE compliance date extension for HCV/PBV/Mod Rehab to 2027-02-01 (FR 2025-19070)",
+            "publisher": "HUD / Federal Register",
+            "url": "https://www.govinfo.gov/content/pkg/FR-2025-09-30/html/2025-19070.htm"
+          },
+          {
+            "id": "cfr.24-982-404",
+            "title": "24 CFR 982.404 Maintenance: owner and family responsibility",
+            "publisher": "eCFR via Cornell LII",
+            "url": "https://www.law.cornell.edu/cfr/text/24/982.404"
+          },
+          {
+            "id": "rihousing.wear-and-tear",
+            "title": "HCV Landlord Responsibility: Expected Wear and Tear flyer (2026)",
+            "publisher": "Rhode Island Housing",
+            "url": "https://www.rihousing.com/wp-content/uploads/2026/07/HCVP-Lanlodrd-Tenant-Wear-and-Tear-Flyer.pdf"
+          },
+          {
+            "id": "bls.oews.tables",
+            "title": "OEWS Data Tables / download page",
+            "publisher": "BLS",
+            "url": "https://www.bls.gov/oes/tables.htm"
+          },
+          {
+            "id": "bls.oews.2025",
+            "title": "Occupational Employment and Wages, May 2025 (released 2026-05-15)",
+            "publisher": "BLS",
+            "url": "https://www.bls.gov/news.release/ocwage.htm"
+          },
+          {
+            "id": "bls.oews.methodology",
+            "title": "OEWS FAQ and methodology",
+            "publisher": "BLS",
+            "url": "https://www.bls.gov/oes/oes_ques.htm"
+          },
+          {
+            "id": "bls.api.oews",
+            "title": "BLS Public Data API (OEWS series)",
+            "publisher": "BLS",
+            "url": "https://api.bls.gov/publicAPI/v1/timeseries/data/"
+          },
+          {
+            "id": "bls.oews.msa-changes-2024",
+            "title": "OEWS notice: new metropolitan area definitions (OMB Bulletin 23-01) from May 2024",
+            "publisher": "BLS",
+            "url": "https://www.bls.gov/oes/notices/2024/msa-changes.htm"
+          },
+          {
+            "id": "bls.ecec.2026-06",
+            "title": "Employer Costs for Employee Compensation, June 2026 (released 2026-09-09)",
+            "publisher": "BLS",
+            "url": "https://www.bls.gov/news.release/ecec.nr0.htm"
+          },
+          {
+            "id": "epi.ecec-ratios",
+            "title": "EPI note on ECEC compensation-to-pay ratios",
+            "publisher": "Economic Policy Institute",
+            "url": "https://www.epi.org/chart/2024-worker-misclassification-table-4-procedure-for-creating-ecec-compensation-to-pay-ratios-for-all-occupations-and-states/"
+          },
+          {
+            "id": "hud.usps-crosswalk",
+            "title": "HUD-USPS ZIP Code Crosswalk Files",
+            "publisher": "HUD PD&R",
+            "url": "https://www.huduser.gov/portal/datasets/usps_crosswalk.html"
+          },
+          {
+            "id": "census.rel2020.zcta-county",
+            "title": "Census 2020 ZCTA-to-county relationship file",
+            "publisher": "U.S. Census Bureau",
+            "url": "https://www2.census.gov/geo/docs/maps-data/data/rel2020/zcta520/tab20_zcta520_county20_natl.txt"
+          },
+          {
+            "id": "census.cbsa-delineation-2023",
+            "title": "OMB Bulletin 23-01 CBSA delineation (list1_2023.xlsx)",
+            "publisher": "OMB / U.S. Census Bureau",
+            "url": "https://www2.census.gov/programs-surveys/metro-micro/geographies/reference-files/2023/delineation-files/list1_2023.xlsx"
+          },
+          {
+            "id": "bea.rpp",
+            "title": "Regional Price Parities by State and Metro Area",
+            "publisher": "BEA",
+            "url": "https://www.bea.gov/data/prices-inflation/regional-price-parities-state-and-metro-area"
+          },
+          {
+            "id": "dod.ufs-3-701-01",
+            "title": "UFS 3-701-01 DoD Facilities Pricing Guide (6 June 2026)",
+            "publisher": "DoD / WBDG",
+            "url": "https://legacy.wbdg.org/FFC/DOD/UFC/ufs_3_701_01_06_2026.pdf"
+          },
+          {
+            "id": "levelset.contractor-profit",
+            "title": "Contractor profit and overhead references ('10 and 10')",
+            "publisher": "Levelset",
+            "url": "https://www.levelset.com/blog/contractor-profit/"
+          },
+          {
+            "id": "nahb.life-expectancy-2007",
+            "title": "Study of Life Expectancy of Home Components (2007)",
+            "publisher": "NAHB Economics Group",
+            "url": "https://standards.nsf.org/higherlogic/ws/public/download/348/NAHB%202007%20StudyUseful%20Life%20of%20Home%20Components.pdf"
+          },
+          {
+            "id": "fanniemae.eul-appendix-f",
+            "title": "Appendix F Estimated Useful Life Tables, Form 4099.F (Aug 2019)",
+            "publisher": "Fannie Mae Multifamily",
+            "url": "https://multifamily.fanniemae.com/media/document/pdf/appendix-f-estimated-useful-life-tables"
+          },
+          {
+            "id": "irs.pub-946",
+            "title": "IRS Publication 946 (2025) How to Depreciate Property",
+            "publisher": "IRS",
+            "url": "https://www.irs.gov/publications/p946"
+          },
+          {
+            "id": "stimmel.ca-deposits",
+            "title": "Security Deposit Refunds, Residential Leases, California: Basic Law",
+            "publisher": "Stimmel Law",
+            "url": "https://stimmel-law.com/articles/security-deposit-refunds-residential-leases-calfornia-basic-law/"
+          },
+          {
+            "id": "baylegal.wear-and-tear",
+            "title": "What is Normal Wear and Tear? A California Landlord's Guide",
+            "publisher": "Bay Legal PC",
+            "url": "https://baylegal.com/what-is-normal-wear-and-tear-a-california-landlords-guide/"
+          },
+          {
+            "id": "ca.civ-1950-5",
+            "title": "California Civil Code 1950.5",
+            "publisher": "California Legislature",
+            "url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=CIV&sectionNum=1950.5"
+          },
+          {
+            "id": "tx.prop-92-103",
+            "title": "Texas Property Code 92.103",
+            "publisher": "Texas Legislature",
+            "url": "https://statutes.capitol.texas.gov/Docs/PR/htm/PR.92.htm"
+          },
+          {
+            "id": "fl.stat-83-49",
+            "title": "Florida Statutes 83.49",
+            "publisher": "Florida Legislature",
+            "url": "https://www.leg.state.fl.us/statutes/index.cfm?App_mode=Display_Statute&URL=0000-0099/0083/Sections/0083.49.html"
+          },
+          {
+            "id": "ny.gol-7-108",
+            "title": "New York General Obligations Law 7-108(e)",
+            "publisher": "NY Senate",
+            "url": "https://www.nysenate.gov/legislation/laws/GOB/7-108"
+          },
+          {
+            "id": "nc.gs-42-52",
+            "title": "North Carolina G.S. 42-52",
+            "publisher": "NC General Assembly",
+            "url": "https://www.ncleg.gov/EnactedLegislation/Statutes/HTML/BySection/Chapter_42/GS_42-52.html"
+          },
+          {
+            "id": "ga.ocga-44-7-34",
+            "title": "Georgia O.C.G.A. 44-7-34",
+            "publisher": "Georgia General Assembly",
+            "url": "https://codes.findlaw.com/ga/title-44-property/ga-code-sect-44-7-34/"
+          },
+          {
+            "id": "az.ars-33-1321",
+            "title": "Arizona A.R.S. 33-1321",
+            "publisher": "Arizona Legislature",
+            "url": "https://www.azleg.gov/ars/33/01321.htm"
+          },
+          {
+            "id": "wa.rcw-59-18-280",
+            "title": "Washington RCW 59.18.280",
+            "publisher": "Washington Legislature",
+            "url": "https://app.leg.wa.gov/rcw/default.aspx?cite=59.18.280"
+          },
+          {
+            "id": "naa.apartment-turnover-2025",
+            "title": "Apartment Turnover guidance (2025-03-06)",
+            "publisher": "National Apartment Association",
+            "url": "https://naahq.org/sites/default/files/2025-03/01a.%20Apartment%20Turnover%202025.pdf"
+          },
+          {
+            "id": "naa.turnover-costs-2016",
+            "title": "Crunching the Numbers on Turnover Costs (2016-10-24)",
+            "publisher": "National Apartment Association",
+            "url": "https://naahq.org/news/crunching-numbers-turnover-costs"
+          },
+          {
+            "id": "treaty-oak.make-ready-sop",
+            "title": "Move-Out Make Ready: Repairs, Paint, Flooring & Rekeying Work Orders",
+            "publisher": "Treaty Oak Property Management",
+            "url": "https://treaty-oak-property-management-llc.helpscoutdocs.com/article/105-move-out-make-ready-rekeying-work-orders"
+          },
+          {
+            "id": "raleigh-ha.rfp-vacant-unit-turns",
+            "title": "RFP Vacant Unit Turns (2025-11)",
+            "publisher": "Raleigh Housing Authority",
+            "url": "https://rhanc.gov/wp-content/uploads/2025/11/RFP-Vacant-Unit-Turns.pdf"
+          },
+          {
+            "id": "hakc.rfp-24-0318",
+            "title": "RFP 24-0318 Make Ready/Vacant Unit Turnover",
+            "publisher": "Housing Authority of Kansas City, MO",
+            "url": "https://www.hakc.org/utility/openPDF/kchamo/HAKC_RFP_24-0318_Make_Ready_Vacant_Unit_Turnover.pdf?alt=media"
+          },
+          {
+            "id": "wilmington-ha.rfp-vut-2026",
+            "title": "Re-Bid RFP Vacant Unit Turn Services (2026-03-16)",
+            "publisher": "Wilmington Housing Authority",
+            "url": "https://wha.net/wp-content/uploads/2026/03/Re-Bid-RFP-for-Vacant-Unit-Turn-Services-VUT-Authority-Wide-3-16-26.pdf"
+          },
+          {
+            "id": "rentready.turn-economics-2026",
+            "title": "2026 Multifamily Turn Economics Report",
+            "publisher": "Rent Ready",
+            "url": "https://www.rentready.com/resources/turn-economics-report"
+          },
+          {
+            "id": "lula.make-ready-cost",
+            "title": "How Much Does a Make-Ready Cost? 2026 Benchmarks",
+            "publisher": "Lula",
+            "url": "https://lula.life/articles/make-ready-cost"
+          },
+          {
+            "id": "dropcurb.make-ready-checklist",
+            "title": "Apartment Make Ready Checklist: Unit Turn Guide 2026",
+            "publisher": "Dropcurb",
+            "url": "https://dropcurb.com/blog/apartment-make-ready-checklist"
+          },
+          {
+            "id": "turnoverla.make-ready-cost",
+            "title": "What is apartment make ready for rent, and what does it cost? (Los Angeles price list)",
+            "publisher": "TurnOver LA",
+            "url": "https://www.turnoverla.com/blog/apartment-make-ready-for-rent"
+          },
+          {
+            "id": "multifamilyinsiders.turn-cost-thread",
+            "title": "What will be the cost to turn a unit on average? (practitioner thread)",
+            "publisher": "Multifamily Insiders",
+            "url": "https://www.multifamilyinsiders.com/apartment-ideas/apartment-maintenance/17314-what-will-be-the-cost-to-turn-a-unit-punch-painting-cleaning-and-carpet-cleaning-on-average"
+          },
+          {
+            "id": "cleaning4profit.turnover-pricing",
+            "title": "How much should you charge for apartment turnovers? (2016)",
+            "publisher": "Cleaning-4-Profit",
+            "url": "https://www.cleaning-4-profit.com/2016/06/19/how-much-should-you-charge-for-apartment-turnovers/"
+          },
+          {
+            "id": "advancedpainting.turnover-painting",
+            "title": "Apartment Turnover Painting Cost Guide for Property Managers",
+            "publisher": "Advanced Painting and Drywall",
+            "url": "https://advancedpaintinganddrywall.com/apartment-turnover-painting-cost-property-managers/"
+          },
+          {
+            "id": "painttechs.turnover-painting",
+            "title": "Rental Property Turnover Painting: A Landlord's Guide (2026)",
+            "publisher": "Paint Techs",
+            "url": "https://www.paint-techs.com/blog/rental-property-turnover-painting"
+          },
+          {
+            "id": "estimaterocket.production-rates",
+            "title": "How to Create Profitable Estimates, Part 2: Calculating your Rates",
+            "publisher": "EstimateRocket",
+            "url": "https://www.estimaterocket.com/blog/how-to-create-profitable-estimates-part-2/"
+          },
+          {
+            "id": "paintscout.production-rate",
+            "title": "Introduction to Production Rate Estimation",
+            "publisher": "PaintScout",
+            "url": "https://help.paintscout.com/en/articles/8137528-introduction-to-production-rate-estimation"
+          },
+          {
+            "id": "zinspector.appfolio",
+            "title": "zInspector / AppFolio integration",
+            "publisher": "zInspector",
+            "url": "https://support.zinspector.com/?p=5090"
+          },
+          {
+            "id": "happyco.inspections",
+            "title": "HappyCo Inspections support",
+            "publisher": "HappyCo",
+            "url": "https://support.happy.co/hc/en-us/sections/12611984112916-Inspections"
+          },
+          {
+            "id": "appfolio.unit-turns",
+            "title": "Streamline unit turns (AppFolio Unit Turn Board)",
+            "publisher": "AppFolio",
+            "url": "https://www.appfolio.com/blog/streamline-unit-turns"
+          },
+          {
+            "id": "propexo.buildium-service-request",
+            "title": "Create a service request for Buildium (Propexo)",
+            "publisher": "Propexo",
+            "url": "https://docs.propexo.com/api-reference/buildium/service-requests/create-a-service-request-for-buildium"
+          },
+          {
+            "id": "greenresidential.vendor-portal",
+            "title": "Vendor Portal Guide (AppFolio vendor work orders)",
+            "publisher": "Green Residential",
+            "url": "https://support.greenresidential.com/hc/en-us/articles/17680858367639-Vendor-Portal-Guide"
+          },
+          {
+            "id": "epa.mold-guide",
+            "title": "A Brief Guide to Mold, Moisture and Your Home",
+            "publisher": "U.S. EPA",
+            "url": "https://www.epa.gov/mold/brief-guide-mold-moisture-and-your-home"
+          },
+          {
+            "id": "cfr.40-745-rrp",
+            "title": "40 CFR 745.82, 745.83, 745.85, 745.103 (EPA Renovation, Repair and Painting rule)",
+            "publisher": "eCFR via Cornell LII",
+            "url": "https://www.law.cornell.edu/cfr/text/40/745.83"
+          },
+          {
+            "id": "epa.rrp-program",
+            "title": "Renovation, Repair and Painting Program",
+            "publisher": "U.S. EPA",
+            "url": "https://www.epa.gov/lead/renovation-repair-and-painting-program"
+          },
+          {
+            "id": "epa.asbestos-protect-family",
+            "title": "Protect Your Family From Exposures to Asbestos",
+            "publisher": "U.S. EPA",
+            "url": "https://www.epa.gov/asbestos/protect-your-family-exposures-asbestos"
+          },
+          {
+            "id": "epa.asbestos-learn",
+            "title": "Learn About Asbestos",
+            "publisher": "U.S. EPA",
+            "url": "https://www.epa.gov/asbestos/learn-about-asbestos"
+          },
+          {
+            "id": "epa-hud.lead-disclosure",
+            "title": "Lead-based paint disclosure rule for pre-1978 housing (40 CFR Part 745 Subpart F)",
+            "publisher": "EPA / HUD",
+            "url": "https://www.epa.gov/sites/default/files/documents/lesr_eng.pdf"
+          },
+          {
+            "id": "nfpa72.smoke-alarm-replacement",
+            "title": "NFPA 72 smoke-alarm replacement and placement (secondary report)",
+            "publisher": "Security Sales & Integration",
+            "url": "https://www.securitysales.com/news/learning-the-nfpa-code-for-replacing-smoke-alarms/46193/"
+          },
+          {
+            "id": "boulder.egress-b10",
+            "title": "B10 Emergency Escape and Rescue Openings (IRC R310)",
+            "publisher": "Boulder County Building Dept.",
+            "url": "https://bouldercounty.gov/property-and-land/land-use/building/building-publications/b10-emergency-escape-and-rescue-openings/"
+          },
+          {
+            "id": "centerpoint.gas-smell",
+            "title": "What Should You Do If You Smell Natural Gas?",
+            "publisher": "CenterPoint Energy",
+            "url": "https://actioncenter.centerpointenergy.com/en-us/resources/what-should-you-do-if-you-smell-natural-gas"
+          },
+          {
+            "id": "zinspector.condition-values",
+            "title": "Condition Values: The N, S, D, & ! of Property Inspection",
+            "publisher": "zInspector",
+            "url": "https://support.zinspector.com/article/property-management-pm-inspection/"
+          },
+          {
+            "id": "paperform.move-out-form",
+            "title": "Rental Property Move-Out Inspection Form with Security Deposit Calculator",
+            "publisher": "Paperform",
+            "url": "https://paperform.co/templates/rental-property-move-out-inspection-checklist"
+          },
+          {
+            "id": "propexo.service-request-models",
+            "title": "Propexo service-request models for Buildium, AppFolio and generic PMS",
+            "publisher": "Propexo",
+            "url": "https://docs.propexo.com/api-reference/pms-generic-ap-is/service-requests/create-service-request.md"
+          },
+          {
+            "id": "homeguide.interior-painting",
+            "title": "Interior painting cost (2026)",
+            "publisher": "HomeGuide",
+            "url": "https://homeguide.com/costs/cost-to-paint-interior-of-house"
+          },
+          {
+            "id": "homeguide.ceiling-painting",
+            "title": "Paint a ceiling",
+            "publisher": "HomeGuide",
+            "url": "https://homeguide.com/costs/cost-to-paint-a-ceiling"
+          },
+          {
+            "id": "homeguide.door-painting",
+            "title": "Paint a door",
+            "publisher": "HomeGuide",
+            "url": "https://homeguide.com/costs/cost-to-paint-a-door"
+          },
+          {
+            "id": "homeguide.trim-painting",
+            "title": "Paint trim and baseboards",
+            "publisher": "HomeGuide",
+            "url": "https://homeguide.com/costs/cost-to-paint-trim-baseboards"
+          },
+          {
+            "id": "homeguide.cabinet-painting",
+            "title": "Paint kitchen cabinets",
+            "publisher": "HomeGuide",
+            "url": "https://homeguide.com/costs/cost-to-paint-kitchen-cabinets"
+          },
+          {
+            "id": "homeguide.drywall-repair",
+            "title": "Drywall repair",
+            "publisher": "HomeGuide",
+            "url": "https://homeguide.com/costs/drywall-repair-cost"
+          },
+          {
+            "id": "homeguide.wallpaper-removal",
+            "title": "Wallpaper removal",
+            "publisher": "HomeGuide",
+            "url": "https://homeguide.com/costs/wallpaper-removal-cost"
+          },
+          {
+            "id": "homeguide.popcorn-ceiling-removal",
+            "title": "Popcorn ceiling removal",
+            "publisher": "HomeGuide",
+            "url": "https://homeguide.com/costs/popcorn-ceiling-removal-cost"
+          },
+          {
+            "id": "homeguide.ceiling-repair",
+            "title": "Ceiling repair",
+            "publisher": "HomeGuide",
+            "url": "https://homeguide.com/costs/ceiling-repair-cost"
+          },
+          {
+            "id": "homeguide.carpet-cleaning",
+            "title": "Carpet cleaning (2026 prices)",
+            "publisher": "HomeGuide",
+            "url": "https://homeguide.com/costs/carpet-cleaning-prices"
+          },
+          {
+            "id": "homeguide.carpet-installation",
+            "title": "Carpet installation (2026)",
+            "publisher": "HomeGuide",
+            "url": "https://homeguide.com/costs/carpet-installation-cost"
+          },
+          {
+            "id": "homeguide.carpet-removal",
+            "title": "Carpet removal (2026)",
+            "publisher": "HomeGuide",
+            "url": "https://homeguide.com/costs/carpet-removal-cost"
+          },
+          {
+            "id": "homeguide.carpet-padding",
+            "title": "Carpet padding (2026)",
+            "publisher": "HomeGuide",
+            "url": "https://homeguide.com/costs/carpet-padding-prices"
+          },
+          {
+            "id": "homeguide.carpet-repair",
+            "title": "Carpet repair",
+            "publisher": "HomeGuide",
+            "url": "https://homeguide.com/costs/carpet-repair-cost"
+          },
+          {
+            "id": "homeguide.carpet-stretching",
+            "title": "Carpet stretching",
+            "publisher": "HomeGuide",
+            "url": "https://homeguide.com/costs/carpet-stretching-cost"
+          },
+          {
+            "id": "homeguide.carpet-prices",
+            "title": "Carpet prices per square foot",
+            "publisher": "HomeGuide",
+            "url": "https://homeguide.com/costs/carpet-prices-per-square-foot"
+          },
+          {
+            "id": "homeguide.carpet-cleaner-rental",
+            "title": "Rent a carpet cleaner",
+            "publisher": "HomeGuide",
+            "url": "https://homeguide.com/costs/cost-to-rent-a-carpet-cleaner"
+          },
+          {
+            "id": "homeguide.vinyl-flooring",
+            "title": "Vinyl flooring installation",
+            "publisher": "HomeGuide",
+            "url": "https://homeguide.com/costs/vinyl-flooring-installation-cost"
+          },
+          {
+            "id": "homeguide.lvp",
+            "title": "Luxury vinyl plank/tile flooring",
+            "publisher": "HomeGuide",
+            "url": "https://homeguide.com/costs/luxury-vinyl-flooring-cost"
+          },
+          {
+            "id": "homeguide.laminate",
+            "title": "Laminate flooring installation",
+            "publisher": "HomeGuide",
+            "url": "https://homeguide.com/costs/cost-to-install-laminate-flooring"
+          },
+          {
+            "id": "homeguide.hardwood-refinish",
+            "title": "Refinish hardwood floors",
+            "publisher": "HomeGuide",
+            "url": "https://homeguide.com/costs/cost-to-refinish-hardwood-floors"
+          },
+          {
+            "id": "homeguide.hardwood-repair",
+            "title": "Hardwood floor repair",
+            "publisher": "HomeGuide",
+            "url": "https://homeguide.com/costs/hardwood-floor-repair-cost"
+          },
+          {
+            "id": "homeguide.tile-grout-cleaning",
+            "title": "Tile and grout cleaning",
+            "publisher": "HomeGuide",
+            "url": "https://homeguide.com/costs/tile-and-grout-cleaning-cost"
+          },
+          {
+            "id": "homeguide.regrout",
+            "title": "Regrout shower or bathroom",
+            "publisher": "HomeGuide",
+            "url": "https://homeguide.com/costs/cost-to-regrout-a-shower-or-bathroom"
+          },
+          {
+            "id": "homeguide.move-out-cleaning",
+            "title": "Move-out cleaning",
+            "publisher": "HomeGuide",
+            "url": "https://homeguide.com/costs/move-out-cleaning-cost"
+          },
+          {
+            "id": "homeguide.house-cleaning",
+            "title": "House cleaning prices",
+            "publisher": "HomeGuide",
+            "url": "https://homeguide.com/costs/house-cleaning-prices"
+          },
+          {
+            "id": "homeguide.apartment-cleaning",
+            "title": "Apartment cleaning prices",
+            "publisher": "HomeGuide",
+            "url": "https://homeguide.com/costs/apartment-cleaning-prices"
+          },
+          {
+            "id": "homeguide.deep-cleaning",
+            "title": "Deep cleaning a house",
+            "publisher": "HomeGuide",
+            "url": "https://homeguide.com/costs/deep-cleaning-house-cost"
+          },
+          {
+            "id": "homeguide.window-cleaning",
+            "title": "Window cleaning prices",
+            "publisher": "HomeGuide",
+            "url": "https://homeguide.com/costs/window-cleaning-prices"
+          },
+          {
+            "id": "homeguide.pressure-washing",
+            "title": "Pressure washing prices",
+            "publisher": "HomeGuide",
+            "url": "https://homeguide.com/costs/pressure-washing-prices"
+          },
+          {
+            "id": "homeguide.dryer-vent-cleaning",
+            "title": "Dryer vent cleaning",
+            "publisher": "HomeGuide",
+            "url": "https://homeguide.com/costs/dryer-vent-cleaning-cost"
+          },
+          {
+            "id": "homeguide.junk-removal",
+            "title": "Junk removal prices",
+            "publisher": "HomeGuide",
+            "url": "https://homeguide.com/costs/junk-removal-prices"
+          },
+          {
+            "id": "homeguide.dumpster-rental",
+            "title": "Dumpster rental prices",
+            "publisher": "HomeGuide",
+            "url": "https://homeguide.com/costs/dumpster-rental-prices"
+          },
+          {
+            "id": "homeguide.debris-removal",
+            "title": "Construction debris removal",
+            "publisher": "HomeGuide",
+            "url": "https://homeguide.com/costs/construction-debris-removal-cost"
+          },
+          {
+            "id": "homeguide.mattress-removal",
+            "title": "Mattress removal",
+            "publisher": "HomeGuide",
+            "url": "https://homeguide.com/costs/mattress-removal-cost"
+          },
+          {
+            "id": "homeguide.change-locks",
+            "title": "Cost to change locks (rekey/replace)",
+            "publisher": "HomeGuide",
+            "url": "https://homeguide.com/costs/cost-to-change-locks"
+          },
+          {
+            "id": "homeguide.locksmith",
+            "title": "Locksmith cost",
+            "publisher": "HomeGuide",
+            "url": "https://homeguide.com/costs/locksmith-cost"
+          },
+          {
+            "id": "homeguide.door-knob",
+            "title": "Door knob replacement",
+            "publisher": "HomeGuide",
+            "url": "https://homeguide.com/costs/door-knob-replacement-cost"
+          },
+          {
+            "id": "homeguide.door-repair",
+            "title": "Door repair",
+            "publisher": "HomeGuide",
+            "url": "https://homeguide.com/costs/door-repair-cost"
+          },
+          {
+            "id": "homeguide.interior-door",
+            "title": "Interior door installation",
+            "publisher": "HomeGuide",
+            "url": "https://homeguide.com/costs/interior-door-installation-cost"
+          },
+          {
+            "id": "homeguide.closet-door",
+            "title": "Closet door installation",
+            "publisher": "HomeGuide",
+            "url": "https://homeguide.com/costs/closet-door-installation-cost"
+          },
+          {
+            "id": "homeguide.window-screen",
+            "title": "Window screen replacement",
+            "publisher": "HomeGuide",
+            "url": "https://homeguide.com/costs/window-screen-replacement-cost"
+          },
+          {
+            "id": "homeguide.window-repair",
+            "title": "Window repair",
+            "publisher": "HomeGuide",
+            "url": "https://homeguide.com/costs/window-repair-cost"
+          },
+          {
+            "id": "homeguide.blinds",
+            "title": "Blinds installation cost",
+            "publisher": "HomeGuide",
+            "url": "https://homeguide.com/costs/blinds-cost-to-install"
+          },
+          {
+            "id": "homeguide.window-treatments",
+            "title": "Window treatments",
+            "publisher": "HomeGuide",
+            "url": "https://homeguide.com/costs/window-treatment-cost"
+          },
+          {
+            "id": "homeguide.bathtub-repair",
+            "title": "Bathtub repair (incl. caulking)",
+            "publisher": "HomeGuide",
+            "url": "https://homeguide.com/costs/bathtub-repair-cost"
+          },
+          {
+            "id": "homeguide.bathtub-refinishing",
+            "title": "Bathtub refinishing",
+            "publisher": "HomeGuide",
+            "url": "https://homeguide.com/costs/bathtub-refinishing-cost"
+          },
+          {
+            "id": "homeguide.toilet-install",
+            "title": "Toilet installation",
+            "publisher": "HomeGuide",
+            "url": "https://homeguide.com/costs/toilet-installation-cost"
+          },
+          {
+            "id": "homeguide.toilet-repair",
+            "title": "Toilet repair",
+            "publisher": "HomeGuide",
+            "url": "https://homeguide.com/costs/toilet-repair-cost"
+          },
+          {
+            "id": "homeguide.bathroom-faucet",
+            "title": "Bathroom faucet installation",
+            "publisher": "HomeGuide",
+            "url": "https://homeguide.com/costs/cost-to-install-bathroom-faucet"
+          },
+          {
+            "id": "homeguide.disposal-install",
+            "title": "Garbage disposal installation",
+            "publisher": "HomeGuide",
+            "url": "https://homeguide.com/costs/garbage-disposal-installation-cost"
+          },
+          {
+            "id": "homeguide.disposal-repair",
+            "title": "Garbage disposal repair",
+            "publisher": "HomeGuide",
+            "url": "https://homeguide.com/costs/garbage-disposal-repair-cost"
+          },
+          {
+            "id": "homeguide.cabinet-repair",
+            "title": "Cabinet repair",
+            "publisher": "HomeGuide",
+            "url": "https://homeguide.com/costs/cabinet-repair-cost"
+          },
+          {
+            "id": "homeguide.cabinet-doors",
+            "title": "Replace cabinet doors",
+            "publisher": "HomeGuide",
+            "url": "https://homeguide.com/costs/cost-to-replace-cabinet-doors"
+          },
+          {
+            "id": "homeguide.cabinet-hardware",
+            "title": "Install cabinet hardware",
+            "publisher": "HomeGuide",
+            "url": "https://homeguide.com/costs/cost-to-install-cabinet-hardware"
+          },
+          {
+            "id": "homeguide.laminate-countertops",
+            "title": "Laminate countertops",
+            "publisher": "HomeGuide",
+            "url": "https://homeguide.com/costs/laminate-countertops-cost"
+          },
+          {
+            "id": "homeguide.bathroom-countertop",
+            "title": "Replace bathroom countertop",
+            "publisher": "HomeGuide",
+            "url": "https://homeguide.com/costs/cost-to-replace-a-bathroom-countertop"
+          },
+          {
+            "id": "homeguide.appliance-installation",
+            "title": "Appliance installation costs",
+            "publisher": "HomeGuide",
+            "url": "https://homeguide.com/costs/appliance-installation-costs"
+          },
+          {
+            "id": "homeguide.dishwasher",
+            "title": "Dishwasher installation",
+            "publisher": "HomeGuide",
+            "url": "https://homeguide.com/costs/dishwasher-installation-cost"
+          },
+          {
+            "id": "homeguide.range",
+            "title": "Oven or stove cost",
+            "publisher": "HomeGuide",
+            "url": "https://homeguide.com/costs/oven-or-stove-cost"
+          },
+          {
+            "id": "homeguide.refrigerator",
+            "title": "Refrigerator cost",
+            "publisher": "HomeGuide",
+            "url": "https://homeguide.com/costs/refrigerator-cost"
+          },
+          {
+            "id": "homeguide.appliance-repair",
+            "title": "Appliance repair costs",
+            "publisher": "HomeGuide",
+            "url": "https://homeguide.com/costs/appliance-repair-costs"
+          },
+          {
+            "id": "homeguide.water-heater",
+            "title": "Water heater installation",
+            "publisher": "HomeGuide",
+            "url": "https://homeguide.com/costs/water-heater-installation-cost"
+          },
+          {
+            "id": "homeguide.outlet",
+            "title": "Install electrical outlet",
+            "publisher": "HomeGuide",
+            "url": "https://homeguide.com/costs/cost-to-install-electrical-outlet"
+          },
+          {
+            "id": "homeguide.gfci",
+            "title": "GFCI outlet",
+            "publisher": "HomeGuide",
+            "url": "https://homeguide.com/costs/gfci-outlet-cost"
+          },
+          {
+            "id": "homeguide.light-switch",
+            "title": "Install or replace a light switch",
+            "publisher": "HomeGuide",
+            "url": "https://homeguide.com/costs/cost-to-install-or-replace-a-light-switch"
+          },
+          {
+            "id": "homeguide.light-fixture",
+            "title": "Replace or repair a light fixture",
+            "publisher": "HomeGuide",
+            "url": "https://homeguide.com/costs/cost-to-replace-or-repair-a-light-fixture"
+          },
+          {
+            "id": "homeguide.ceiling-fan",
+            "title": "Ceiling fan installation",
+            "publisher": "HomeGuide",
+            "url": "https://homeguide.com/costs/ceiling-fan-installation-cost"
+          },
+          {
+            "id": "homeguide.smoke-detector",
+            "title": "Smoke detector installation",
+            "publisher": "HomeGuide",
+            "url": "https://homeguide.com/costs/smoke-detector-installation-cost"
+          },
+          {
+            "id": "homeguide.hvac-repair",
+            "title": "HVAC repair",
+            "publisher": "HomeGuide",
+            "url": "https://homeguide.com/costs/hvac-repair-cost"
+          },
+          {
+            "id": "homeguide.pest-control",
+            "title": "Pest control prices",
+            "publisher": "HomeGuide",
+            "url": "https://homeguide.com/costs/pest-control-prices"
+          },
+          {
+            "id": "homeguide.cockroach",
+            "title": "Cockroach exterminator",
+            "publisher": "HomeGuide",
+            "url": "https://homeguide.com/costs/cockroach-exterminator-cost"
+          },
+          {
+            "id": "homeguide.bed-bug",
+            "title": "Bed bug exterminator",
+            "publisher": "HomeGuide",
+            "url": "https://homeguide.com/costs/bed-bug-exterminator-cost"
+          },
+          {
+            "id": "homeguide.mice",
+            "title": "Mice exterminator",
+            "publisher": "HomeGuide",
+            "url": "https://homeguide.com/costs/mice-exterminator-cost"
+          },
+          {
+            "id": "homeguide.handyman",
+            "title": "2026 Handyman Hourly Rates (HomeGuide)",
+            "publisher": "HomeGuide",
+            "url": "https://homeguide.com/costs/handyman-prices"
+          },
+          {
+            "id": "homeguide.electrician",
+            "title": "Electrician Cost Per Hour (HomeGuide, 2026)",
+            "publisher": "HomeGuide",
+            "url": "https://homeguide.com/costs/electrician-cost-per-hour"
+          },
+          {
+            "id": "homeguide.plumber",
+            "title": "2026 Plumber Cost Per Hour (HomeGuide)",
+            "publisher": "HomeGuide",
+            "url": "https://homeguide.com/costs/plumber-cost"
+          },
+          {
+            "id": "homeguide.lawn-mowing",
+            "title": "Lawn mowing cost",
+            "publisher": "HomeGuide",
+            "url": "https://homeguide.com/costs/lawn-mowing-cost"
+          },
+          {
+            "id": "homeguide.lawn-care",
+            "title": "Lawn care prices",
+            "publisher": "HomeGuide",
+            "url": "https://homeguide.com/costs/lawn-care-prices"
+          },
+          {
+            "id": "homeguide.yard-cleanup",
+            "title": "Yard cleanup",
+            "publisher": "HomeGuide",
+            "url": "https://homeguide.com/costs/yard-cleanup-cost"
+          },
+          {
+            "id": "homeguide.landscaping",
+            "title": "Landscaping costs",
+            "publisher": "HomeGuide",
+            "url": "https://homeguide.com/costs/landscaping-costs"
+          },
+          {
+            "id": "homeguide.mold-removal",
+            "title": "Mold removal",
+            "publisher": "HomeGuide",
+            "url": "https://homeguide.com/costs/mold-removal-cost"
+          },
+          {
+            "id": "homeguide.mold-inspection",
+            "title": "Mold inspection",
+            "publisher": "HomeGuide",
+            "url": "https://homeguide.com/costs/mold-inspection-cost"
+          },
+          {
+            "id": "homeguide.lead-paint-removal",
+            "title": "Lead paint removal",
+            "publisher": "HomeGuide",
+            "url": "https://homeguide.com/costs/lead-paint-removal-cost"
+          },
+          {
+            "id": "homeguide.asbestos-removal",
+            "title": "Asbestos removal",
+            "publisher": "HomeGuide",
+            "url": "https://homeguide.com/costs/asbestos-removal-cost"
+          },
+          {
+            "id": "homeguide.smoke-remediation",
+            "title": "Smoke remediation",
+            "publisher": "HomeGuide",
+            "url": "https://homeguide.com/costs/smoke-remediation-cost"
+          },
+          {
+            "id": "homeguide.hoarding-cleanup",
+            "title": "Hoarding cleanup",
+            "publisher": "HomeGuide",
+            "url": "https://homeguide.com/costs/hoarding-cleanup-cost"
+          },
+          {
+            "id": "homeguide.biohazard-cleanup",
+            "title": "Biohazard cleanup",
+            "publisher": "HomeGuide",
+            "url": "https://homeguide.com/costs/biohazard-cleanup-cost"
+          },
+          {
+            "id": "homeguide.baseboard",
+            "title": "Baseboard installation",
+            "publisher": "HomeGuide",
+            "url": "https://homeguide.com/costs/baseboard-installation-cost"
+          },
+          {
+            "id": "homeguide.air-duct-cleaning",
+            "title": "Air duct cleaning",
+            "publisher": "HomeGuide",
+            "url": "https://homeguide.com/costs/air-duct-cleaning-cost"
+          },
+          {
+            "id": "hud.nspire.walls",
+            "title": "NSPIRE Standard: Wall - Interior (v3.0, 2023-08-11)",
+            "publisher": "HUD REAC",
+            "url": "https://www.hud.gov/sites/dfiles/PIH/documents/NSPIRE-Standard-Wall-Interior_20230811.pdf"
+          },
+          {
+            "id": "hud.nspire.smoke-alarm",
+            "title": "NSPIRE Standard: Smoke Alarm (v3.0, 2023-08-11)",
+            "publisher": "HUD REAC",
+            "url": "https://www.hud.gov/sites/dfiles/PIH/documents/NSPIRE-Standard-Smoke-Alarm_20230811.pdf"
+          },
+          {
+            "id": "hud.nspire.mold",
+            "title": "NSPIRE Standard: Mold-like Substance (v3.0, 2023-08-11)",
+            "publisher": "HUD REAC",
+            "url": "https://www.hud.gov/sites/dfiles/PIH/documents/NSPIRE-Standard-Mold-like-Substance_20230811.pdf"
+          },
+          {
+            "id": "tk.assumption",
+            "title": "Tektolo modelling assumption",
+            "publisher": "Tektolo",
+            "url": null
+          },
+          {
+            "id": "turnoverla.paint-2026",
+            "title": "Apartment painting cost LA: real prices and timelines (TurnOver LA, 2026-07-29)",
+            "publisher": "TurnOver LA",
+            "url": "https://www.turnoverla.com/blog/apartment-painting-los-angeles-cost"
+          },
+          {
+            "id": "cda.multifamily-2026",
+            "title": "Apartment Painting in Coeur d'Alene: Multifamily Costs (2026-09-21)",
+            "publisher": "Coeur d'Alene Painters",
+            "url": "https://coeurdalenepainters.com/blog/apartment-multifamily-painting-coeur-dalene-2026"
+          },
+          {
+            "id": "tas.atlanta-turn-paint",
+            "title": "Multifamily interior painting in Atlanta (Total Apartment Solutions)",
+            "publisher": "Total Apartment Solutions",
+            "url": "https://totalapartmentsolutions.com/news-and-insights/multifamily-interior-painting-atlanta/"
+          },
+          {
+            "id": "aphanj.rfp-2026",
+            "title": "Asbury Park HA, RFP Vacancy Prep Unit Turnover (2026)",
+            "publisher": "Asbury Park Housing Authority",
+            "url": "https://aphanj.org/wp-content/uploads/2026-INVITATION-FOR-RFP-Vacancy-Prep-Unit-Turnover_.pdf"
+          },
+          {
+            "id": "homeguide.microwave-install",
+            "title": "Microwave Installation Cost (HomeGuide, 2026)",
+            "publisher": "HomeGuide",
+            "url": "https://homeguide.com/costs/microwave-installation-cost"
+          },
+          {
+            "id": "homeguide.appliances-prices",
+            "title": "Home Appliance Prices (HomeGuide, 2026)",
+            "publisher": "HomeGuide",
+            "url": "https://homeguide.com/costs/appliances-prices"
+          },
+          {
+            "id": "homeguide.asbestos-testing",
+            "title": "Asbestos Testing Cost (HomeGuide)",
+            "publisher": "HomeGuide",
+            "url": "https://homeguide.com/costs/asbestos-testing-and-inspection-costs"
+          },
+          {
+            "id": "homeadvisor.junk-removal",
+            "title": "Junk Removal Cost (HomeAdvisor, 2025)",
+            "publisher": "HomeAdvisor",
+            "url": "https://www.homeadvisor.com/cost/cleaning-services/remove-waste/"
+          },
+          {
+            "id": "epa.rrp-cost",
+            "title": "How much will it cost contractors to comply with the RRP rule? (EPA, archived)",
+            "publisher": "US EPA",
+            "url": "https://19january2021snapshot.epa.gov/lead/how-much-will-it-cost-contractors-comply-rrp-rule_.html"
+          },
+          {
+            "id": "epa.rrp-window-faq",
+            "title": "Window repair vs removal under RRP (EPA FAQ)",
+            "publisher": "US EPA",
+            "url": "https://epa.gov/lead/how-window-repair-or-maintenance-distinct-removal-treated-under-rrp-rule-would-rule-apply-job"
+          },
+          {
+            "id": "osha.1926-1101",
+            "title": "OSHA asbestos standard for construction (significant changes; PACM)",
+            "publisher": "OSHA",
+            "url": "https://www.osha.gov/training/library/asbestos/construction"
+          },
+          {
+            "id": "hud.nspire.hvac-v2.2",
+            "title": "NSPIRE Standards v2.2, HVAC",
+            "publisher": "HUD REAC",
+            "url": "https://www.hud.gov/sites/dfiles/PIH/documents/NSPIRE-Standards-v2.2-HVAC.pdf"
+          },
+          {
+            "id": "ncsl.co-detectors",
+            "title": "Carbon Monoxide Detector Requirements (NCSL)",
+            "publisher": "NCSL",
+            "url": "https://www.ncsl.org/environment-and-natural-resources/carbon-monoxide-detector-requirements-laws-and-regulations"
+          },
+          {
+            "id": "cpsc.range-tipover",
+            "title": "Free-Standing Kitchen Ranges (CPSC)",
+            "publisher": "US CPSC",
+            "url": "https://www.cpsc.gov/Regulations-Laws--Standards/Voluntary-Standards/Topics/Free-Standing-Kitchen-Ranges"
+          },
+          {
+            "id": "tx.prop-code-92-156",
+            "title": "Texas Property Code § 92.156, Rekeying",
+            "publisher": "FindLaw (Texas statute)",
+            "url": "https://codes.findlaw.com/tx/property-code/prop-sect-92-156/"
+          },
+          {
+            "id": "ca.civ-1984",
+            "title": "Cal. Civ. Code § 1984 (abandoned property notice)",
+            "publisher": "California Public Law",
+            "url": "https://california.public.law/codes/civil_code_section_1984"
+          },
+          {
+            "id": "rentcafe.apt-size-2024",
+            "title": "U.S. average apartment size (RentCafe)",
+            "publisher": "RentCafe",
+            "url": "https://www.rentcafe.com/blog/rental-market/real-estate-news/national-average-apartment-size/"
+          },
+          {
+            "id": "bls.oews-nonmetro",
+            "title": "OEWS metropolitan and nonmetropolitan area definitions (May 2024 county list, via the Internet Archive)",
+            "publisher": "US BLS",
+            "url": "https://www.bls.gov/oes/current/msa_def.htm"
+          },
+          {
+            "id": "bea.rpp-2024",
+            "title": "Regional Price Parities 2024 (BEA, Feb 2026)",
+            "publisher": "US BEA",
+            "url": "https://www.bea.gov/sites/default/files/2026-02/rpp0226.pdf"
+          },
+          {
+            "id": "bid.grhc-2024",
+            "title": "Grand Rapids Housing Commission, Res. 24-43 painting per unit (board minutes 2024-11-19)",
+            "publisher": "Grand Rapids Housing Commission",
+            "url": "https://grhousing.org/pdf/nov24minutes.pdf"
+          },
+          {
+            "id": "bid.grhc-2026",
+            "title": "Grand Rapids Housing Commission, Res. 25-79 unit-turn hourly labor rates (2026-03-17)",
+            "publisher": "Grand Rapids Housing Commission",
+            "url": "https://www.grhousing.org/pdf/mar26minutes.pdf"
+          },
+          {
+            "id": "bid.saha-2020",
+            "title": "San Antonio HA, prior bid tab Unit Make Ready Paint (2020)",
+            "publisher": "San Antonio Housing Authority",
+            "url": "https://saha.org/wp-content/uploads/2020/02/1909-910-54-4967PaintingServicesForBeaconCommunities_Addendum2.pdf"
+          },
+          {
+            "id": "bid.ccha-2020",
+            "title": "Corpus Christi HA, RFP P2006 Unit Make Ready Services (2020)",
+            "publisher": "Corpus Christi Housing Authority",
+            "url": "https://www.hacc.org/wp-content/uploads/2020/03/RFP-20006-Unit-Make-Ready-Services.pdf"
+          },
+          {
+            "id": "bid.calvert-2025",
+            "title": "Calvert County ITB 2025-023 interior painting bid comparison",
+            "publisher": "Calvert County Government",
+            "url": "https://www.calvertcountymd.gov/DocumentCenter/View/47562"
+          },
+          {
+            "id": "bid.fortbend-2025",
+            "title": "Fort Bend County B25-040 carpet supply and install, signed contract",
+            "publisher": "Fort Bend County Purchasing",
+            "url": "https://agendalink.fortbendcountytx.gov/mindocs/2025/CCTR/20250311_3974/minutes/3756%5F36D%5Fsigned%5Fcontract%2Epdf"
+          },
+          {
+            "id": "bid.sc-painting-2024",
+            "title": "SC statewide painting GS-FPB-230213-02, intent to award",
+            "publisher": "SC Materials Management Office",
+            "url": "https://sc.edu/purchasing/solicitations/documents/Intent_to_Award_GS-FPB-230213-02.pdf"
+          },
+          {
+            "id": "bid.ia-pbs-2026",
+            "title": "Iowa DAS (Iowa PBS) commercial janitorial contract price sheet",
+            "publisher": "Iowa DAS",
+            "url": "https://bidopportunities.iowa.gov/Home/ShowContractDocument/88e00fdb-e46f-4095-8780-1346a869518e"
+          },
+          {
+            "id": "bid.ne-das",
+            "title": "Nebraska DAS awarded bid tab, North Platte custodial services",
+            "publisher": "State of Nebraska DAS",
+            "url": "https://das.nebraska.gov/materiel/purchasing/5758/bid tab AWARDED.pdf"
+          },
+          {
+            "id": "bid.carpet-clean-5agencies",
+            "title": "Carpet-cleaning per-sq-ft bid tabs, five agencies (research 09)",
+            "publisher": "Tektolo research 09",
+            "url": null
+          }
+        ]
+      },
+      "links": {
+        "page": "https://tektolo.com/capabilities/property-turnover",
+        "api": "https://tektolo.com/v1/capabilities/property-turnover",
+        "openapi": "https://tektolo.com/openapi.json",
+        "mcp": "https://tektolo.com/mcp",
+        "hub": "https://tektolo.com/tools/rental-property/",
+        "web_tool": "https://tektolo.com/tools/rental-property/property-turnover"
+      },
+      "content_sections": [
+        {
+          "label": "Turnover costs by city",
+          "url": "https://tektolo.com/turnover-costs/",
+          "summary": "apartment turnover cost for 530 metro and nonmetropolitan areas: typical ranges by unit size, local labor by trade and unit prices, computed from BLS wages by the same engine as the free tool"
+        }
+      ]
+    },
+    {
+      "id": "deposit-settlement",
+      "name": "Deposit settlement",
+      "version": "0.1.0",
+      "status": "experimental",
+      "summary": "Settle a US rental security deposit under the state's rule (and a covered city's): the return deadline, each deduction assessed (allowed category, depreciation, documentation), interest owed, the refund, penalty exposure and a draft itemized statement, every number cited.",
+      "outcome": "Return the deposit on time with a compliant itemized statement, and know the exposure if you do not.",
+      "domain": "rental-property",
+      "audiences": [
+        "landlord_pm",
+        "ai_agent"
+      ],
+      "audience_names": [
+        "Landlords and property managers",
+        "AI agents"
+      ],
+      "workflow": {
+        "chain": "move-out",
+        "step": 2
+      },
+      "featured": false,
+      "tags": [
+        "property-management",
+        "security-deposit",
+        "move-out",
+        "landlord-tenant",
+        "compliance",
+        "deadlines"
+      ],
+      "determinism": "strict",
+      "coverage": {
+        "regions": [
+          "US"
+        ],
+        "effective_from": "2026-10-09",
+        "as_of_input": true
+      },
+      "operations": [
+        {
+          "id": "settle",
+          "title": "Settle a security deposit after move-out",
+          "kind": "deterministic",
+          "summary": "Security deposit settlement for a US rental under the state's statute (and a covered city's ordinance): the date to return the deposit and itemized statement, each intended deduction assessed (allowed or not, prorated by useful life, documentation needed), interest owed, refund due, penalty exposure, a draft itemized statement and a citation for every rule. Covers all 50 states and DC, with city overlays for Chicago, San Francisco, Berkeley, Los Angeles, Seattle, Portland, Minneapolis and Saint Paul.",
+          "rest": {
+            "method": "POST",
+            "url": "https://tektolo.com/v1/deposit-settlement/settle"
+          },
+          "mcp_tool": "deposit_settlement_settle",
+          "schemas": {
+            "input": "https://tektolo.com/v1/capabilities/deposit-settlement/schemas/settle/input.json",
+            "output": "https://tektolo.com/v1/capabilities/deposit-settlement/schemas/settle/output.json"
+          },
+          "artifacts": {},
+          "requires_key": false,
+          "pricing": {
+            "model": "free_tier",
+            "free_calls_per_day": 20,
+            "free_tier_scope": "per client, UTC day, REST and MCP together",
+            "then_usd_per_call": "0.02",
+            "paid_lane": "x402",
+            "paid_lane_status": "testing"
+          },
+          "agent": {
+            "when_to_use": "A landlord or property manager is closing a move-out and asks when the deposit must be returned, what they may deduct (carpet, paint, cleaning, unpaid rent), how much interest is owed, what to put in the itemized statement, or what happens if they are late.",
+            "when_not_to_use": "Not legal advice and not a tenant demand letter. It does not price repairs (use property_turnover_quick_estimate for that), hold or account for deposits, or cover pet deposits, last-month's rent handling or non-US rentals. Where the statute sets no deadline (Kentucky, Tennessee) it says so; never present a guessed date as the rule.",
+            "tips": [
+              "Send as_of (today's date) for a repeatable answer; it defaults to today in UTC.",
+              "Give item_installed_on or item_age_years for carpet, paint, blinds and appliances; without them the tenancy length is assumed.",
+              "Mark normal wear with caused_by_tenant false; it is never deductible.",
+              "Relay deadline.return_by and its status, totals.refund_due_usd, penalty_exposure and the citations; say it is not legal advice.",
+              "Offer statement.text as the draft itemized statement; it has no names or addresses.",
+              "Relay warnings, assumptions and unknowns (for example the Texas forwarding address).",
+              "Send the start-event dates a state needs when known (forwarding_address_received_on, demand_received_on, new_tenant_moved_in_on, claim_notice_sent_on in Florida); without them the clock is not_started.",
+              "deadline.status none_in_statute means no statutory deadline; deadline.extended_to is the statute's weekend roll-forward, but advise acting by return_by."
+            ],
+            "example": "{\"state\": \"CA\", \"deposit_usd\": \"2000\", \"monthly_rent_usd\": \"2000\", \"move_in_on\": \"2023-06-01\", \"vacated_on\": \"2026-09-30\", \"deductions\": [{\"category\": \"cleaning\", \"amount_usd\": \"150\"}, {\"category\": \"carpet\", \"amount_usd\": \"1200\", \"item_age_years\": 5}], \"as_of\": \"2026-10-09\"}"
+          },
+          "examples": [
+            {
+              "path": "examples/california_carpet.json",
+              "input": {
+                "state": "CA",
+                "city": "Fresno",
+                "deposit_usd": "2000",
+                "monthly_rent_usd": "2000",
+                "move_in_on": "2023-06-01",
+                "vacated_on": "2026-09-30",
+                "deductions": [
+                  {
+                    "category": "cleaning",
+                    "amount_usd": "150",
+                    "has_receipt": true
+                  },
+                  {
+                    "category": "carpet",
+                    "amount_usd": "1200",
+                    "item_age_years": 5,
+                    "has_receipt": true
+                  },
+                  {
+                    "category": "paint",
+                    "amount_usd": "600",
+                    "item_installed_on": "2025-03-01",
+                    "has_receipt": true
+                  },
+                  {
+                    "category": "blinds_window_coverings",
+                    "amount_usd": "80",
+                    "caused_by_tenant": false
+                  }
+                ],
+                "documentation": {
+                  "itemized_statement": true,
+                  "receipts": true,
+                  "photos_move_out": true,
+                  "photos_after_repair": false
+                },
+                "as_of": "2026-10-09"
+              }
+            },
+            {
+              "path": "examples/chicago_interest.json",
+              "input": {
+                "state": "IL",
+                "city": "Chicago",
+                "deposit_usd": "1500",
+                "monthly_rent_usd": "1500",
+                "building_units": 12,
+                "move_in_on": "2025-08-01",
+                "vacated_on": "2026-07-31",
+                "deductions": [
+                  {
+                    "category": "wall_or_door_repair",
+                    "amount_usd": "200",
+                    "has_receipt": true
+                  }
+                ],
+                "documentation": {
+                  "itemized_statement": true,
+                  "receipts": true
+                },
+                "as_of": "2026-08-20"
+              }
+            },
+            {
+              "path": "examples/texas_no_forwarding_address.json",
+              "input": {
+                "state": "TX",
+                "deposit_usd": "1200",
+                "move_in_on": "2025-09-01",
+                "vacated_on": "2026-09-15",
+                "deductions": [
+                  {
+                    "category": "unpaid_rent",
+                    "amount_usd": "400"
+                  },
+                  {
+                    "category": "cleaning",
+                    "amount_usd": "120"
+                  },
+                  {
+                    "category": "late_fees",
+                    "amount_usd": "75"
+                  }
+                ],
+                "as_of": "2026-10-09"
+              }
+            }
+          ],
+          "x402": {
+            "protocol": "x402",
+            "x402_version": 2,
+            "scheme": "exact",
+            "network": "eip155:84532",
+            "network_name": "Base Sepolia",
+            "testnet": true,
+            "asset": {
+              "symbol": "USDC",
+              "address": "0x036CbD53842c5426634e7929541eC2318f3dCF7e",
+              "decimals": 6
+            },
+            "facilitator": "https://x402.org/facilitator",
+            "price_usd": "0.02",
+            "endpoint": {
+              "method": "POST",
+              "url": "https://tektolo.com/v1/x402/deposit-settlement/settle"
+            },
+            "artifacts": {},
+            "headers": {
+              "request": "PAYMENT-SIGNATURE",
+              "challenge": "PAYMENT-REQUIRED",
+              "receipt": "PAYMENT-RESPONSE"
+            },
+            "note": "Optional paid lane above the free limits; the free REST and MCP routes stay free. Not available over MCP."
+          }
+        },
+        {
+          "id": "rules",
+          "title": "Security deposit rules for a state (and city)",
+          "kind": "deterministic",
+          "summary": "The security deposit rules for one US state, with a covered city's overlay: return deadline and what starts it, itemization and documentation duties, allowed deductions and depreciation, interest, penalty, deposit cap and recent changes, with citations.",
+          "rest": {
+            "method": "POST",
+            "url": "https://tektolo.com/v1/deposit-settlement/rules"
+          },
+          "mcp_tool": "deposit_settlement_rules",
+          "schemas": {
+            "input": "https://tektolo.com/v1/capabilities/deposit-settlement/schemas/rules/input.json",
+            "output": "https://tektolo.com/v1/capabilities/deposit-settlement/schemas/rules/output.json"
+          },
+          "artifacts": {},
+          "requires_key": false,
+          "pricing": {
+            "model": "free",
+            "note": "Free lookup; not counted toward the daily free tier."
+          },
+          "agent": {
+            "when_to_use": "Someone asks what a state's (or a covered city's) security deposit rules are without a specific move-out to settle, or which states are covered.",
+            "when_not_to_use": "To settle a specific deposit (use deposit_settlement_settle, which applies the rules to the dates and deductions). Other landlord-tenant topics (evictions, rent control, notice periods) are not covered.",
+            "tips": [],
+            "example": "{\"state\": \"IL\", \"city\": \"Chicago\"}"
+          },
+          "examples": []
+        }
+      ],
+      "privacy": {
+        "retention_days": 0,
+        "trains_models": false,
+        "personal_data": "Inputs are a state, a city, amounts, dates and deduction categories; no tenant name, address or unit number is asked for. Deduction descriptions are never stored, logged, hashed or returned. Requests are not stored and no per-settlement record is kept. Each call leaves only the standard usage log line (capability, status, duration, hashes, a daily-rotating anonymous fingerprint)."
+      },
+      "limitations": [
+        "Computes and cites the published rule; it is not legal advice. Check the statute, your lease and local ordinances before you sign the statement.",
+        "Covers the 50 states and DC and eight city overlays; other local ordinances are not applied (the result warns).",
+        "Several state rows were read on a mirror (FindLaw, public.law) rather than the official code site, and some quotes are summaries; each citation says which.",
+        "Useful lives come from HUD's chart and industry tables (carpet 8 years, 10 in California and Colorado; paint 3, 2 in California with the DRE guide's step table; blinds 3; appliances 10). Send your own with useful_life_years.",
+        "Penalty amounts are statutory exposure, not a prediction of what a court would award.",
+        "Some rule text is summarised rather than quoted; each citation says which."
+      ],
+      "ruleset": {
+        "version": "sd-2026.10.1",
+        "hash": "sha256:3777ac89e2a1b9400e9abf225feca8733c14c19cdecf5740e24a00faf4631cd8",
+        "sources": [
+          {
+            "id": "al.code-35-9a-201",
+            "title": "Code of Alabama 35-9A-201 Security deposits; prepaid rent",
+            "publisher": "FindLaw (mirror)",
+            "url": "https://codes.findlaw.com/al/title-35-property/al-code-sect-35-9a-201/"
+          },
+          {
+            "id": "ak.as-34.03.070",
+            "title": "Alaska Statutes 34.03.070 Security deposits and prepaid rent",
+            "publisher": "FindLaw (mirror)",
+            "url": "https://codes.findlaw.com/ak/title-34-property/ak-st-sect-34-03-070/"
+          },
+          {
+            "id": "az.ars-33-1321",
+            "title": "Arizona Revised Statutes 33-1321 Security deposits",
+            "publisher": "Arizona State Legislature",
+            "url": "https://www.azleg.gov/ars/33/01321.htm"
+          },
+          {
+            "id": "ar.code-18-16-303",
+            "title": "Arkansas Code 18-16-303 Applicability (small-landlord exemption)",
+            "publisher": "FindLaw (mirror)",
+            "url": "https://codes.findlaw.com/ar/title-18-property/ar-code-sect-18-16-303/"
+          },
+          {
+            "id": "ar.code-18-16-304",
+            "title": "Arkansas Code 18-16-304 Limitation on amount",
+            "publisher": "FindLaw (mirror)",
+            "url": "https://codes.findlaw.com/ar/title-18-property/ar-code-sect-18-16-304/"
+          },
+          {
+            "id": "ar.code-18-16-305",
+            "title": "Arkansas Code 18-16-305 Return of deposit",
+            "publisher": "FindLaw (mirror)",
+            "url": "https://codes.findlaw.com/ar/title-18-property/ar-code-sect-18-16-305/"
+          },
+          {
+            "id": "ar.code-18-16-306",
+            "title": "Arkansas Code 18-16-306 Noncompliance by landlord",
+            "publisher": "FindLaw (mirror)",
+            "url": "https://codes.findlaw.com/ar/title-18-property/ar-code-sect-18-16-306/"
+          },
+          {
+            "id": "ar.ezel-survey",
+            "title": "Arkansas: Security Deposit Return Deadlines & Deductions",
+            "publisher": "ezel.ai",
+            "url": "https://ezel.ai/surveys/security-deposit-return-deadlines/arkansas"
+          },
+          {
+            "id": "ca.civ-1950.5",
+            "title": "California Civil Code 1950.5",
+            "publisher": "California Legislative Information (official)",
+            "url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=CIV&sectionNum=1950.5"
+          },
+          {
+            "id": "ca.ab12-2023",
+            "title": "AB 12 (2023) Security deposits",
+            "publisher": "California Legislature",
+            "url": "https://leginfo.legislature.ca.gov/faces/billNavClient.xhtml?bill_id=202320240AB12"
+          },
+          {
+            "id": "ca.ab2801-2024",
+            "title": "AB 2801 (2024) Tenancy: security deposits (photographs)",
+            "publisher": "California Legislature",
+            "url": "https://leginfo.legislature.ca.gov/faces/billNavClient.xhtml?bill_id=202320240AB2801"
+          },
+          {
+            "id": "ca.ab414-2025",
+            "title": "AB 414 (2025) Residential tenancies: return of security",
+            "publisher": "LegiScan",
+            "url": "https://legiscan.com/CA/bill/AB414/"
+          },
+          {
+            "id": "ca.dre-tenant-guide-2026",
+            "title": "California Tenants: A Guide to Residential Tenants' and Landlords' Rights and Responsibilities (2026 edition)",
+            "publisher": "California Department of Real Estate",
+            "url": "https://www.dre.ca.gov/publications/ResourceGuidebook/2026_Landlord_Tenant_Guide.pdf"
+          },
+          {
+            "id": "co.hb25-1249",
+            "title": "HB25-1249 Tenant Security Deposit Protections (enrolled act)",
+            "publisher": "Colorado General Assembly",
+            "url": "https://leg.colorado.gov/bill_files/84524/download"
+          },
+          {
+            "id": "co.hb25-1249-summary",
+            "title": "HB25-1249 bill page and summary",
+            "publisher": "Colorado General Assembly",
+            "url": "https://leg.colorado.gov/bills/hb25-1249"
+          },
+          {
+            "id": "co.crs-38-12-103",
+            "title": "Colorado Revised Statutes 38-12-103 Return of security deposit (pre-2026 text)",
+            "publisher": "FindLaw (mirror)",
+            "url": "https://codes.findlaw.com/co/title-38-property-real-and-personal/co-rev-st-sect-38-12-103/"
+          },
+          {
+            "id": "ct.cgs-47a-21",
+            "title": "Connecticut General Statutes 47a-21 Security deposits",
+            "publisher": "Connecticut General Assembly",
+            "url": "https://www.cga.ct.gov/current/pub/chap_831.htm#sec_47a-21"
+          },
+          {
+            "id": "ct.dob-deposit-index-2026",
+            "title": "CT Deposit Index and Interest Rates",
+            "publisher": "Connecticut Department of Banking",
+            "url": "https://portal.ct.gov/dob/rental-security-deposits/rental-security-deposits/deposit-index-and-interest-rates"
+          },
+          {
+            "id": "ct.dob-interest-calculator",
+            "title": "Interest Calculator - Landlord Tenant Security Deposits (xls)",
+            "publisher": "Connecticut Department of Banking",
+            "url": "https://portal.ct.gov/-/media/dob/rental-security-deposits/interestcalculationtable.xls"
+          },
+          {
+            "id": "de.code-25-5514",
+            "title": "Delaware Code Title 25 5514 Security deposit",
+            "publisher": "Delaware General Assembly",
+            "url": "https://delcode.delaware.gov/title25/c055/index.html"
+          },
+          {
+            "id": "dc.law-16-276",
+            "title": "D.C. Law 16-276, Interest on Rental Security Deposits Amendment Act of 2006",
+            "publisher": "Council of the District of Columbia",
+            "url": "https://code.dccouncil.gov/us/dc/council/laws/docs/16-276.pdf"
+          },
+          {
+            "id": "dc.code-42-3502.17",
+            "title": "D.C. Code 42-3502.17 Security deposit",
+            "publisher": "Council of the District of Columbia",
+            "url": "https://code.dccouncil.gov/us/dc/council/code/sections/42-3502.17"
+          },
+          {
+            "id": "dc.law-26-156",
+            "title": "D.C. Law 26-156, Fair Housing Practices Amendment Act of 2026",
+            "publisher": "Council of the District of Columbia",
+            "url": "https://code.dccouncil.gov/us/dc/council/laws/26-156"
+          },
+          {
+            "id": "dc.dcmr-14-309",
+            "title": "14 DCMR 309 Repayment of security deposits to tenants",
+            "publisher": "DC Office of Documents (DCRegs)",
+            "url": "https://dcregs.dc.gov/Common/DCMR/SectionList.aspx?SectionNumber=14-309"
+          },
+          {
+            "id": "dc.ezel-survey",
+            "title": "District of Columbia: Security Deposit Return Deadlines & Deductions",
+            "publisher": "ezel.ai",
+            "url": "https://ezel.ai/surveys/security-deposit-return-deadlines/district-of-columbia"
+          },
+          {
+            "id": "fl.stat-83.49",
+            "title": "Florida Statutes 83.49 Deposit money or advance rent",
+            "publisher": "Florida Legislature",
+            "url": "https://www.leg.state.fl.us/statutes/index.cfm?App_mode=Display_Statute&URL=0000-0099/0083/Sections/0083.49.html"
+          },
+          {
+            "id": "fl.stat-83.491",
+            "title": "Florida Statutes 83.491 Fee in lieu of security deposit",
+            "publisher": "Florida Legislature",
+            "url": "https://www.leg.state.fl.us/statutes/index.cfm?App_mode=Display_Statute&URL=0000-0099/0083/Sections/0083.491.html"
+          },
+          {
+            "id": "fl.stat-83.505",
+            "title": "Florida Statutes 83.505 Electronic delivery of notices",
+            "publisher": "Florida Legislature",
+            "url": "https://www.leg.state.fl.us/statutes/index.cfm?App_mode=Display_Statute&URL=0000-0099/0083/Sections/0083.505.html"
+          },
+          {
+            "id": "fl.laws-2025-16",
+            "title": "Laws of Florida ch. 2025-16 (CS/CS/CS/HB 615)",
+            "publisher": "Florida Department of State",
+            "url": "https://laws.flrules.org/2025/16"
+          },
+          {
+            "id": "fl.laws-2024-199",
+            "title": "Laws of Florida ch. 2024-199 (CS/HB 1305)",
+            "publisher": "Florida Department of State",
+            "url": "https://laws.flrules.org/2024/199"
+          },
+          {
+            "id": "fl.laws-2023-181",
+            "title": "Laws of Florida ch. 2023-181 (CS/HB 133)",
+            "publisher": "Florida Department of State",
+            "url": "https://laws.flrules.org/2023/181"
+          },
+          {
+            "id": "ga.code-44-7-34",
+            "title": "O.C.G.A. 44-7-34 Return of security deposit",
+            "publisher": "FindLaw (mirror)",
+            "url": "https://codes.findlaw.com/ga/title-44-property/ga-code-sect-44-7-34/"
+          },
+          {
+            "id": "ga.code-44-7-33",
+            "title": "O.C.G.A. 44-7-33 Move-in and move-out damage lists",
+            "publisher": "FindLaw (mirror)",
+            "url": "https://codes.findlaw.com/ga/title-44-property/ga-code-sect-44-7-33/"
+          },
+          {
+            "id": "ga.code-44-7-35",
+            "title": "O.C.G.A. 44-7-35 Landlord's liability",
+            "publisher": "FindLaw (mirror)",
+            "url": "https://codes.findlaw.com/ga/title-44-property/ga-code-sect-44-7-35/"
+          },
+          {
+            "id": "ga.code-44-7-36",
+            "title": "O.C.G.A. 44-7-36 Exemption for small owners",
+            "publisher": "FindLaw (mirror)",
+            "url": "https://codes.findlaw.com/ga/title-44-property/ga-code-sect-44-7-36/"
+          },
+          {
+            "id": "ga.hb404-2024",
+            "title": "HB 404 (2023-2024) Safe at Home Act, House Judiciary substitute",
+            "publisher": "Georgia General Assembly",
+            "url": "https://www.legis.ga.gov/api/legislation/document/20232024/216456"
+          },
+          {
+            "id": "hi.hrs-521-44",
+            "title": "Hawaii Revised Statutes 521-44 Security deposits",
+            "publisher": "FindLaw (mirror)",
+            "url": "https://codes.findlaw.com/hi/division-3-property-family/hi-rev-st-sect-521-44/"
+          },
+          {
+            "id": "id.code-6-321",
+            "title": "Idaho Code 6-321 Security deposits",
+            "publisher": "Idaho Legislature",
+            "url": "https://legislature.idaho.gov/statutesrules/idstat/Title6/T6CH3/SECT6-321/"
+          },
+          {
+            "id": "id.code-6-320",
+            "title": "Idaho Code 6-320 Action for damages by tenant",
+            "publisher": "Idaho Legislature",
+            "url": "https://legislature.idaho.gov/statutesrules/idstat/Title6/T6CH3/SECT6-320/"
+          },
+          {
+            "id": "id.code-6-324",
+            "title": "Idaho Code 6-324 Attorney fees",
+            "publisher": "Idaho Legislature",
+            "url": "https://legislature.idaho.gov/statutesrules/idstat/Title6/T6CH3/SECT6-324/"
+          },
+          {
+            "id": "il.ilcs-765-710",
+            "title": "Security Deposit Return Act, 765 ILCS 710",
+            "publisher": "Illinois General Assembly",
+            "url": "https://www.ilga.gov/legislation/ilcs/ilcs3.asp?ActID=2202&ChapterID=62"
+          },
+          {
+            "id": "il.ilcs-765-715",
+            "title": "Security Deposit Interest Act, 765 ILCS 715",
+            "publisher": "Illinois General Assembly",
+            "url": "https://www.ilga.gov/legislation/ilcs/ilcs3.asp?ActID=2203&ChapterID=62"
+          },
+          {
+            "id": "il.pa-103-0224",
+            "title": "Illinois Public Act 103-0224",
+            "publisher": "Illinois General Assembly",
+            "url": "https://www.ilga.gov/legislation/publicacts/fulltext.asp?Name=103-0224"
+          },
+          {
+            "id": "in.code-32-31-3-12",
+            "title": "Indiana Code 32-31-3-12",
+            "publisher": "FindLaw (mirror)",
+            "url": "https://codes.findlaw.com/in/title-32-property/in-code-sect-32-31-3-12/"
+          },
+          {
+            "id": "in.code-32-31-3-13",
+            "title": "Indiana Code 32-31-3-13",
+            "publisher": "FindLaw (mirror)",
+            "url": "https://codes.findlaw.com/in/title-32-property/in-code-sect-32-31-3-13/"
+          },
+          {
+            "id": "in.code-32-31-3-14",
+            "title": "Indiana Code 32-31-3-14",
+            "publisher": "FindLaw (mirror)",
+            "url": "https://codes.findlaw.com/in/title-32-property/in-code-sect-32-31-3-14/"
+          },
+          {
+            "id": "in.code-32-31-3-15",
+            "title": "Indiana Code 32-31-3-15",
+            "publisher": "FindLaw (mirror)",
+            "url": "https://codes.findlaw.com/in/title-32-property/in-code-sect-32-31-3-15/"
+          },
+          {
+            "id": "in.code-32-31-3-16",
+            "title": "Indiana Code 32-31-3-16",
+            "publisher": "FindLaw (mirror)",
+            "url": "https://codes.findlaw.com/in/title-32-property/in-code-sect-32-31-3-16/"
+          },
+          {
+            "id": "ia.code-562a.12",
+            "title": "Iowa Code 562A.12 Rental deposits (Iowa Code 2026)",
+            "publisher": "Iowa Legislature",
+            "url": "https://www.legis.iowa.gov/docs/code/562A.12.pdf"
+          },
+          {
+            "id": "ks.ksa-58-2550",
+            "title": "Kansas Statutes 58-2550 Security deposits",
+            "publisher": "Kansas Office of Revisor of Statutes",
+            "url": "https://ksrevisor.gov/statutes/chapters/ch58/058_025_0050.html"
+          },
+          {
+            "id": "ky.krs-383.580",
+            "title": "KRS 383.580 Security deposits",
+            "publisher": "Kentucky General Assembly (Legislative Research Commission)",
+            "url": "https://apps.legislature.ky.gov/law/statutes/statute.aspx?id=35733"
+          },
+          {
+            "id": "ky.krs-383.500",
+            "title": "KRS 383.500 Local adoption of the URLTA",
+            "publisher": "Kentucky General Assembly (Legislative Research Commission)",
+            "url": "https://apps.legislature.ky.gov/law/statutes/statute.aspx?id=35717"
+          },
+          {
+            "id": "ezel.ky",
+            "title": "Kentucky: Security Deposit Return Deadlines & Deductions",
+            "publisher": "Ezel AI",
+            "url": "https://ezel.ai/surveys/security-deposit-return-deadlines/kentucky"
+          },
+          {
+            "id": "la.rs-9-3251",
+            "title": "La. R.S. 9:3251 Lessee's deposit",
+            "publisher": "Louisiana State Legislature",
+            "url": "https://legis.la.gov/legis/Law.aspx?d=107468"
+          },
+          {
+            "id": "la.rs-9-3252",
+            "title": "La. R.S. 9:3252 Failure of lessor to comply",
+            "publisher": "Louisiana State Legislature",
+            "url": "https://legis.la.gov/legis/Law.aspx?d=107469"
+          },
+          {
+            "id": "la.rs-9-3253",
+            "title": "La. R.S. 9:3253 Costs and attorney's fees",
+            "publisher": "Louisiana State Legislature",
+            "url": "https://legis.la.gov/legis/Law.aspx?d=107470"
+          },
+          {
+            "id": "la.act63-2026",
+            "title": "Act 63 of 2026 (HB 292), amending R.S. 9:3251",
+            "publisher": "Louisiana State Legislature",
+            "url": "https://www.legis.la.gov/legis/BillInfo.aspx?i=250012"
+          },
+          {
+            "id": "ezel.la",
+            "title": "Louisiana: Security Deposit Return Deadlines & Deductions",
+            "publisher": "Ezel AI",
+            "url": "https://ezel.ai/surveys/security-deposit-return-deadlines/louisiana"
+          },
+          {
+            "id": "me.14-6031",
+            "title": "14 M.R.S. 6031 Definitions",
+            "publisher": "Maine Legislature, Office of the Revisor of Statutes",
+            "url": "https://legislature.maine.gov/statutes/14/title14sec6031.html"
+          },
+          {
+            "id": "me.14-6032",
+            "title": "14 M.R.S. 6032 Maximum security deposit",
+            "publisher": "Maine Legislature, Office of the Revisor of Statutes",
+            "url": "https://legislature.maine.gov/statutes/14/title14sec6032.html"
+          },
+          {
+            "id": "me.14-6033",
+            "title": "14 M.R.S. 6033 Return of the security deposit",
+            "publisher": "Maine Legislature, Office of the Revisor of Statutes",
+            "url": "https://legislature.maine.gov/statutes/14/title14sec6033.html"
+          },
+          {
+            "id": "me.14-6034",
+            "title": "14 M.R.S. 6034 Wrongful retention; damages",
+            "publisher": "Maine Legislature, Office of the Revisor of Statutes",
+            "url": "https://legislature.maine.gov/statutes/14/title14sec6034.html"
+          },
+          {
+            "id": "me.14-6037",
+            "title": "14 M.R.S. 6037 Exemptions",
+            "publisher": "Maine Legislature, Office of the Revisor of Statutes",
+            "url": "https://legislature.maine.gov/statutes/14/title14sec6037.html"
+          },
+          {
+            "id": "md.rp-8-203",
+            "title": "Md. Code, Real Property 8-203 Security deposits",
+            "publisher": "Maryland General Assembly",
+            "url": "https://mgaleg.maryland.gov/mgawebsite/Laws/StatuteText?article=grp&section=8-203"
+          },
+          {
+            "id": "md.ch124-2024",
+            "title": "2024 Md. Laws ch. 124 (HB 693), Renters' Rights and Stabilization Act of 2024",
+            "publisher": "Maryland General Assembly",
+            "url": "https://mgaleg.maryland.gov/2024rs/Chapters_noln/CH_124_hb0693e.pdf"
+          },
+          {
+            "id": "md.dhcd-hb693-handout",
+            "title": "Renters' Rights & Stabilization Act handout for renters",
+            "publisher": "Maryland Department of Housing and Community Development",
+            "url": "https://dhcd.maryland.gov/TurningTheKey/Documents/HB693-Handout-for-Renters.pdf"
+          },
+          {
+            "id": "md.dhcd-rsd-calculator",
+            "title": "Rental Security Deposit Calculator",
+            "publisher": "Maryland Department of Housing and Community Development",
+            "url": "https://dhcd.prod.maryland.gov/housing/renter-landlord-resources/rental-security-deposit-calculator"
+          },
+          {
+            "id": "ezel.md",
+            "title": "Maryland: Security Deposit Return Deadlines & Deductions",
+            "publisher": "Ezel AI",
+            "url": "https://ezel.ai/surveys/security-deposit-return-deadlines/maryland"
+          },
+          {
+            "id": "ma.c186-15b",
+            "title": "M.G.L. c. 186, s. 15B",
+            "publisher": "The 194th General Court of the Commonwealth of Massachusetts",
+            "url": "https://malegislature.gov/Laws/GeneralLaws/PartII/TitleI/Chapter186/Section15B"
+          },
+          {
+            "id": "ezel.ma",
+            "title": "Massachusetts: Security Deposit Return Deadlines & Deductions",
+            "publisher": "Ezel AI",
+            "url": "https://ezel.ai/surveys/security-deposit-return-deadlines/massachusetts"
+          },
+          {
+            "id": "mi.mcl-554-602",
+            "title": "MCL 554.602 Security deposit; amount",
+            "publisher": "Michigan Legislature",
+            "url": "https://www.legislature.mi.gov/Laws/MCL?objectName=mcl-554-602"
+          },
+          {
+            "id": "mi.mcl-554-607",
+            "title": "MCL 554.607 Permissible uses",
+            "publisher": "Michigan Legislature",
+            "url": "https://www.legislature.mi.gov/Laws/MCL?objectName=mcl-554-607"
+          },
+          {
+            "id": "mi.mcl-554-608",
+            "title": "MCL 554.608 Inventory checklists",
+            "publisher": "Michigan Legislature",
+            "url": "https://www.legislature.mi.gov/Laws/MCL?objectName=mcl-554-608"
+          },
+          {
+            "id": "mi.mcl-554-609",
+            "title": "MCL 554.609 Itemized list of damages",
+            "publisher": "Michigan Legislature",
+            "url": "https://www.legislature.mi.gov/Laws/MCL?objectName=mcl-554-609"
+          },
+          {
+            "id": "mi.mcl-554-610",
+            "title": "MCL 554.610 Effect of noncompliance with notice of damages requirement",
+            "publisher": "Michigan Legislature",
+            "url": "https://www.legislature.mi.gov/Laws/MCL?objectName=mcl-554-610"
+          },
+          {
+            "id": "mi.mcl-554-611",
+            "title": "MCL 554.611 Notice of forwarding address",
+            "publisher": "Michigan Legislature",
+            "url": "https://www.legislature.mi.gov/Laws/MCL?objectName=mcl-554-611"
+          },
+          {
+            "id": "mi.mcl-554-613",
+            "title": "MCL 554.613 Action for damages; retention of security deposit",
+            "publisher": "Michigan Legislature",
+            "url": "https://www.legislature.mi.gov/Laws/MCL?objectName=mcl-554-613"
+          },
+          {
+            "id": "ezel.mi",
+            "title": "Michigan: Security Deposit Return Deadlines & Deductions",
+            "publisher": "Ezel AI",
+            "url": "https://ezel.ai/surveys/security-deposit-return-deadlines/michigan"
+          },
+          {
+            "id": "mn.504b-178",
+            "title": "Minn. Stat. 504B.178 Security deposits",
+            "publisher": "Minnesota Office of the Revisor of Statutes",
+            "url": "https://www.revisor.mn.gov/statutes/cite/504B.178"
+          },
+          {
+            "id": "mn.504b-182",
+            "title": "Minn. Stat. 504B.182 Initial and final inspection required",
+            "publisher": "Minnesota Office of the Revisor of Statutes",
+            "url": "https://www.revisor.mn.gov/statutes/cite/504B.182"
+          },
+          {
+            "id": "mn.sl-2023-c52",
+            "title": "2023 Minn. Laws ch. 52 (session law)",
+            "publisher": "Minnesota Office of the Revisor of Statutes",
+            "url": "https://www.revisor.mn.gov/laws/2023/0/Session+Law/Chapter/52/"
+          },
+          {
+            "id": "ezel.mn",
+            "title": "Minnesota: Security Deposit Return Deadlines & Deductions",
+            "publisher": "Ezel AI",
+            "url": "https://ezel.ai/surveys/security-deposit-return-deadlines/minnesota"
+          },
+          {
+            "id": "ms.89-8-21",
+            "title": "Miss. Code Ann. 89-8-21",
+            "publisher": "FindLaw (Thomson Reuters)",
+            "url": "https://codes.findlaw.com/ms/title-89-real-and-personal-property/ms-code-sect-89-8-21/"
+          },
+          {
+            "id": "ezel.ms",
+            "title": "Mississippi: Security Deposit Return Deadlines & Deductions",
+            "publisher": "Ezel AI",
+            "url": "https://ezel.ai/surveys/security-deposit-return-deadlines/mississippi"
+          },
+          {
+            "id": "mo.535-300",
+            "title": "RSMo 535.300 Security deposits",
+            "publisher": "Missouri Revisor of Statutes",
+            "url": "https://revisor.mo.gov/main/OneSection.aspx?section=535.300"
+          },
+          {
+            "id": "mt.70-25-201",
+            "title": "Mont. Code Ann. 70-25-201 Security deposit -- deductions authorized",
+            "publisher": "Montana Legislature",
+            "url": "https://leg.mt.gov/bills/mca/title_0700/chapter_0250/part_0020/section_0010/0700-0250-0020-0010.html"
+          },
+          {
+            "id": "mt.70-25-202",
+            "title": "Mont. Code Ann. 70-25-202 List of damages and refund",
+            "publisher": "Montana Legislature",
+            "url": "https://leg.mt.gov/bills/mca/title_0700/chapter_0250/part_0020/section_0020/0700-0250-0020-0020.html"
+          },
+          {
+            "id": "mt.70-25-204",
+            "title": "Mont. Code Ann. 70-25-204 Wrongful withholding of security deposit -- action",
+            "publisher": "Montana Legislature",
+            "url": "https://leg.mt.gov/bills/mca/title_0700/chapter_0250/part_0020/section_0040/0700-0250-0020-0040.html"
+          },
+          {
+            "id": "ezel.mt",
+            "title": "Montana: Security Deposit Return Deadlines & Deductions",
+            "publisher": "Ezel AI",
+            "url": "https://ezel.ai/surveys/security-deposit-return-deadlines/montana"
+          },
+          {
+            "id": "ne.76-1416",
+            "title": "Neb. Rev. Stat. 76-1416 Security deposits; prepaid rent",
+            "publisher": "Nebraska Legislature",
+            "url": "https://nebraskalegislature.gov/laws/statutes.php?statute=76-1416"
+          },
+          {
+            "id": "ezel.ne",
+            "title": "Nebraska: Security Deposit Return Deadlines & Deductions",
+            "publisher": "Ezel AI",
+            "url": "https://ezel.ai/surveys/security-deposit-return-deadlines/nebraska"
+          },
+          {
+            "id": "nv.nrs-118a",
+            "title": "NRS Chapter 118A (118A.242 Security deposit)",
+            "publisher": "Nevada Legislature",
+            "url": "https://www.leg.state.nv.us/NRS/NRS-118A.html#NRS118ASec242"
+          },
+          {
+            "id": "ezel.nv",
+            "title": "Nevada: Security Deposit Return Deadlines & Deductions",
+            "publisher": "Ezel AI",
+            "url": "https://ezel.ai/surveys/security-deposit-return-deadlines/nevada"
+          },
+          {
+            "id": "nh.rsa-540-a-5",
+            "title": "N.H. RSA 540-A:5 Definitions",
+            "publisher": "New Hampshire General Court",
+            "url": "https://gc.nh.gov/rsa/html/LV/540-A/540-A-5.htm"
+          },
+          {
+            "id": "nh.rsa-540-a-6",
+            "title": "N.H. RSA 540-A:6 Procedure",
+            "publisher": "New Hampshire General Court",
+            "url": "https://gc.nh.gov/rsa/html/LV/540-A/540-A-6.htm"
+          },
+          {
+            "id": "nh.rsa-540-a-7",
+            "title": "N.H. RSA 540-A:7 Return of Security Deposit",
+            "publisher": "New Hampshire General Court",
+            "url": "https://gc.nh.gov/rsa/html/LV/540-A/540-A-7.htm"
+          },
+          {
+            "id": "nh.rsa-540-a-8",
+            "title": "N.H. RSA 540-A:8 Remedies",
+            "publisher": "New Hampshire General Court",
+            "url": "https://gc.nh.gov/rsa/html/LV/540-A/540-A-8.htm"
+          },
+          {
+            "id": "nj.46-8-19",
+            "title": "N.J.S.A. 46:8-19 Security deposits; investment, interest, notice",
+            "publisher": "FindLaw (Thomson Reuters)",
+            "url": "https://codes.findlaw.com/nj/title-46-property/nj-st-sect-46-8-19/"
+          },
+          {
+            "id": "nj.46-8-21.1",
+            "title": "N.J.S.A. 46:8-21.1 Return of deposit; itemization; double damages",
+            "publisher": "FindLaw (Thomson Reuters)",
+            "url": "https://codes.findlaw.com/nj/title-46-property/nj-st-sect-46-8-21-1/"
+          },
+          {
+            "id": "nj.46-8-21.2",
+            "title": "N.J.S.A. 46:8-21.2 Maximum security deposit",
+            "publisher": "FindLaw (Thomson Reuters)",
+            "url": "https://codes.findlaw.com/nj/title-46-property/nj-st-sect-46-8-21-2/"
+          },
+          {
+            "id": "nj.46-8-26",
+            "title": "N.J.S.A. 46:8-26 Applicability; owner-occupied exemption",
+            "publisher": "FindLaw (Thomson Reuters)",
+            "url": "https://codes.findlaw.com/nj/title-46-property/nj-st-sect-46-8-26/"
+          },
+          {
+            "id": "ezel.nj",
+            "title": "New Jersey: Security Deposit Return Deadlines & Deductions",
+            "publisher": "Ezel AI",
+            "url": "https://ezel.ai/surveys/security-deposit-return-deadlines/new-jersey"
+          },
+          {
+            "id": "nm.47-8-18",
+            "title": "NMSA 1978 47-8-18 Deposits",
+            "publisher": "FindLaw (Thomson Reuters)",
+            "url": "https://codes.findlaw.com/nm/chapter-47-property-law/nm-st-sect-47-8-18/"
+          },
+          {
+            "id": "ezel.nm",
+            "title": "New Mexico: Security Deposit Return Deadlines & Deductions",
+            "publisher": "Ezel AI",
+            "url": "https://ezel.ai/surveys/security-deposit-return-deadlines/new-mexico"
+          },
+          {
+            "id": "ny.gol-7-108",
+            "title": "N.Y. Gen. Oblig. Law 7-108",
+            "publisher": "New York State Senate (official)",
+            "url": "https://www.nysenate.gov/legislation/laws/GOB/7-108"
+          },
+          {
+            "id": "ny.gol-7-103",
+            "title": "N.Y. Gen. Oblig. Law 7-103",
+            "publisher": "public.law (reprint of nysenate.gov)",
+            "url": "https://newyork.public.law/laws/n.y._general_obligations_law_section_7-103"
+          },
+          {
+            "id": "ezel.ny",
+            "title": "New York: Security Deposit Return Deadlines & Deductions",
+            "publisher": "Ezel AI",
+            "url": "https://ezel.ai/surveys/security-deposit-return-deadlines/new-york"
+          },
+          {
+            "id": "nc.gs-42-50",
+            "title": "N.C. Gen. Stat. 42-50 Deposits from the tenant",
+            "publisher": "North Carolina General Assembly",
+            "url": "https://www.ncleg.gov/EnactedLegislation/Statutes/HTML/BySection/Chapter_42/GS_42-50.html"
+          },
+          {
+            "id": "nc.gs-42-51",
+            "title": "N.C. Gen. Stat. 42-51 Permitted uses of the deposit",
+            "publisher": "North Carolina General Assembly",
+            "url": "https://www.ncleg.gov/EnactedLegislation/Statutes/HTML/BySection/Chapter_42/GS_42-51.html"
+          },
+          {
+            "id": "nc.gs-42-52",
+            "title": "N.C. Gen. Stat. 42-52 Landlord's obligations",
+            "publisher": "North Carolina General Assembly",
+            "url": "https://www.ncleg.gov/EnactedLegislation/Statutes/HTML/BySection/Chapter_42/GS_42-52.html"
+          },
+          {
+            "id": "nc.gs-42-55",
+            "title": "N.C. Gen. Stat. 42-55 Remedies",
+            "publisher": "North Carolina General Assembly",
+            "url": "https://www.ncleg.gov/EnactedLegislation/Statutes/HTML/BySection/Chapter_42/GS_42-55.html"
+          },
+          {
+            "id": "ezel.nc",
+            "title": "North Carolina: Security Deposit Return Deadlines & Deductions",
+            "publisher": "Ezel AI",
+            "url": "https://ezel.ai/surveys/security-deposit-return-deadlines/north-carolina"
+          },
+          {
+            "id": "nd.cc-47-16-07.1",
+            "title": "N.D. Cent. Code ch. 47-16 (Leases), sec. 47-16-07.1 Real property and dwelling security deposits",
+            "publisher": "North Dakota Legislative Branch",
+            "url": "https://ndlegis.gov/cencode/t47c16.pdf"
+          },
+          {
+            "id": "oh.rc-5321.16",
+            "title": "Ohio Rev. Code 5321.16 Procedures for security deposits",
+            "publisher": "Ohio Legislative Service Commission",
+            "url": "https://codes.ohio.gov/ohio-revised-code/section-5321.16"
+          },
+          {
+            "id": "ok.41-115",
+            "title": "Okla. Stat. tit. 41, 115 Damage or security deposits (Title 41 complete text, RTF)",
+            "publisher": "Oklahoma Legislature",
+            "url": "https://www.oklegislature.gov/OK_Statutes/CompleteTitles/os41.rtf"
+          },
+          {
+            "id": "or.ors-90.300",
+            "title": "ORS 90.300 Security deposits; prepaid rent (ORS chapter 90, 2025 edition)",
+            "publisher": "Oregon Legislature (Legislative Counsel)",
+            "url": "https://www.oregonlegislature.gov/bills_laws/ors/ors090.html"
+          },
+          {
+            "id": "or.ors-90.255",
+            "title": "ORS 90.255 Attorney fees",
+            "publisher": "Oregon Legislature (Legislative Counsel)",
+            "url": "https://www.oregonlegislature.gov/bills_laws/ors/ors090.html"
+          },
+          {
+            "id": "pa.lta-1951-ch5",
+            "title": "Landlord and Tenant Act of 1951 (Act 20), Article V incl. secs. 511.1-512 (68 P.S. 250.511a-250.512)",
+            "publisher": "Pennsylvania General Assembly",
+            "url": "https://www.palegis.us/statutes/unconsolidated/law-information/view-statute?txtType=PDF&SessYr=1951&SessInd=0&ActNum=0020.&chpt=5&subchpt=000."
+          },
+          {
+            "id": "ri.34-18-19",
+            "title": "R.I. Gen. Laws 34-18-19 Security deposits",
+            "publisher": "Rhode Island General Assembly",
+            "url": "https://webserver.rilegislature.gov/Statutes/TITLE34/34-18/34-18-19.htm"
+          },
+          {
+            "id": "sc.27-40-410",
+            "title": "S.C. Code tit. 27 ch. 40 (Residential Landlord and Tenant Act), sec. 27-40-410",
+            "publisher": "South Carolina Legislature",
+            "url": "https://www.scstatehouse.gov/code/t27c040.php"
+          },
+          {
+            "id": "sd.43-32-24",
+            "title": "SDCL 43-32-24 Return of security deposit after termination of tenancy",
+            "publisher": "South Dakota Legislative Research Council",
+            "url": "https://sdlegislature.gov/Statutes/43-32-24"
+          },
+          {
+            "id": "sd.43-32-6.1",
+            "title": "SDCL 43-32-6.1 Maximum security deposit for residential premises",
+            "publisher": "South Dakota Legislative Research Council",
+            "url": "https://sdlegislature.gov/Statutes/43-32-6.1"
+          },
+          {
+            "id": "sd.sl2026-ch179",
+            "title": "SD Session Laws 2026, chapter 179 (Senate Bill 4): revise procedures for returning and withholding security deposits",
+            "publisher": "South Dakota Legislative Research Council",
+            "url": "https://mylrc.sdlegislature.gov/api/Documents/SessionLaw/300761.pdf?Year=2026"
+          },
+          {
+            "id": "tn.66-28-301",
+            "title": "Tenn. Code Ann. 66-28-301 Security deposits (FindLaw mirror)",
+            "publisher": "FindLaw (Thomson Reuters)",
+            "url": "https://codes.findlaw.com/tn/title-66-property/tn-code-sect-66-28-301.html"
+          },
+          {
+            "id": "tn.66-28-102",
+            "title": "Tenn. Code Ann. 66-28-102 Applicability (FindLaw mirror)",
+            "publisher": "FindLaw (Thomson Reuters)",
+            "url": "https://codes.findlaw.com/tn/title-66-property/tn-code-sect-66-28-102.html"
+          },
+          {
+            "id": "ezel.tn-deadline",
+            "title": "Tennessee: Security Deposit Return Deadlines & Deductions",
+            "publisher": "ezel.ai",
+            "url": "https://ezel.ai/surveys/security-deposit-return-deadlines/tennessee"
+          },
+          {
+            "id": "tx.prop-ch92",
+            "title": "Tex. Prop. Code ch. 92, subchapter C Security Deposits (92.101-92.113)",
+            "publisher": "Texas Legislative Council",
+            "url": "https://tcss.legis.texas.gov/resources/PR/htm/PR.92.htm"
+          },
+          {
+            "id": "ut.57-17-3",
+            "title": "Utah Code 57-17-3 Deductions from deposit -- Written itemization -- Time for return (effective 5/7/2025)",
+            "publisher": "Utah Legislature",
+            "url": "https://le.utah.gov/xcode/Title57/Chapter17/C57-17-S3_2025050720250507.html"
+          },
+          {
+            "id": "ut.57-17-5",
+            "title": "Utah Code 57-17-5 Failure to return deposit -- Recovery of deposit, penalty, costs, and attorney fees",
+            "publisher": "Utah Legislature",
+            "url": "https://le.utah.gov/xcode/Title57/Chapter17/C57-17-S5_2023050320240701.html"
+          },
+          {
+            "id": "ut.hb480-2025",
+            "title": "Utah H.B. 480 (2025) Landlord Communication Amendments, enrolled copy",
+            "publisher": "Utah Legislature",
+            "url": "https://le.utah.gov/Session/2025/bills/enrolled/HB0480.pdf"
+          },
+          {
+            "id": "vt.9-4461",
+            "title": "9 V.S.A. 4461 Security deposits",
+            "publisher": "Vermont General Assembly",
+            "url": "https://legislature.vermont.gov/statutes/section/09/137/04461"
+          },
+          {
+            "id": "va.55.1-1226",
+            "title": "Va. Code 55.1-1226 Security deposits",
+            "publisher": "Virginia Division of Legislative Automated Systems",
+            "url": "https://law.lis.virginia.gov/vacode/title55.1/chapter12/section55.1-1226/"
+          },
+          {
+            "id": "va.hb1542-2023",
+            "title": "Virginia HB 1542 (2023) Virginia Residential Landlord and Tenant Act; security deposits",
+            "publisher": "FastDemocracy (bill tracker)",
+            "url": "https://fastdemocracy.com/bill-search/va/2023/bills/VAB00024142"
+          },
+          {
+            "id": "wa.rcw-59.18.280",
+            "title": "RCW 59.18.280 Moneys paid as deposit or security for performance by tenant -- Statement and notice of basis for retention -- Remedies",
+            "publisher": "Washington State Legislature",
+            "url": "https://app.leg.wa.gov/RCW/default.aspx?cite=59.18.280"
+          },
+          {
+            "id": "wv.37-6A-1",
+            "title": "W. Va. Code 37-6A-1 Definitions (notice period)",
+            "publisher": "West Virginia Legislature",
+            "url": "https://code.wvlegislature.gov/37-6A-1/"
+          },
+          {
+            "id": "wv.37-6A-2",
+            "title": "W. Va. Code 37-6A-2 Security deposits",
+            "publisher": "West Virginia Legislature",
+            "url": "https://code.wvlegislature.gov/37-6A-2/"
+          },
+          {
+            "id": "wv.37-6A-5",
+            "title": "W. Va. Code 37-6A-5 Landlord's noncompliance",
+            "publisher": "West Virginia Legislature",
+            "url": "https://code.wvlegislature.gov/37-6A-5/"
+          },
+          {
+            "id": "wi.704.28",
+            "title": "Wis. Stat. 704.28 Withholding from and return of security deposits",
+            "publisher": "Wisconsin Legislature",
+            "url": "https://docs.legis.wisconsin.gov/statutes/statutes/704/28"
+          },
+          {
+            "id": "wi.atcp-134.06",
+            "title": "Wis. Admin. Code ATCP 134.06 Security deposits",
+            "publisher": "Wisconsin Legislature (Legislative Reference Bureau)",
+            "url": "https://docs.legis.wisconsin.gov/document/administrativecode/ATCP%20134.06"
+          },
+          {
+            "id": "wi.100.20",
+            "title": "Wis. Stat. 100.20(5) Unfair methods of competition and trade practices -- double damages",
+            "publisher": "Wisconsin Legislature",
+            "url": "https://docs.legis.wisconsin.gov/statutes/statutes/100/20/5"
+          },
+          {
+            "id": "wy.1-21-1208",
+            "title": "Wyo. Stat. 1-21-1208 Deductions from deposit; written itemization; time limits (Title 1 PDF)",
+            "publisher": "Wyoming Legislature",
+            "url": "https://wyoleg.gov/statutes/compress/title01.pdf"
+          },
+          {
+            "id": "chicago.rlto-summary-2023",
+            "title": "City of Chicago, Residential Landlord and Tenant Ordinance Summary (2023, English)",
+            "publisher": "City of Chicago, Department of Housing",
+            "url": "https://www.chicago.gov/content/dam/city/depts/doh/RLTO/RLTO%20Summary_2023_EN_FINAL.pdf"
+          },
+          {
+            "id": "chicago.deposit-interest-2026",
+            "title": "RLTO Rate of Interest on Security Deposits, lease rider 2026",
+            "publisher": "City of Chicago, Department of Housing (City Comptroller rate)",
+            "url": "https://www.chicago.gov/content/dam/city/depts/doh/general/SD%20Interest%20Rate%20Lease%20Rider_2026.pdf"
+          },
+          {
+            "id": "sf.rentboard-security-deposits",
+            "title": "Security Deposits (Rent Board Topic 101)",
+            "publisher": "San Francisco Rent Board",
+            "url": "https://www.sf.gov/reports--security-deposits"
+          },
+          {
+            "id": "sf.rentboard-rate-2026",
+            "title": "New Interest Rate for Security Deposits Effective 3/1/26",
+            "publisher": "San Francisco Rent Board",
+            "url": "https://www.sf.gov/news--new-interest-rate-security-deposits-effective-3126"
+          },
+          {
+            "id": "berkeley.rentboard-interest-calculator",
+            "title": "Security Deposit Interest & Calculator",
+            "publisher": "City of Berkeley Rent Stabilization Board",
+            "url": "https://rentboard.berkeleyca.gov/rights-responsibilities/security-deposits/security-deposit-interest-calculator"
+          },
+          {
+            "id": "berkeley.rentboard-2025-interest-news",
+            "title": "2026 AGA Published and the 2025 Security Deposit Interest Payment Due Soon",
+            "publisher": "City of Berkeley Rent Stabilization Board",
+            "url": "https://rentboard.berkeleyca.gov/elected-rent-board/news/2026-aga-published-and-2025-security-deposit-interest-payment-due-soon"
+          },
+          {
+            "id": "la.lahd-bulletin-44-2026",
+            "title": "Rent Stabilization Bulletin 44, Interest Payment on Security Deposit (01/13/2026)",
+            "publisher": "Los Angeles Housing Department",
+            "url": "https://housing2.lacity.org/wp-content/uploads/2023/01/44-Interest-Payments-on-Security-Deposits-English.pdf"
+          },
+          {
+            "id": "santamonica.rentcontrol-security-deposits-2024",
+            "title": "Security Deposits (Rent Control information by subject, 08-2024)",
+            "publisher": "City of Santa Monica Rent Control Board",
+            "url": "https://santamonica.gov/media/Document%20Library/Topic%20Explainers/Rent%20Control%20Information%20by%20Subject/Security%20Deposits%2008-2024.pdf"
+          },
+          {
+            "id": "seattle.sdci-move-in-charges",
+            "title": "Move-In Charges (common code questions)",
+            "publisher": "Seattle Department of Construction and Inspections",
+            "url": "https://seattle.gov/construction-and-inspections/codes/common-code-questions/move-in-charges"
+          },
+          {
+            "id": "portland.pcc-30.01.087",
+            "title": "Portland City Code 30.01.087 Security Deposits; Pre-paid Rent",
+            "publisher": "City of Portland",
+            "url": "https://www.portland.gov/code/30/01/087"
+          },
+          {
+            "id": "portland.phb-security-deposits",
+            "title": "Security Deposits (Rental Services Office)",
+            "publisher": "Portland Housing Bureau",
+            "url": "https://www.portland.gov/phb/rental-services/security-deposits"
+          },
+          {
+            "id": "portland.hou-3.07-2022",
+            "title": "Rental Housing Security Deposits Permanent Administrative Rule (effective July 29, 2022)",
+            "publisher": "Portland Housing Bureau",
+            "url": "https://www.portland.gov/phb/rental-services/documents/security-deposits-permanent-administrative-rules-effective-july-29/download"
+          },
+          {
+            "id": "portland.hou-3.07-2021",
+            "title": "HOU-3.07 Rental Housing Security Deposits Permanent Rule (as amended March 29, 2021)",
+            "publisher": "City of Portland (eFiles)",
+            "url": "https://efiles.portlandoregon.gov/record/15366695/file/document"
+          },
+          {
+            "id": "portland.depreciation-schedule-2020",
+            "title": "Fixture, Appliance, Equipment, and Personal Property Depreciation Schedule, Form 30.01.087.C.1 (Valid through December 2020)",
+            "publisher": "Portland Housing Bureau (eFiles)",
+            "url": "https://efiles.portlandoregon.gov/record/13333106/file/document"
+          },
+          {
+            "id": "portland.security-deposit-brochure-2022",
+            "title": "Security Deposits brochure (published August 2022)",
+            "publisher": "Portland Housing Bureau",
+            "url": "https://www.portland.gov/phb/rental-services/documents/security-deposits-brochure/download"
+          },
+          {
+            "id": "minneapolis.security-deposits",
+            "title": "Rental Security Deposits",
+            "publisher": "City of Minneapolis",
+            "url": "https://www.minneapolismn.gov/business-services/licenses-permits-inspections/rental-licenses/renter-protections-disclosures/security-deposits/"
+          },
+          {
+            "id": "stpaul.safe-housing-security-deposit-limitations",
+            "title": "S.A.F.E. Housing Tenant Protections, Security Deposit Limitations (March 2021)",
+            "publisher": "City of Saint Paul",
+            "url": "https://www.stpaul.gov/sites/default/files/2021-02/S.A.F.E.%20Housing%20-%20Security%20Deposit%20Liimitations.pdf"
+          },
+          {
+            "id": "wi.stat-66.0104",
+            "title": "Wis. Stat. 66.0104 Prohibiting certain local regulation of residential rental practices",
+            "publisher": "Wisconsin State Legislature",
+            "url": "https://docs.legis.wisconsin.gov/statutes/statutes/66/i/0104"
+          },
+          {
+            "id": "ny.gob-7-108",
+            "title": "N.Y. General Obligations Law 7-108 Security deposits",
+            "publisher": "New York State Senate",
+            "url": "https://www.nysenate.gov/legislation/laws/GOB/7-108"
+          },
+          {
+            "id": "ma.mgl-186-15b",
+            "title": "Mass. Gen. Laws c. 186, s. 15B Security deposits",
+            "publisher": "Massachusetts Legislature",
+            "url": "https://malegislature.gov/Laws/GeneralLaws/PartII/TitleI/Chapter186/Section15B"
+          },
+          {
+            "id": "hud.special-claims-life-expectancy",
+            "title": "Sample Life Expectancy Chart and Tenant Damage vs Normal Wear and Tear (HUD Special Claims guidance, reproduced as Minnesota Housing 1.13)",
+            "publisher": "Minnesota Housing (state HFA) reproducing HUD Multifamily Special Claims guidance",
+            "url": "https://www.mnhousing.gov/get/MHFA_1012119"
+          },
+          {
+            "id": "ca.dre-california-tenants-2024",
+            "title": "California Tenants: A Guide to Residential Tenants' and Landlords' Rights and Responsibilities (2024 Edition)",
+            "publisher": "California Department of Real Estate (copy hosted by UC Berkeley Student Legal Services)",
+            "url": "https://sls.berkeley.edu/wp-content/uploads/2024/05/CA-Tenant-Guide.pdf"
+          },
+          {
+            "id": "internachi.life-expectancy",
+            "title": "InterNACHI's Standard Estimated Life Expectancy Chart for Homes",
+            "publisher": "International Association of Certified Home Inspectors",
+            "url": "https://www.nachi.org/life-expectancy.htm"
+          },
+          {
+            "id": "irs.pub-527",
+            "title": "Publication 527, Residential Rental Property",
+            "publisher": "Internal Revenue Service",
+            "url": "https://www.irs.gov/publications/p527"
+          },
+          {
+            "id": "ca.civ-10-mirror",
+            "title": "Cal. Civ. Code 10 (computation of time)",
+            "publisher": "Public.Law (mirror of leginfo.legislature.ca.gov; official site returned 403)",
+            "url": "https://california.public.law/codes/ca_civ_code_section_10"
+          },
+          {
+            "id": "ca.civ-11-mirror",
+            "title": "Cal. Civ. Code 11 (act due on a holiday)",
+            "publisher": "Public.Law (mirror)",
+            "url": "https://california.public.law/codes/ca_civ_code_section_11"
+          },
+          {
+            "id": "ca.ccp-12a-mirror",
+            "title": "Cal. Code Civ. Proc. 12a (last day a holiday; Saturdays are holidays)",
+            "publisher": "Public.Law (mirror)",
+            "url": "https://california.public.law/codes/ca_civ_proc_code_section_12a"
+          },
+          {
+            "id": "ny.gcl-25-a",
+            "title": "N.Y. General Construction Law 25-a",
+            "publisher": "New York State Senate",
+            "url": "https://www.nysenate.gov/legislation/laws/GCN/25-A"
+          },
+          {
+            "id": "ny.gcl-20-mirror",
+            "title": "N.Y. General Construction Law 20 (day, computation)",
+            "publisher": "Public.Law (mirror)",
+            "url": "https://newyork.public.law/laws/n.y._general_construction_law_section_20"
+          },
+          {
+            "id": "tx.gov-311.014-mirror",
+            "title": "Tex. Gov't Code 311.014 Computation of time",
+            "publisher": "Public.Law (mirror; statutes.capitol.texas.gov is script-rendered)",
+            "url": "https://texas.public.law/statutes/tex._gov't_code_section_311.014"
+          },
+          {
+            "id": "tx.prop-1.002-mirror",
+            "title": "Tex. Prop. Code 1.002 Code Construction Act",
+            "publisher": "Public.Law (mirror)",
+            "url": "https://texas.public.law/statutes/tex._prop._code_section_1.002"
+          },
+          {
+            "id": "az.ars-33-1321-cities",
+            "title": "Arizona Revised Statutes 33-1321 Security deposits",
+            "publisher": "Arizona State Legislature",
+            "url": "https://www.azleg.gov/ars/33/01321.htm"
+          },
+          {
+            "id": "ct.dob-interest-calculation-table",
+            "title": "Interest Calculator - Landlord Tenant Security Deposits (xls)",
+            "publisher": "Connecticut Department of Banking",
+            "url": "https://portal.ct.gov/-/media/dob/rental-security-deposits/interestcalculationtable.xls"
+          },
+          {
+            "id": "ct.dob-brochure-2026",
+            "title": "Rental Security Deposits, Key Issues and Guidance (rev. 05/26)",
+            "publisher": "Connecticut Department of Banking",
+            "url": "https://portal.ct.gov/-/media/dob/rental-security-deposits/rentalsecuritydepositbrochure_rev_05_26.pdf"
+          },
+          {
+            "id": "inc.lotkeeper-deposit-compliance",
+            "title": "Security Deposit Compliance (LotKeeper features)",
+            "publisher": "LotKeeper",
+            "url": "https://lotkeeper.ai/features/deposit-compliance"
+          },
+          {
+            "id": "inc.appfolio-2025-q4",
+            "title": "What's New in AppFolio, Winter 2025",
+            "publisher": "AppFolio",
+            "url": "https://www.appfolio.com/blog/product-update-2025-q4"
+          },
+          {
+            "id": "inc.appfolio-2022-q2",
+            "title": "Product showcase, key feature releases from Q2 2022",
+            "publisher": "AppFolio",
+            "url": "https://www.appfolio.com/articles/2022-q2-product-update"
+          },
+          {
+            "id": "inc.buildium-academy-moveouts",
+            "title": "Buildium Academy, Move-ins and Move-outs for Rentals",
+            "publisher": "Buildium",
+            "url": "https://www.buildium.com/support/academy/move-ins-and-move-outs-for-rentals/"
+          },
+          {
+            "id": "inc.turbotenant-deposit-returns",
+            "title": "Deposit Returns product update; Return a Security Deposit (support)",
+            "publisher": "TurboTenant",
+            "url": "https://www.turbotenant.com/product-updates/return-security-deposit/"
+          },
+          {
+            "id": "inc.doorloop-end-lease",
+            "title": "End a Lease (DoorLoop support)",
+            "publisher": "DoorLoop",
+            "url": "https://support.doorloop.com/en/articles/6067246-end-a-lease"
+          },
+          {
+            "id": "inc.tenantcloud-return-deposit",
+            "title": "How do I return a deposit? (TenantCloud support)",
+            "publisher": "TenantCloud",
+            "url": "https://support.tenantcloud.com/en/articles/11955779-how-do-i-return-a-deposit"
+          },
+          {
+            "id": "inc.rentredi-refund-letter",
+            "title": "Security Deposit Refund Letter & Receipt Templates",
+            "publisher": "RentRedi",
+            "url": "https://rentredi.com/blog/how-to-write-a-security-deposit-return-letter-to-your-tenant-free-sample/"
+          },
+          {
+            "id": "inc.avail-features",
+            "title": "Avail features",
+            "publisher": "Avail (Realtor.com)",
+            "url": "https://www.avail.co/features"
+          },
+          {
+            "id": "us.treasury-par-yield-1yr",
+            "title": "Daily Treasury Par Yield Curve Rates (1-year), first business day of 2024, 2025 and 2026",
+            "publisher": "U.S. Department of the Treasury",
+            "url": "https://home.treasury.gov/resource-center/data-chart-center/interest-rates/TextView?type=daily_treasury_yield_curve"
+          }
+        ]
+      },
+      "links": {
+        "page": "https://tektolo.com/capabilities/deposit-settlement",
+        "api": "https://tektolo.com/v1/capabilities/deposit-settlement",
+        "openapi": "https://tektolo.com/openapi.json",
+        "mcp": "https://tektolo.com/mcp",
+        "hub": "https://tektolo.com/tools/rental-property/",
+        "web_tool": "https://tektolo.com/tools/rental-property/deposit-settlement"
+      },
+      "content_sections": [
+        {
+          "label": "Deposit rules by state",
+          "url": "https://tektolo.com/deposit-settlement/by-state",
+          "summary": "security deposit return deadlines, allowed deductions, interest and penalties in all 50 US states and DC plus 8 city overlays: the rule per state and city in plain words, the quoted text and a worked example"
+        }
+      ]
+    }
+  ]
+}

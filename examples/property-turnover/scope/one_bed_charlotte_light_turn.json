@@ -1,0 +1,90 @@
+{
+  "property": {
+    "zip": "28202",
+    "unit_type": "apartment",
+    "bedrooms": 1,
+    "bathrooms": "1",
+    "sq_ft": 700,
+    "year_built": 2008
+  },
+  "standards": {
+    "profile": "standard"
+  },
+  "findings": [
+    {
+      "id": "f1",
+      "location": {
+        "area": "bedroom",
+        "label": "Bedroom"
+      },
+      "code": "walls.nail_holes",
+      "extent": "partial"
+    },
+    {
+      "id": "f2",
+      "location": {
+        "area": "living_room",
+        "label": "Living room"
+      },
+      "code": "walls.scuffs",
+      "extent": "spot"
+    },
+    {
+      "id": "f3",
+      "location": {
+        "area": "living_room",
+        "label": "Living room"
+      },
+      "code": "carpet.soiled",
+      "extent": "partial",
+      "quantity": {
+        "value": 220,
+        "uom": "sq_ft"
+      }
+    },
+    {
+      "id": "f4",
+      "location": {
+        "area": "bedroom",
+        "label": "Bedroom"
+      },
+      "code": "carpet.soiled",
+      "extent": "partial",
+      "quantity": {
+        "value": 140,
+        "uom": "sq_ft"
+      }
+    },
+    {
+      "id": "f5",
+      "location": {
+        "area": "kitchen",
+        "label": "Kitchen"
+      },
+      "code": "range.dirty"
+    },
+    {
+      "id": "f6",
+      "location": {
+        "area": "kitchen",
+        "label": "Kitchen"
+      },
+      "code": "refrigerator.dirty"
+    },
+    {
+      "id": "f7",
+      "location": {
+        "area": "living_room",
+        "label": "Living room"
+      },
+      "code": "blinds.bent_missing",
+      "quantity": {
+        "value": 1,
+        "uom": "each"
+      }
+    }
+  ],
+  "client_refs": {
+    "unit_id": "example-1bed-charlotte"
+  }
+}

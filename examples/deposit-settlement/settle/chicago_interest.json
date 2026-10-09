@@ -1,0 +1,21 @@
+{
+  "state": "IL",
+  "city": "Chicago",
+  "deposit_usd": "1500",
+  "monthly_rent_usd": "1500",
+  "building_units": 12,
+  "move_in_on": "2025-08-01",
+  "vacated_on": "2026-07-31",
+  "deductions": [
+    {
+      "category": "wall_or_door_repair",
+      "amount_usd": "200",
+      "has_receipt": true
+    }
+  ],
+  "documentation": {
+    "itemized_statement": true,
+    "receipts": true
+  },
+  "as_of": "2026-08-20"
+}

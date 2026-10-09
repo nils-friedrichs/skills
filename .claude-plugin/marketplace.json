@@ -1,0 +1,15 @@
+{
+  "name": "tektolo",
+  "description": "Tektolo: deterministic, source-cited tools for rental property operations, as skills plus an MCP connector",
+  "owner": {
+    "name": "Tektolo",
+    "email": "hello@tektolo.com"
+  },
+  "plugins": [
+    {
+      "name": "tektolo",
+      "source": "./plugins/tektolo",
+      "description": "Property turnover estimates and security deposit settlement under each state's rules, with every number cited"
+    }
+  ]
+}

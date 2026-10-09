@@ -1,0 +1,194 @@
+{
+  "property": {
+    "zip": "85032",
+    "unit_type": "single_family",
+    "bedrooms": 3,
+    "bathrooms": "2",
+    "sq_ft": 1600,
+    "year_built": 1998
+  },
+  "standards": {
+    "profile": "standard"
+  },
+  "findings": [
+    {
+      "id": "f1",
+      "location": {
+        "area": "bedroom",
+        "label": "Bedroom 2"
+      },
+      "code": "carpet.pet_urine",
+      "extent": "partial",
+      "quantity": {
+        "value": 150,
+        "uom": "sq_ft"
+      }
+    },
+    {
+      "id": "f2",
+      "location": {
+        "area": "bedroom",
+        "label": "Bedroom 3"
+      },
+      "code": "carpet.pet_urine",
+      "extent": "partial",
+      "quantity": {
+        "value": 140,
+        "uom": "sq_ft"
+      }
+    },
+    {
+      "id": "f3",
+      "location": {
+        "area": "living_room",
+        "label": "Living room"
+      },
+      "code": "carpet.pet_urine",
+      "extent": "partial",
+      "quantity": {
+        "value": 280,
+        "uom": "sq_ft"
+      }
+    },
+    {
+      "id": "f4",
+      "location": {
+        "area": "whole_unit",
+        "label": "Whole unit"
+      },
+      "code": "trim.baseboard_damaged",
+      "extent": "partial",
+      "quantity": {
+        "value": 45,
+        "uom": "linear_ft"
+      }
+    },
+    {
+      "id": "f5",
+      "location": {
+        "area": "bedroom",
+        "label": "Bedroom 2"
+      },
+      "code": "door.interior_hole",
+      "extent": "partial"
+    },
+    {
+      "id": "f6",
+      "location": {
+        "area": "whole_unit",
+        "label": "Whole unit"
+      },
+      "code": "walls.paint_aged",
+      "extent": "full"
+    },
+    {
+      "id": "f7",
+      "location": {
+        "area": "whole_unit",
+        "label": "Whole unit"
+      },
+      "code": "clean.heavy_soil",
+      "extent": "partial",
+      "quantity": {
+        "value": 6,
+        "uom": "hour"
+      }
+    },
+    {
+      "id": "f8",
+      "location": {
+        "area": "yard",
+        "label": "Back yard"
+      },
+      "code": "yard.debris"
+    },
+    {
+      "id": "f9",
+      "location": {
+        "area": "whole_unit",
+        "label": "Whole unit"
+      },
+      "code": "trash.heavy",
+      "extent": "partial",
+      "quantity": {
+        "value": 8,
+        "uom": "cu_yd"
+      }
+    },
+    {
+      "id": "f10",
+      "location": {
+        "area": "bedroom",
+        "label": "Bedroom 3"
+      },
+      "code": "window.screen_torn",
+      "quantity": {
+        "value": 3,
+        "uom": "each"
+      }
+    },
+    {
+      "id": "f11",
+      "location": {
+        "area": "whole_unit",
+        "label": "Whole unit"
+      },
+      "code": "blinds.bent_missing",
+      "extent": "partial"
+    },
+    {
+      "id": "f12",
+      "location": {
+        "area": "kitchen",
+        "label": "Kitchen"
+      },
+      "code": "range.dirty"
+    },
+    {
+      "id": "f13",
+      "location": {
+        "area": "kitchen",
+        "label": "Kitchen"
+      },
+      "code": "refrigerator.dirty"
+    },
+    {
+      "id": "f14",
+      "location": {
+        "area": "bathroom",
+        "label": "Hall bath"
+      },
+      "code": "tile.grout_dirty"
+    },
+    {
+      "id": "f15",
+      "location": {
+        "area": "entry",
+        "label": "Entry"
+      },
+      "code": "key.missing"
+    },
+    {
+      "id": "f16",
+      "location": {
+        "area": "bedroom",
+        "label": "Bedroom 2"
+      },
+      "code": "walls.holes_many",
+      "extent": "partial"
+    },
+    {
+      "id": "f17",
+      "location": {
+        "area": "whole_unit",
+        "label": "Whole unit"
+      },
+      "code": "odor.general",
+      "extent": "partial",
+      "notes": "Strong pet odor throughout"
+    }
+  ],
+  "client_refs": {
+    "unit_id": "example-3bed-phoenix-pets"
+  }
+}

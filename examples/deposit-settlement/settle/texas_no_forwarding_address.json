@@ -1,0 +1,21 @@
+{
+  "state": "TX",
+  "deposit_usd": "1200",
+  "move_in_on": "2025-09-01",
+  "vacated_on": "2026-09-15",
+  "deductions": [
+    {
+      "category": "unpaid_rent",
+      "amount_usd": "400"
+    },
+    {
+      "category": "cleaning",
+      "amount_usd": "120"
+    },
+    {
+      "category": "late_fees",
+      "amount_usd": "75"
+    }
+  ],
+  "as_of": "2026-10-09"
+}

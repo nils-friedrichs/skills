@@ -1,0 +1,70 @@
+{
+  "property": {
+    "zip": "83843",
+    "unit_type": "apartment",
+    "bedrooms": 0,
+    "bathrooms": "1",
+    "year_built": 1985
+  },
+  "standards": {
+    "profile": "standard"
+  },
+  "findings": [
+    {
+      "id": "f1",
+      "location": {
+        "area": "living_room",
+        "label": "Main room"
+      },
+      "description": "carpet is dirty with a few stains near the window"
+    },
+    {
+      "id": "f2",
+      "location": {
+        "area": "living_room",
+        "label": "Main room"
+      },
+      "description": "a few nail holes in the walls from pictures"
+    },
+    {
+      "id": "f3",
+      "location": {
+        "area": "bathroom",
+        "label": "Bathroom"
+      },
+      "description": "bathroom fan is loud and barely works"
+    },
+    {
+      "id": "f4",
+      "location": {
+        "area": "whole_unit",
+        "label": "Whole unit"
+      },
+      "description": "smoke detector is chirping"
+    },
+    {
+      "id": "f5",
+      "location": {
+        "area": "kitchen",
+        "label": "Kitchen"
+      },
+      "description": "fridge smells and needs cleaning"
+    },
+    {
+      "id": "f6",
+      "location": {
+        "area": "kitchen",
+        "label": "Kitchen"
+      },
+      "description": "dishwasher not draining"
+    },
+    {
+      "id": "f7",
+      "location": {
+        "area": "living_room",
+        "label": "Main room"
+      },
+      "description": "tenant left a sticky residue along the window sills"
+    }
+  ]
+}

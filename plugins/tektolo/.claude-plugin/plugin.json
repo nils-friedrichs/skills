@@ -1,0 +1,13 @@
+{
+  "name": "tektolo",
+  "description": "Deterministic, source-cited tools from tektolo.com: priced turnover scopes from move-out notes, and security deposit settlement under each US state's rules",
+  "author": {
+    "name": "Tektolo",
+    "email": "hello@tektolo.com",
+    "url": "https://tektolo.com"
+  },
+  "homepage": "https://tektolo.com",
+  "repository": "https://github.com/tektolo/skills",
+  "license": "MIT-0",
+  "keywords": ["rental property", "property management", "security deposit", "turnover", "landlord", "tenant", "mcp"]
+}

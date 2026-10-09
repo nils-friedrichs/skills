@@ -1,0 +1,104 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/v1/server-card.schema.json",
+  "name": "com.tektolo/capabilities",
+  "version": "0.1.0",
+  "title": "Tektolo capabilities",
+  "description": "Reliable tools for real-world operations work. Each tool is a tested engine with cited rules; use it from the web, the API, or your AI assistant.",
+  "websiteUrl": "https://tektolo.com/",
+  "icons": [
+    {
+      "src": "https://tektolo.com/static/brand/icon-512.png?v=1cd99ad9b1",
+      "mimeType": "image/png",
+      "sizes": [
+        "512x512"
+      ]
+    },
+    {
+      "src": "https://tektolo.com/static/brand/icon-192.png?v=c62e23b387",
+      "mimeType": "image/png",
+      "sizes": [
+        "192x192"
+      ]
+    },
+    {
+      "src": "https://tektolo.com/static/brand/favicon.svg?v=a7a6e648f9",
+      "mimeType": "image/svg+xml",
+      "sizes": [
+        "any"
+      ]
+    },
+    {
+      "src": "https://tektolo.com/static/brand/icon-512-dark.png?v=0e1e814a92",
+      "mimeType": "image/png",
+      "sizes": [
+        "512x512"
+      ],
+      "theme": "dark"
+    }
+  ],
+  "remotes": [
+    {
+      "type": "streamable-http",
+      "url": "https://tektolo.com/mcp",
+      "supportedProtocolVersions": [
+        "2025-11-25",
+        "2026-07-28"
+      ]
+    }
+  ],
+  "_meta": {
+    "com.tektolo/capabilities": {
+      "contact": "hello@tektolo.com",
+      "contact_page": "https://tektolo.com/contact",
+      "setup": "https://tektolo.com/connect-your-ai",
+      "reference": "https://tektolo.com/reference/",
+      "catalog": "https://tektolo.com/catalog.json",
+      "legal": {
+        "terms": "https://tektolo.com/terms",
+        "privacy": "https://tektolo.com/privacy",
+        "disclaimer": "https://tektolo.com/disclaimer"
+      },
+      "domains": [
+        {
+          "id": "rental-property",
+          "name": "Rental property",
+          "hub": "https://tektolo.com/tools/rental-property/",
+          "capabilities": [
+            "property-turnover",
+            "deposit-settlement"
+          ]
+        }
+      ],
+      "capabilities": [
+        {
+          "id": "deposit-settlement",
+          "contract_version": "0.1.0",
+          "ruleset_hash": "sha256:3777ac89e2a1b9400e9abf225feca8733c14c19cdecf5740e24a00faf4631cd8",
+          "domain": "rental-property",
+          "audiences": [
+            "landlord_pm",
+            "ai_agent"
+          ],
+          "workflow": {
+            "chain": "move-out",
+            "step": 2
+          }
+        },
+        {
+          "id": "property-turnover",
+          "contract_version": "0.3.0",
+          "ruleset_hash": "sha256:376e6a62ee5dd8a3be85fcc0eb633330902847a97256c27bd9d0610bf77cb643",
+          "domain": "rental-property",
+          "audiences": [
+            "landlord_pm",
+            "ai_agent"
+          ],
+          "workflow": {
+            "chain": "move-out",
+            "step": 1
+          }
+        }
+      ]
+    }
+  }
+}
