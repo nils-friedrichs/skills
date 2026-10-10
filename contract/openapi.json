@@ -183,7 +183,7 @@
           "property-turnover"
         ],
         "summary": "Quick turnover estimate (start here)",
-        "description": "The easiest way to estimate a US rental turnover: a ZIP, bedrooms, bathrooms and a list of plain-English issues in, a priced make-ready estimate out (same engine and result as property_turnover_scope, short summary by default).\nWhen to use: Start here when the user describes a move-out or turnover in words (\"carpet stained in both bedrooms, oven filthy\") and wants a cost estimate or what to tell vendors. Use property_turnover_scope instead for rate cards, owner decisions, measured quantities or per-finding control.\nNot for: Diagnosing hazards (they come back as refer-outs to a licensed professional); legal advice on deposits; remodel bids; properties outside the US.\nTip: If the ZIP is missing or not exactly 5 digits, ask the user; never guess or pad it.\nTip: Relay refer_outs first, then the totals; say the numbers are estimates, not quotes.\nDeterministic: the same input returns the same result_hash. Capability property-turnover v0.3.0 (experimental).",
+        "description": "The easiest way to estimate a US rental turnover: a ZIP, bedrooms, bathrooms and a list of plain-English issues in, a priced make-ready estimate out (same engine and result as property_turnover_scope, short summary by default).\nWhen to use: Start here when the user describes a move-out or turnover in words (\"carpet stained in both bedrooms, oven filthy\") and wants a cost estimate or what to tell vendors. Use property_turnover_scope instead for rate cards, owner decisions, measured quantities or per-finding control.\nNot for: Diagnosing hazards (they come back as refer-outs to a licensed professional); legal advice on deposits; remodel bids; properties outside the US.\nTip: If the ZIP is missing or not exactly 5 digits, ask the user; never guess or pad it.\nTip: Relay refer_outs first, then the totals; say the numbers are estimates, not quotes.\nDeterministic: the same input returns the same result_hash. Capability property-turnover v0.8.0 (experimental).",
         "operationId": "property_turnover_quick_estimate",
         "requestBody": {
           "content": {
@@ -225,7 +225,7 @@
           "property-turnover"
         ],
         "summary": "Scope a property turnover",
-        "description": "Turn move-out / turnover inspection findings for a US rental unit into a priced make-ready scope: standardized tasks by trade, regional low/expected/high costs, must/should/could priorities, vendor scopes, refer-outs to licensed professionals, and every assumption stated.\nWhen to use: Turnover findings for a US rental unit when you need control: rooms, measured quantities, the manager's own prices (rate_card) or owner approve/decline decisions. For a plain-English estimate, property_turnover_quick_estimate is easier.\nNot for: Diagnosing hazards (they come back as refer-outs to a licensed professional); legal advice on deposits; remodel bids; properties outside the US.\nTip: If the ZIP is missing or not exactly 5 digits, ask the user; never guess or pad it.\nTip: Describe each finding in plain words (description). Only send a code returned by property_turnover_issue_codes; unmatched findings come back as manual-quote lines with suggested codes.\nTip: Give measured quantities when you have them (e.g. 120 sq_ft); otherwise typical sizes are assumed and listed in assumptions.\nTip: Send property.floor_coverings when you know whether there is carpet, and unit_type single_family for houses; both change the baseline scope.\nTip: Relay the summary, refer_outs, assumptions and unknowns to the user; costs are estimate ranges, not quotes.\nTip: Use detail=summary unless the user asks for every line item (summary already lists every line tied to a finding).\nTip: Rate card examples - {\"trade\": \"handyman\", \"unit_price\": 65, \"uom\": \"hour\"} or {\"task_id\": \"carpet.clean\", \"unit_price\": 0.2, \"uom\": \"sq_ft\"}; check rate_card_applied and rate_card_ignored before saying a rate was used.\nTip: For the Excel workbook or owner estimate, give the user links.web_tool_prefilled (opens the free web tool with these findings) or POST the same arguments to links.downloads; do not build a spreadsheet yourself.\nDeterministic: the same input returns the same result_hash. Capability property-turnover v0.3.0 (experimental).",
+        "description": "Turn move-out / turnover inspection findings for a US rental unit into a priced make-ready scope: standardized tasks by trade, regional low/expected/high costs, must/should/could priorities, vendor scopes, refer-outs to licensed professionals, and every assumption stated.\nWhen to use: Turnover findings for a US rental unit when you need control: rooms, measured quantities, the manager's own prices (rate_card) or owner approve/decline decisions. For a plain-English estimate, property_turnover_quick_estimate is easier.\nNot for: Diagnosing hazards (they come back as refer-outs to a licensed professional); legal advice on deposits; remodel bids; properties outside the US.\nTip: If the ZIP is missing or not exactly 5 digits, ask the user; never guess or pad it.\nTip: Describe each finding in plain words (description). Only send a code returned by property_turnover_issue_codes; unmatched findings come back as manual-quote lines with suggested codes.\nTip: Give measured quantities when you have them (e.g. 120 sq_ft); otherwise typical sizes are assumed and listed in assumptions.\nTip: Send property.floor_coverings when you know whether there is carpet, and unit_type single_family for houses; both change the baseline scope.\nTip: Relay the summary, refer_outs, assumptions and unknowns to the user; costs are estimate ranges, not quotes.\nTip: Use detail=summary unless the user asks for every line item (summary already lists every line tied to a finding).\nTip: Rate card examples - {\"trade\": \"handyman\", \"unit_price\": 65, \"uom\": \"hour\"} or {\"task_id\": \"carpet.clean\", \"unit_price\": 0.2, \"uom\": \"sq_ft\"}; check rate_card_applied and rate_card_ignored before saying a rate was used.\nTip: For the Excel workbook or owner estimate, give the user links.web_tool_prefilled (opens the free web tool with these findings) or POST the same arguments to links.downloads; do not build a spreadsheet yourself.\nDeterministic: the same input returns the same result_hash. Capability property-turnover v0.8.0 (experimental).",
         "operationId": "property_turnover_scope",
         "requestBody": {
           "content": {
@@ -435,7 +435,7 @@
           "property-turnover"
         ],
         "summary": "Look up turnover issue codes",
-        "description": "Search the standard taxonomy of rental-unit turnover issues (component.issue codes) by keyword or area.\nWhen to use: Only while preparing findings for a turnover cost estimate, to find the standard issue code for something observed (e.g. \"pet stain on carpet\"). Never needed to answer a question; call with no arguments to list the taxonomy areas and the first codes.\nNot for: Legal or security-deposit questions; anything outside rental turnover and make-ready work. Not needed before quick_estimate or scope: a plain description works there.\nTip: Call with no arguments to list the taxonomy areas (in `areas`) and the first codes.\nTip: Codes are optional for scoping; a plain description also works.\nDeterministic: the same input returns the same result_hash. Capability property-turnover v0.3.0 (experimental).",
+        "description": "Search the standard taxonomy of rental-unit turnover issues (component.issue codes) by keyword or area.\nWhen to use: Only while preparing findings for a turnover cost estimate, to find the standard issue code for something observed (e.g. \"pet stain on carpet\"). Never needed to answer a question; call with no arguments to list the taxonomy areas and the first codes.\nNot for: Legal or security-deposit questions; anything outside rental turnover and make-ready work. Not needed before quick_estimate or scope: a plain description works there.\nTip: Call with no arguments to list the taxonomy areas (in `areas`) and the first codes.\nTip: Codes are optional for scoping; a plain description also works.\nDeterministic: the same input returns the same result_hash. Capability property-turnover v0.8.0 (experimental).",
         "operationId": "property_turnover_issue_codes",
         "requestBody": {
           "content": {
@@ -861,7 +861,11 @@
                 "lease_specifies_longer",
                 "lease_specifies_shorter",
                 "tenant_gave_notice",
-                "contractor_needed"
+                "contractor_needed",
+                "damages_exceed_deposit",
+                "written_lease",
+                "abandoned",
+                "charges_only"
               ]
             },
             "type": "array",
@@ -937,10 +941,32 @@
             "enum": [
               "replace",
               "later_date",
-              "earlier_date"
+              "earlier_date",
+              "extend"
             ],
             "title": "Combine",
             "default": "replace"
+          },
+          "notice_within_days": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "minimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Notice Within Days"
+          },
+          "pending": {
+            "type": "string",
+            "enum": [
+              "not_started",
+              "notice_date"
+            ],
+            "title": "Pending",
+            "default": "not_started"
           },
           "effective_before": {
             "anyOf": [
@@ -965,6 +991,15 @@
               }
             ],
             "title": "Effective On Or After"
+          },
+          "effective_by": {
+            "type": "string",
+            "enum": [
+              "termination",
+              "conduct"
+            ],
+            "title": "Effective By",
+            "default": "termination"
           },
           "note": {
             "anyOf": [
@@ -1186,6 +1221,20 @@
               }
             ]
           },
+          "forfeiture": {
+            "anyOf": [
+              {
+                "items": {
+                  "$ref": "#/components/schemas/Forfeiture"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Forfeiture"
+          },
           "depreciation_schedule": {
             "anyOf": [
               {
@@ -1224,6 +1273,95 @@
         ],
         "title": "CityRules"
       },
+      "CleaningRule": {
+        "properties": {
+          "basis": {
+            "type": "string",
+            "enum": [
+              "named",
+              "damage"
+            ],
+            "title": "Basis"
+          },
+          "routine": {
+            "type": "string",
+            "enum": [
+              "barred",
+              "lease",
+              "reasonable"
+            ],
+            "title": "Routine",
+            "default": "barred"
+          },
+          "condition": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Condition"
+          },
+          "unless_no_notice": {
+            "type": "boolean",
+            "title": "Unless No Notice",
+            "default": false
+          },
+          "effective_on": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Effective On"
+          },
+          "note": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Note"
+          },
+          "section": {
+            "type": "string",
+            "title": "Section"
+          },
+          "quote": {
+            "type": "string",
+            "maxLength": 600,
+            "title": "Quote"
+          },
+          "verbatim": {
+            "type": "boolean",
+            "title": "Verbatim",
+            "default": true
+          },
+          "source": {
+            "type": "string",
+            "title": "Source"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "basis",
+          "section",
+          "quote",
+          "source"
+        ],
+        "title": "CleaningRule",
+        "description": "How the statute treats a cleaning charge (a line's ``cleaning_kind``: ``beyond_wear``,\n``routine`` or unknown).\n\n``basis``: ``named`` when the deposit statute names cleaning as a purpose (to return the unit\nto its move-in cleanliness, reasonable cleaning): unknown kind is 'yes' with the limit noted;\n``damage`` when it does not, but a unit left dirtier than normal use is recoverable as damage\nbeyond normal wear, a breach of the tenant's duty to keep it clean, or a lease charge: unknown\nkind is 'depends'. ``routine`` (cleaning after ordinary use): ``barred`` ('no': it is normal\nwear) or ``lease`` ('depends': only if the lease provides it and the statute lets lease charges\ncome out of the deposit) or ``reasonable`` ('depends': the statute allows reasonable cleaning\ncosts with no wear limit, Mississippi, Nevada, Rhode Island, Utah). ``condition``: a precondition (Montana's written notice and 24 hours\nto clean), checked against ``documentation.cleaning_notice`` (unknown: 'depends'; no: 'no',\nunless ``unless_no_notice`` and the tenant gave no notice of leaving). ``effective_on``: the\nversion for deductions made on or after this date (Colorado HB25-1249: ordinary uncleanliness\nis normal wear from 2026-01-01); the latest in force wins."
+      },
       "Constraints": {
         "properties": {
           "target_ready_date": {
@@ -1260,6 +1398,71 @@
         "additionalProperties": false,
         "type": "object",
         "title": "Constraints"
+      },
+      "ContractDamages": {
+        "properties": {
+          "section": {
+            "type": "string",
+            "title": "Section"
+          },
+          "quote": {
+            "type": "string",
+            "maxLength": 400,
+            "title": "Quote"
+          },
+          "source": {
+            "type": "string",
+            "title": "Source"
+          },
+          "categories": {
+            "items": {
+              "type": "string",
+              "enum": [
+                "unpaid_rent",
+                "unpaid_utilities",
+                "cleaning",
+                "carpet",
+                "flooring",
+                "paint",
+                "blinds_window_coverings",
+                "appliance",
+                "fixture_or_hardware",
+                "wall_or_door_repair",
+                "key_or_lock",
+                "late_fees",
+                "lease_break_fee",
+                "moving_and_storage",
+                "reletting_costs",
+                "trash_and_abandoned_items",
+                "other_damage",
+                "other"
+              ]
+            },
+            "type": "array",
+            "title": "Categories"
+          },
+          "note": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Note"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "section",
+          "quote",
+          "source",
+          "categories"
+        ],
+        "title": "ContractDamages",
+        "description": "The statute lets the deposit cover damages from the tenant's noncompliance with the rental\nagreement (URLTA wording: Ohio 5321.16(B), Nebraska 76-1416(2), ...), so lease charges it does\nnot list are 'depends' (the lease, reasonableness, mitigation), never a flat 'no' (round 3\nR9: D-OH-06, F-NE-03)."
       },
       "CostRange": {
         "properties": {
@@ -1382,10 +1585,14 @@
               "due_today",
               "overdue",
               "not_started",
-              "none_in_statute"
+              "none_in_statute",
+              "reverted",
+              "no_deposit",
+              "met",
+              "late"
             ],
             "title": "Status",
-            "description": "upcoming, due_today, overdue; not_started when the start event is not given yet; none_in_statute when the statute sets no deadline (Kentucky, Tennessee)."
+            "description": "upcoming, due_today, overdue; met (the refund and statement went out on time and cover what is owed, per returned) or late (they went out after the last day); not_started when the start event is not given yet; none_in_statute when the statute sets no deadline (Kentucky, Tennessee)."
           },
           "days_remaining": {
             "anyOf": [
@@ -1397,7 +1604,15 @@
               }
             ],
             "title": "Days Remaining",
-            "description": "Days from as_of to return_by (negative when overdue)."
+            "description": "Days from as_of to the last day: extended_to when the statute extends a weekend or holiday last day, else return_by (negative when overdue). None once met."
+          },
+          "alternatives": {
+            "items": {
+              "$ref": "#/components/schemas/DeadlineAlternative"
+            },
+            "type": "array",
+            "title": "Alternatives",
+            "description": "Earlier dates that apply on facts not given (send the named input)."
           },
           "note": {
             "anyOf": [
@@ -1418,6 +1633,33 @@
           "status"
         ],
         "title": "Deadline"
+      },
+      "DeadlineAlternative": {
+        "properties": {
+          "on": {
+            "type": "string",
+            "format": "date",
+            "title": "On"
+          },
+          "applies_if": {
+            "type": "string",
+            "title": "Applies If",
+            "description": "The condition, in words."
+          },
+          "send": {
+            "type": "string",
+            "title": "Send",
+            "description": "The input that decides it."
+          }
+        },
+        "type": "object",
+        "required": [
+          "on",
+          "applies_if",
+          "send"
+        ],
+        "title": "DeadlineAlternative",
+        "description": "Another date the rule gives on facts the request does not settle (e.g. Montana's 10 days\nif nothing is deducted, when the deductions are not known yet)."
       },
       "Decision": {
         "properties": {
@@ -1491,11 +1733,14 @@
               "key_or_lock",
               "late_fees",
               "lease_break_fee",
+              "moving_and_storage",
+              "reletting_costs",
+              "trash_and_abandoned_items",
               "other_damage",
               "other"
             ],
             "title": "Category",
-            "description": "One of: unpaid_rent, unpaid_utilities, cleaning, carpet, flooring, paint, blinds_window_coverings, appliance, fixture_or_hardware, wall_or_door_repair, key_or_lock, late_fees, lease_break_fee, other_damage, other."
+            "description": "One of: unpaid_rent, unpaid_utilities, cleaning, carpet, flooring, paint, blinds_window_coverings, appliance, fixture_or_hardware, wall_or_door_repair, key_or_lock, late_fees, lease_break_fee, moving_and_storage, reletting_costs (advertising or a broker to re-rent after an early move-out), trash_and_abandoned_items (removing trash or belongings left behind), other_damage, other. Carpet cleaning is cleaning (with cleaning_kind), not carpet."
           },
           "description": {
             "anyOf": [
@@ -1519,7 +1764,7 @@
               },
               {
                 "type": "string",
-                "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$"
+                "pattern": "^\\$?[0-9][0-9,]*(\\.[0-9]+)?$"
               }
             ],
             "title": "Amount Usd",
@@ -1575,9 +1820,16 @@
             "description": "Override the useful life used for depreciation (years)."
           },
           "caused_by_tenant": {
-            "type": "boolean",
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
             "title": "Caused By Tenant",
-            "description": "False when the condition is normal wear and tear (never deductible).",
+            "description": "False when the condition is normal wear and tear (never deductible); null when it is disputed or unknown (a tenant checking a landlord's list): the line is then 'depends', with the amount the rule would allow if it is damage.",
             "default": true
           },
           "has_receipt": {
@@ -1603,6 +1855,89 @@
             ],
             "title": "Has Photos",
             "description": "You have photos of this damage."
+          },
+          "utility_kind": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "water",
+                  "sewer",
+                  "electric",
+                  "gas",
+                  "heat",
+                  "trash",
+                  "internet",
+                  "other"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Utility Kind",
+            "description": "unpaid_utilities only: which utility. Some states allow only some (Massachusetts: water); without it such a line is 'depends'."
+          },
+          "late_payments": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "maximum": 600.0,
+                "minimum": 1.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Late Payments",
+            "description": "late_fees only: how many late payments (or months, where the cap is per month) the fee covers. A statutory cap is per late payment; without this, more than one cap is 'depends'."
+          },
+          "work_kind": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "repair",
+                  "replace",
+                  "cleaning"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Work Kind",
+            "description": "repair (restores the item: never depreciated), replace (a new item: prorated by the old one's remaining life where the rule does), or cleaning (e.g. carpet cleaning: judged as a cleaning line)."
+          },
+          "rent_through": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Rent Through",
+            "description": "unpaid_rent only: the last day the rent charged covers. With new_tenant_moved_in_on it decides how much of the rent overlaps the new tenancy (not recoverable: the landlord cannot collect rent twice for the same days)."
+          },
+          "cleaning_kind": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "beyond_wear",
+                  "routine",
+                  "unknown"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Cleaning Kind",
+            "description": "cleaning only: beyond_wear (the unit was left dirtier than normal use; cleaning to restore its move-in condition), routine (ordinary cleaning after normal use, which most states treat as normal wear) or unknown. Where the statute does not name cleaning, an unknown kind is 'depends'."
           }
         },
         "additionalProperties": false,
@@ -1631,6 +1966,9 @@
               "key_or_lock",
               "late_fees",
               "lease_break_fee",
+              "moving_and_storage",
+              "reletting_costs",
+              "trash_and_abandoned_items",
               "other_damage",
               "other"
             ],
@@ -1655,7 +1993,12 @@
               "allowed_category",
               "normal_wear",
               "not_allowed",
-              "unclassified"
+              "unclassified",
+              "forfeited",
+              "statutory_bar",
+              "mitigation",
+              "excluded_by_fee",
+              "documentation_missing"
             ],
             "title": "Basis"
           },
@@ -1673,6 +2016,46 @@
             "type": "string",
             "title": "Amount Allowed Usd",
             "description": "What the rule lets you keep for this line ('depends' lines: not counted in totals until you confirm)."
+          },
+          "range_low_usd": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Range Low Usd",
+            "description": "A 'depends' line's least amount on the facts given (e.g. rent after a new tenant's rent is credited at the same rate)."
+          },
+          "range_high_usd": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Range High Usd",
+            "description": "A 'depends' line's most (counted in refund_min_usd)."
+          },
+          "exclusive_option": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "fee",
+                  "actual"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Exclusive Option",
+            "description": "Part of an either/or the statute sets (an early-termination fee, or the rent and re-renting costs it replaces): the totals count only the larger option."
           },
           "documentation_needed": {
             "items": {
@@ -1706,6 +2089,38 @@
             "title": "Normal Wear Excluded",
             "default": true
           },
+          "mitigation_section": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Mitigation Section"
+          },
+          "contract_damages": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ContractDamages"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "not_allowed_warning": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Not Allowed Warning"
+          },
           "allowed": {
             "items": {
               "type": "string",
@@ -1719,7 +2134,8 @@
                 "future_defaults_under_lease",
                 "other_lease_obligations",
                 "moving_and_storage",
-                "real_estate_tax_increase"
+                "real_estate_tax_increase",
+                "removal_of_items_left"
               ]
             },
             "type": "array",
@@ -1739,10 +2155,10 @@
             "enum": [
               "required",
               "guidance",
-              "none"
+              "silent"
             ],
             "title": "Depreciation",
-            "default": "none"
+            "default": "silent"
           },
           "depreciation_only": {
             "items": {
@@ -1761,6 +2177,9 @@
                 "key_or_lock",
                 "late_fees",
                 "lease_break_fee",
+                "moving_and_storage",
+                "reletting_costs",
+                "trash_and_abandoned_items",
                 "other_damage",
                 "other"
               ]
@@ -1790,6 +2209,52 @@
               }
             ],
             "title": "Note"
+          },
+          "late_fee": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/LateFeeRule"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "utilities": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/UtilityLimit"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "excluded": {
+            "items": {
+              "$ref": "#/components/schemas/Exclusion"
+            },
+            "type": "array",
+            "title": "Excluded",
+            "default": []
+          },
+          "lease_break": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/LeaseBreakRule"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "cleaning": {
+            "items": {
+              "$ref": "#/components/schemas/CleaningRule"
+            },
+            "type": "array",
+            "title": "Cleaning",
+            "default": []
           }
         },
         "additionalProperties": false,
@@ -1798,6 +2263,16 @@
       },
       "DepositCap": {
         "properties": {
+          "excess_remedy": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ExcessRemedy"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
           "months_rent": {
             "anyOf": [
               {
@@ -1833,6 +2308,173 @@
             ],
             "title": "Variants"
           },
+          "effective_on": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Effective On"
+          },
+          "effective_by": {
+            "type": "string",
+            "enum": [
+              "collected",
+              "lease_signed"
+            ],
+            "title": "Effective By",
+            "default": "collected"
+          },
+          "before_months_rent": {
+            "anyOf": [
+              {
+                "type": "string",
+                "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Before Months Rent"
+          },
+          "before_furnished_months": {
+            "anyOf": [
+              {
+                "type": "string",
+                "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Before Furnished Months"
+          },
+          "furnished_months": {
+            "anyOf": [
+              {
+                "type": "string",
+                "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Furnished Months"
+          },
+          "furnished_exempt": {
+            "type": "boolean",
+            "title": "Furnished Exempt",
+            "default": false
+          },
+          "max_rent_usd": {
+            "anyOf": [
+              {
+                "type": "string",
+                "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Max Rent Usd"
+          },
+          "min_term_months": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Min Term Months"
+          },
+          "max_term_months": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Max Term Months"
+          },
+          "later_months_rent": {
+            "anyOf": [
+              {
+                "type": "string",
+                "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Later Months Rent"
+          },
+          "later_after_months": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Later After Months"
+          },
+          "variant_months": {
+            "anyOf": [
+              {
+                "type": "string",
+                "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Variant Months"
+          },
+          "variant_note": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Variant Note"
+          },
+          "variant_when": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "small_landlord",
+                  "tenant_age_62_plus"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Variant When"
+          },
+          "excludes_pet_deposit": {
+            "type": "boolean",
+            "title": "Excludes Pet Deposit",
+            "default": false
+          },
+          "counts_prepaid_rent": {
+            "type": "boolean",
+            "title": "Counts Prepaid Rent",
+            "default": false
+          },
           "note": {
             "anyOf": [
               {
@@ -1854,7 +2496,8 @@
         "required": [
           "source"
         ],
-        "title": "DepositCap"
+        "title": "DepositCap",
+        "description": "The statutory deposit limit, computed (round 2 class 9).\n\n``effective_on`` / ``effective_by``: the cap applies to deposits collected (``collected``,\nCalifornia AB 12, Colorado) or leases entered into or renewed (``lease_signed``, Georgia,\nMaryland) on or after the date; earlier ones keep ``before_months_rent`` (None: no cap) and\n``before_furnished_months``. ``furnished_months``: the cap for a furnished unit (Kansas);\n``furnished_exempt``: none for one (Delaware). ``max_rent_usd``: no cap above this rent\n(Alaska $2,000). ``min_term_months``: only for leases of at least this term (Delaware: one\nyear); ``max_term_months``: only for shorter ones (New Mexico: under a year).\n``later_months_rent`` from ``later_after_months`` into the tenancy (Pennsylvania: one month\nfrom the second year). ``variant_months``: another limit under facts the request cannot\nstate (California small landlords 2, Connecticut 62+ 1, North Carolina month-to-month 1.5,\nPortland last month's rent 1.5, ...): a deposit between the two is 'depends'."
       },
       "DepositCapCheck": {
         "properties": {
@@ -1891,7 +2534,34 @@
                 "type": "null"
               }
             ],
-            "title": "Exceeded"
+            "title": "Exceeded",
+            "description": "None when it depends on facts not given (see status)."
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "within",
+              "exceeded",
+              "depends",
+              "unknown",
+              "no_cap",
+              "not_applicable"
+            ],
+            "title": "Status",
+            "description": "within / exceeded the cap; depends: between the cap and another limit that facts not given decide (alternative_cap_usd); unknown: monthly rent missing; no_cap; not_applicable: an exception the inputs show (Alaska rent over $2,000).",
+            "default": "unknown"
+          },
+          "alternative_cap_usd": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Alternative Cap Usd",
+            "description": "The other limit when the cap depends on facts not given."
           },
           "citation": {
             "type": "string",
@@ -2110,6 +2780,30 @@
             ],
             "title": "Schedule Source",
             "description": "Source id of the step table, when one was used."
+          },
+          "range_low_usd": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Range Low Usd",
+            "description": "Where the statute states no formula: the charge under the shortest useful life the sources give (the line is 'depends' at the default-life estimate)."
+          },
+          "range_high_usd": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Range High Usd",
+            "description": "The same under the longest useful life the sources give."
           }
         },
         "type": "object",
@@ -2179,6 +2873,42 @@
             ],
             "title": "Photos After Repair",
             "description": "Photos after repairs."
+          },
+          "cleaning_notice": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Cleaning Notice",
+            "description": "You gave the tenant written notice of the cleaning needed and time to do it before charging for cleaning (Montana 70-25-201(3): 24 hours)."
+          },
+          "move_in_condition_statement": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Move In Condition Statement",
+            "description": "You gave the tenant a written move-in condition statement or checklist (Montana 70-25-206, Washington 59.18.260)."
+          },
+          "move_out_list": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Move Out List",
+            "description": "You inspected the unit and made the move-out damage list in time (Georgia 44-7-33(b): within 3 business days)."
           }
         },
         "additionalProperties": false,
@@ -2192,7 +2922,10 @@
             "enum": [
               "itemized_statement",
               "receipts",
-              "photos"
+              "photos",
+              "photos_move_in",
+              "move_in_statement",
+              "move_out_list"
             ],
             "title": "Duty"
           },
@@ -2223,6 +2956,19 @@
               }
             ],
             "title": "Threshold"
+          },
+          "due_by": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Due By",
+            "description": "The duty's own last day, if dated."
           },
           "note": {
             "anyOf": [
@@ -2330,6 +3076,100 @@
         "title": "EstimateContext",
         "description": "Identifiers of the estimate being rated. Hashes, versions, region and total only.\n\nEvery field has a strict format (security review M1): they end up in the feedback digest,\nso nothing here may carry free text."
       },
+      "ExcessRemedy": {
+        "properties": {
+          "multiple": {
+            "type": "string",
+            "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+            "title": "Multiple"
+          },
+          "section": {
+            "type": "string",
+            "title": "Section"
+          },
+          "quote": {
+            "type": "string",
+            "maxLength": 400,
+            "title": "Quote"
+          },
+          "source": {
+            "type": "string",
+            "title": "Source"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "multiple",
+          "section",
+          "quote",
+          "source"
+        ],
+        "title": "ExcessRemedy",
+        "description": "A remedy for taking a deposit above the cap (Maryland 8-203(b)(3): up to three times the\nextra amount charged, plus fees)."
+      },
+      "Exclusion": {
+        "properties": {
+          "category": {
+            "type": "string",
+            "enum": [
+              "unpaid_rent",
+              "unpaid_utilities",
+              "cleaning",
+              "carpet",
+              "flooring",
+              "paint",
+              "blinds_window_coverings",
+              "appliance",
+              "fixture_or_hardware",
+              "wall_or_door_repair",
+              "key_or_lock",
+              "late_fees",
+              "lease_break_fee",
+              "moving_and_storage",
+              "reletting_costs",
+              "trash_and_abandoned_items",
+              "other_damage",
+              "other"
+            ],
+            "title": "Category"
+          },
+          "section": {
+            "type": "string",
+            "title": "Section"
+          },
+          "quote": {
+            "type": "string",
+            "maxLength": 600,
+            "title": "Quote"
+          },
+          "source": {
+            "type": "string",
+            "title": "Source"
+          },
+          "note": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Note"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "category",
+          "section",
+          "quote",
+          "source"
+        ],
+        "title": "Exclusion",
+        "description": "A category the statute keeps out of the deposit (Delaware: damage correctable by painting\nand ordinary cleaning): 'no', cited."
+      },
       "Extent": {
         "type": "string",
         "enum": [
@@ -2338,6 +3178,98 @@
           "full"
         ],
         "title": "Extent"
+      },
+      "Extraction": {
+        "properties": {
+          "method": {
+            "type": "string",
+            "const": "ai",
+            "title": "Method",
+            "description": "'ai': read by a language model from free text."
+          },
+          "model": {
+            "type": "string",
+            "maxLength": 80,
+            "pattern": "^[A-Za-z0-9._:() -]+$",
+            "title": "Model",
+            "description": "The model that read it, e.g. 'gpt-5-nano 2025-08-07'."
+          },
+          "confidence": {
+            "anyOf": [
+              {
+                "type": "number",
+                "maximum": 1.0,
+                "minimum": 0.0
+              },
+              {
+                "type": "string",
+                "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$"
+              }
+            ],
+            "title": "Confidence",
+            "description": "The reader's confidence, 0 to 1."
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "method",
+          "model",
+          "confidence"
+        ],
+        "title": "Extraction",
+        "description": "How a finding was produced, when software read it from free text (contract 0.4.0).\n\nSet by the web tool when its AI reader (Azure OpenAI) turned a person's own words into this\nfinding. The engine reports such a finding as ``resolution: \"ai\"`` with ``needs_review``\nand flags its lines; it never changes how the finding is priced."
+      },
+      "Fallback": {
+        "properties": {
+          "days": {
+            "type": "integer",
+            "exclusiveMinimum": 0.0,
+            "title": "Days"
+          },
+          "start": {
+            "type": "string",
+            "enum": [
+              "vacate",
+              "termination",
+              "later_of_vacate_and_termination",
+              "forwarding_address",
+              "demand",
+              "later_of_termination_and_address",
+              "latest_of_termination_possession_and_address",
+              "earlier_of_termination_and_surrender",
+              "surrender_or_termination_first",
+              "new_tenant_occupancy",
+              "termination_possession_and_demand",
+              "claim_notice"
+            ],
+            "title": "Start",
+            "default": "vacate"
+          },
+          "section": {
+            "type": "string",
+            "title": "Section"
+          },
+          "note": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Note"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "days",
+          "section"
+        ],
+        "title": "Fallback",
+        "description": "A second date for the full refund when the statement is not given in time or none is\nneeded (Illinois 710/1(a): no statement for property damage within 30 days: the deposit in\nfull within 45 days of vacating; a rent-only withholding needs no statement). The statement's\nown date stays ``itemization_by``."
       },
       "FeedbackIn": {
         "properties": {
@@ -2566,6 +3498,17 @@
               }
             ],
             "title": "Notes"
+          },
+          "extraction": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/Extraction"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Leave out. Set by the web tool for findings its AI reader produced from free text; they come back as resolution 'ai' with needs_review."
           }
         },
         "additionalProperties": false,
@@ -2584,9 +3527,29 @@
             "enum": [
               "exact",
               "alias",
-              "unmapped"
+              "ai",
+              "unmapped",
+              "not_billed"
             ],
-            "title": "Resolution"
+            "title": "Resolution",
+            "description": "exact: a taxonomy code was given. alias: the description matched an alias. ai: an AI reader chose the code from free text (see confidence, model; needs_review). unmapped: nothing matched (a manual-quote line). not_billed: the description says there is no work ('no mold', 'faucet not leaking', 'fixed by tenant'); no lines, no refer-out; the issue it names is in suggestions and the reason in not_billed_reason."
+          },
+          "not_billed_reason": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "none",
+                  "ok",
+                  "done"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Not Billed Reason",
+            "description": "resolution 'not_billed' only. none: says there is none ('no mold', 'mold: none'); ok: says it works or is fine; done: says it was already fixed or done."
           },
           "code": {
             "anyOf": [
@@ -2686,6 +3649,37 @@
             "type": "array",
             "title": "Line Ids",
             "default": []
+          },
+          "needs_review": {
+            "type": "boolean",
+            "title": "Needs Review",
+            "description": "True when software read this finding from free text (resolution 'ai'): check it.",
+            "default": false
+          },
+          "confidence": {
+            "anyOf": [
+              {
+                "type": "string",
+                "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Confidence",
+            "description": "resolution 'ai' only: the AI reader's confidence, 0 to 1."
+          },
+          "model": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Model",
+            "description": "resolution 'ai' only: the model used."
           }
         },
         "type": "object",
@@ -2730,6 +3724,326 @@
         "type": "object",
         "title": "FloorCoverings",
         "description": "What is on the floors. Drives the carpet-cleaning baseline and whole-unit carpet sizes."
+      },
+      "Forfeiture": {
+        "properties": {
+          "trigger": {
+            "type": "string",
+            "enum": [
+              "late_statement",
+              "late_return",
+              "late_statement_or_return",
+              "late_claim_notice",
+              "not_in_input"
+            ],
+            "title": "Trigger"
+          },
+          "bars": {
+            "type": "string",
+            "enum": [
+              "all",
+              "damage"
+            ],
+            "title": "Bars",
+            "default": "all"
+          },
+          "contested": {
+            "items": {
+              "type": "string",
+              "enum": [
+                "unpaid_rent",
+                "unpaid_utilities",
+                "cleaning",
+                "carpet",
+                "flooring",
+                "paint",
+                "blinds_window_coverings",
+                "appliance",
+                "fixture_or_hardware",
+                "wall_or_door_repair",
+                "key_or_lock",
+                "late_fees",
+                "lease_break_fee",
+                "moving_and_storage",
+                "reletting_costs",
+                "trash_and_abandoned_items",
+                "other_damage",
+                "other"
+              ]
+            },
+            "type": "array",
+            "title": "Contested",
+            "default": []
+          },
+          "exempt": {
+            "items": {
+              "type": "string",
+              "enum": [
+                "unpaid_rent",
+                "unpaid_utilities",
+                "cleaning",
+                "carpet",
+                "flooring",
+                "paint",
+                "blinds_window_coverings",
+                "appliance",
+                "fixture_or_hardware",
+                "wall_or_door_repair",
+                "key_or_lock",
+                "late_fees",
+                "lease_break_fee",
+                "moving_and_storage",
+                "reletting_costs",
+                "trash_and_abandoned_items",
+                "other_damage",
+                "other"
+              ]
+            },
+            "type": "array",
+            "title": "Exempt",
+            "default": []
+          },
+          "gate": {
+            "type": "string",
+            "enum": [
+              "none",
+              "bad_faith",
+              "unreasonable",
+              "willful",
+              "presumption",
+              "tenant_notice",
+              "court"
+            ],
+            "title": "Gate",
+            "default": "none"
+          },
+          "keeps_claim": {
+            "type": "boolean",
+            "title": "Keeps Claim",
+            "default": false
+          },
+          "address_relief_days": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "minimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Address Relief Days"
+          },
+          "tenant_notice_relief": {
+            "type": "boolean",
+            "title": "Tenant Notice Relief",
+            "default": false
+          },
+          "effective_on": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Effective On"
+          },
+          "condition": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Condition"
+          },
+          "section": {
+            "type": "string",
+            "title": "Section"
+          },
+          "quote": {
+            "type": "string",
+            "maxLength": 600,
+            "title": "Quote"
+          },
+          "verbatim": {
+            "type": "boolean",
+            "title": "Verbatim",
+            "default": true
+          },
+          "source": {
+            "type": "string",
+            "title": "Source"
+          },
+          "note": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Note"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "trigger",
+          "section",
+          "quote",
+          "source"
+        ],
+        "title": "Forfeiture",
+        "description": "A statute's consequence for a missed duty: the landlord loses the right to keep some or\nall of the deposit. Computed, not relayed: when the trigger is met as of ``as_of`` (the date\npassed and the statement or refund was not sent in time, or a statement sent now would be\nlate), the barred lines become ``allowed: no`` (``depends`` when ``gate`` needs a finding or\nthe category is ``contested``) and the totals are recomputed. Before then the lines stand and\na warning names the date. ``not_in_input`` rows turn on facts the request cannot state and\nare relayed as unknowns whenever something is deducted."
+      },
+      "ForfeitureCheck": {
+        "properties": {
+          "trigger": {
+            "type": "string",
+            "title": "Trigger",
+            "description": "late_statement, late_return, late_statement_or_return, late_claim_notice or not_in_input (facts the request cannot state)."
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "met",
+              "not_yet",
+              "complied",
+              "not_started",
+              "relieved",
+              "unknown"
+            ],
+            "title": "Status",
+            "description": "met: the date passed without the statement or refund (or sending it now would be late), so the barred lines are not counted; not_yet: still time; complied: sent on time; not_started: the clock has not started; relieved: the statute excuses the duty here; unknown: turns on facts you did not give."
+          },
+          "due_by": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Due By",
+            "description": "The date the duty had to be met by."
+          },
+          "scope": {
+            "type": "string",
+            "enum": [
+              "all",
+              "damage"
+            ],
+            "title": "Scope",
+            "description": "all: every deduction; damage: damage and cleaning only."
+          },
+          "gate": {
+            "type": "string",
+            "title": "Gate",
+            "description": "none, or the finding needed first (bad_faith, ...)."
+          },
+          "lines": {
+            "items": {
+              "type": "integer"
+            },
+            "type": "array",
+            "title": "Lines",
+            "description": "0-based deduction lines it bars (when met)."
+          },
+          "amount_released_usd": {
+            "type": "string",
+            "title": "Amount Released Usd",
+            "description": "What those lines would otherwise have kept from the deposit.",
+            "default": "0.00"
+          },
+          "keeps_claim": {
+            "type": "boolean",
+            "title": "Keeps Claim",
+            "description": "The charges can still be sued for separately."
+          },
+          "citation": {
+            "type": "string",
+            "title": "Citation"
+          },
+          "note": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Note"
+          }
+        },
+        "type": "object",
+        "required": [
+          "trigger",
+          "status",
+          "scope",
+          "gate",
+          "keeps_claim",
+          "citation"
+        ],
+        "title": "ForfeitureCheck",
+        "description": "A statute's forfeiture of the right to withhold, checked against the request."
+      },
+      "Guide": {
+        "properties": {
+          "title": {
+            "type": "string",
+            "title": "Title"
+          },
+          "url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Url"
+          },
+          "publisher": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Publisher"
+          },
+          "accessed": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Accessed"
+          }
+        },
+        "type": "object",
+        "required": [
+          "title"
+        ],
+        "title": "Guide",
+        "description": "An official plain-language resource for the state or city (an agency guide)."
       },
       "HTTPValidationError": {
         "properties": {
@@ -2847,6 +4161,18 @@
               }
             ],
             "title": "Amount Usd"
+          },
+          "if_required_usd": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "If Required Usd",
+            "description": "The amount owed if the condition holds (a rent ordinance's interest when coverage is not known); not in the refund."
           },
           "citation": {
             "anyOf": [
@@ -3047,6 +4373,9 @@
             "type": "string",
             "enum": [
               "simple",
+              "monthly_by_year",
+              "months_to_compliance",
+              "lease_years",
               "per_window",
               "anniversary_years",
               "monthly"
@@ -3088,6 +4417,174 @@
               }
             ],
             "title": "Payable"
+          },
+          "held_until": {
+            "type": "string",
+            "enum": [
+              "vacate",
+              "return"
+            ],
+            "title": "Held Until",
+            "default": "vacate"
+          },
+          "accrual_floor": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Accrual Floor"
+          },
+          "accrual_floor_section": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Accrual Floor Section"
+          },
+          "count_last_day": {
+            "type": "boolean",
+            "title": "Count Last Day",
+            "default": false
+          },
+          "ordinance_coverage": {
+            "type": "boolean",
+            "title": "Ordinance Coverage",
+            "default": false
+          },
+          "legacy_before": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Legacy Before"
+          },
+          "legacy_rate": {
+            "anyOf": [
+              {
+                "type": "string",
+                "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Legacy Rate"
+          },
+          "legacy_interval_months": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Legacy Interval Months"
+          },
+          "minimum_usd": {
+            "anyOf": [
+              {
+                "type": "string",
+                "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Minimum Usd"
+          },
+          "year_starts": {
+            "anyOf": [
+              {
+                "type": "string",
+                "pattern": "^\\d{2}-\\d{2}$"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Year Starts"
+          },
+          "accrues_after_months": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "exclusiveMinimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Accrues After Months"
+          },
+          "fee_percent": {
+            "anyOf": [
+              {
+                "type": "string",
+                "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Fee Percent"
+          },
+          "compound": {
+            "type": "string",
+            "enum": [
+              "none",
+              "annual"
+            ],
+            "title": "Compound",
+            "default": "none"
+          },
+          "min_lease_term_months": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Min Lease Term Months"
+          },
+          "min_deposit_months_rent": {
+            "anyOf": [
+              {
+                "type": "string",
+                "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Min Deposit Months Rent"
+          },
+          "rate_published_by": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Rate Published By"
           },
           "note": {
             "anyOf": [
@@ -3327,6 +4824,41 @@
               }
             ]
           },
+          "move_in_photos": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/MoveInPhotos"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "move_in_statement": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/MoveInStatement"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "move_out_list": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/MoveOutList"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "refund_with_list": {
+            "type": "boolean",
+            "title": "Refund With List",
+            "default": false
+          },
           "note": {
             "anyOf": [
               {
@@ -3391,7 +4923,19 @@
           "verified": {
             "type": "boolean",
             "title": "Verified",
-            "description": "True when the main rule text was read verbatim at the official source."
+            "description": "True when the main rule text was read verbatim at the official source and, when a city was given, the city's own rules are covered."
+          },
+          "city_rules_checked": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "City Rules Checked",
+            "description": "True: the city's overlay was applied; false: the city you gave is not covered, so only the state rule is shown (a local ordinance may be stricter); null: no city given."
           }
         },
         "type": "object",
@@ -3401,6 +4945,232 @@
           "verified"
         ],
         "title": "JurisdictionRef"
+      },
+      "LateFeeRule": {
+        "properties": {
+          "percent": {
+            "anyOf": [
+              {
+                "type": "string",
+                "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Percent"
+          },
+          "flat_usd": {
+            "anyOf": [
+              {
+                "type": "string",
+                "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Flat Usd"
+          },
+          "combine": {
+            "type": "string",
+            "enum": [
+              "greater",
+              "lesser",
+              "plus"
+            ],
+            "title": "Combine",
+            "default": "greater"
+          },
+          "over_usd": {
+            "anyOf": [
+              {
+                "type": "string",
+                "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Over Usd"
+          },
+          "rent_tiers": {
+            "items": {
+              "$ref": "#/components/schemas/RentTier"
+            },
+            "type": "array",
+            "title": "Rent Tiers",
+            "default": []
+          },
+          "unit_tiers": {
+            "items": {
+              "$ref": "#/components/schemas/UnitTier"
+            },
+            "type": "array",
+            "title": "Unit Tiers",
+            "default": []
+          },
+          "per": {
+            "type": "string",
+            "enum": [
+              "late_payment",
+              "month"
+            ],
+            "title": "Per",
+            "default": "late_payment"
+          },
+          "presumption": {
+            "type": "boolean",
+            "title": "Presumption",
+            "default": false
+          },
+          "conditional": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Conditional"
+          },
+          "deposit_use": {
+            "type": "boolean",
+            "title": "Deposit Use",
+            "default": false
+          },
+          "section": {
+            "type": "string",
+            "title": "Section"
+          },
+          "quote": {
+            "type": "string",
+            "maxLength": 600,
+            "title": "Quote"
+          },
+          "verbatim": {
+            "type": "boolean",
+            "title": "Verbatim",
+            "default": true
+          },
+          "source": {
+            "type": "string",
+            "title": "Source"
+          },
+          "note": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Note"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "section",
+          "quote",
+          "source"
+        ],
+        "title": "LateFeeRule",
+        "description": "The most a late fee may be, per late payment (or per month), computed from the monthly\nrent: ``flat_usd`` and ``percent`` (of the rent, or of the rent above ``over_usd``) combined\nas the greater, the lesser or the sum; ``rent_tiers`` / ``unit_tiers`` pick the figure by\nrent or building size. ``presumption``: the figure is only a safe harbor (Texas), so a larger\nfee is 'depends'. ``conditional``: no figure can be checked (Massachusetts: nothing until 30\ndays late; Oregon's reasonable flat fee; Wisconsin's nonstandard provision): 'depends' with\nthe text. The engine allows up to the cap for one late payment unless the line says how many\n(``late_payments``); more than one cap without a count is 'depends'."
+      },
+      "LeaseBreakRule": {
+        "properties": {
+          "rule": {
+            "type": "string",
+            "enum": [
+              "actual_rent",
+              "cap_months_rent",
+              "nonstandard_provision"
+            ],
+            "title": "Rule"
+          },
+          "months_rent": {
+            "anyOf": [
+              {
+                "type": "string",
+                "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Months Rent"
+          },
+          "excludes_later_rent": {
+            "type": "boolean",
+            "title": "Excludes Later Rent",
+            "default": false
+          },
+          "exclusion_section": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Exclusion Section"
+          },
+          "exclusion_quote": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 400
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Exclusion Quote"
+          },
+          "section": {
+            "type": "string",
+            "title": "Section"
+          },
+          "quote": {
+            "type": "string",
+            "maxLength": 600,
+            "title": "Quote"
+          },
+          "verbatim": {
+            "type": "boolean",
+            "title": "Verbatim",
+            "default": true
+          },
+          "source": {
+            "type": "string",
+            "title": "Source"
+          },
+          "note": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Note"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "rule",
+          "section",
+          "quote",
+          "source"
+        ],
+        "title": "LeaseBreakRule",
+        "description": "What the statute lets a landlord keep for a tenancy ended early. ``actual_rent``: only\nthe rent actually lost (after mitigation), not a flat fee (Michigan, Indiana, North Carolina);\n``cap_months_rent``: a fee up to ``months_rent`` x rent when the agreement provides it (Oregon\n1.5, Florida 2 with a signed addendum); ``nonstandard_provision``: only under a signed\nnonstandard provision (Wisconsin). Every case is 'depends' (facts the request cannot state);\nthe cap limits the amount."
       },
       "Location": {
         "properties": {
@@ -3426,6 +5196,297 @@
         "type": "object",
         "title": "Location",
         "description": "Where the finding is. Also accepted as a plain string (\"Bedroom 2\", \"kitchen\")."
+      },
+      "MoveInPhotos": {
+        "properties": {
+          "tenancy_from": {
+            "type": "string",
+            "format": "date",
+            "title": "Tenancy From"
+          },
+          "section": {
+            "type": "string",
+            "title": "Section"
+          },
+          "quote": {
+            "type": "string",
+            "maxLength": 600,
+            "title": "Quote"
+          },
+          "source": {
+            "type": "string",
+            "title": "Source"
+          },
+          "missing": {
+            "type": "string",
+            "enum": [
+              "warn",
+              "depends",
+              "bars"
+            ],
+            "title": "Missing",
+            "default": "depends"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "tenancy_from",
+          "section",
+          "quote",
+          "source"
+        ],
+        "title": "MoveInPhotos",
+        "description": "Photos at the start of the tenancy, for tenancies beginning on or after ``tenancy_from``\n(California 1950.5(g)(1): 2025-07-01). Checked against ``documentation.photos_move_in``."
+      },
+      "MoveInStatement": {
+        "properties": {
+          "section": {
+            "type": "string",
+            "title": "Section"
+          },
+          "quote": {
+            "type": "string",
+            "maxLength": 400,
+            "title": "Quote"
+          },
+          "source": {
+            "type": "string",
+            "title": "Source"
+          },
+          "missing": {
+            "type": "string",
+            "enum": [
+              "depends",
+              "bars"
+            ],
+            "title": "Missing",
+            "default": "depends"
+          },
+          "scope": {
+            "type": "string",
+            "enum": [
+              "lines",
+              "all"
+            ],
+            "title": "Scope",
+            "default": "lines"
+          },
+          "note": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Note"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "section",
+          "quote",
+          "source"
+        ],
+        "title": "MoveInStatement",
+        "description": "A written move-in condition statement or checklist the statute ties damage deductions to,\nchecked against ``documentation.move_in_condition_statement`` (Montana 70-25-206(3): without\nit, damage and cleaning only on clear and convincing evidence: 'depends'; Washington\n59.18.260(5): liable for the whole deposit: ``bars``, ``scope: all``)."
+      },
+      "MoveOutList": {
+        "properties": {
+          "business_days": {
+            "type": "integer",
+            "exclusiveMinimum": 0.0,
+            "title": "Business Days"
+          },
+          "section": {
+            "type": "string",
+            "title": "Section"
+          },
+          "quote": {
+            "type": "string",
+            "maxLength": 400,
+            "title": "Quote"
+          },
+          "source": {
+            "type": "string",
+            "title": "Source"
+          },
+          "note": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Note"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "business_days",
+          "section",
+          "quote",
+          "source"
+        ],
+        "title": "MoveOutList",
+        "description": "A move-out inspection and damage list due a number of business days after the tenancy\nends and the tenant vacates (Georgia 44-7-33(b): three business days), checked against\n``documentation.move_out_list``; dated, with a due-soon warning."
+      },
+      "NotIfAbandoned": {
+        "properties": {
+          "section": {
+            "type": "string",
+            "title": "Section"
+          },
+          "quote": {
+            "type": "string",
+            "maxLength": 400,
+            "title": "Quote"
+          },
+          "source": {
+            "type": "string",
+            "title": "Source"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "section",
+          "quote",
+          "source"
+        ],
+        "title": "NotIfAbandoned",
+        "description": "The return rule does not apply when the tenant abandons (Louisiana 9:3251(C)): decided by\n``tenant_abandoned`` (else no proper notice or a move-out before the end of the tenancy)."
+      },
+      "Outcome": {
+        "properties": {
+          "status": {
+            "type": "string",
+            "enum": [
+              "upcoming",
+              "due_today",
+              "overdue",
+              "not_started",
+              "none_in_statute",
+              "reverted",
+              "no_deposit",
+              "met",
+              "late"
+            ],
+            "title": "Status",
+            "description": "The same value as deadline.status."
+          },
+          "refund_due_usd": {
+            "type": "string",
+            "title": "Refund Due Usd",
+            "description": "totals.refund_due_usd: the rule's refund."
+          },
+          "refund_min_usd": {
+            "type": "string",
+            "title": "Refund Min Usd",
+            "description": "The refund if every 'depends' line is kept."
+          },
+          "interest_usd": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Interest Usd",
+            "description": "Interest owed and computed; None when interest is owed but not computed (see interest_unknown) or not owed."
+          },
+          "interest_unknown": {
+            "type": "boolean",
+            "title": "Interest Unknown",
+            "description": "Interest is (or may be) owed but its amount is not computed.",
+            "default": false
+          },
+          "returned_usd": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Returned Usd",
+            "description": "Already returned to the tenant (returned.amount_usd; the deposit for a full refund with no amount; 0 for nothing); None when not said or not given."
+          },
+          "owed_now_usd": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Owed Now Usd",
+            "description": "Still owed to the tenant: refund_due_usd minus returned_usd, never below 0 (None when the amount returned is not known)."
+          },
+          "owed_now_min_usd": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Owed Now Min Usd",
+            "description": "The same against refund_min_usd."
+          },
+          "tenant_owes_usd": {
+            "type": "string",
+            "title": "Tenant Owes Usd"
+          },
+          "next_due": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Next Due",
+            "description": "The earliest open step's last day (what to act on first)."
+          },
+          "stages": {
+            "items": {
+              "$ref": "#/components/schemas/Stage"
+            },
+            "type": "array",
+            "title": "Stages"
+          },
+          "uncertain": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Uncertain",
+            "description": "What the answer still turns on, in words."
+          }
+        },
+        "type": "object",
+        "required": [
+          "status",
+          "refund_due_usd",
+          "refund_min_usd",
+          "tenant_owes_usd"
+        ],
+        "title": "Outcome",
+        "description": "The one answer every other section is worded from: what is owed to the tenant now, by\nwhen, and what is still uncertain."
       },
       "PaymentInfo": {
         "properties": {
@@ -3572,6 +5633,30 @@
             "type": "boolean",
             "title": "Plus Attorney Fees"
           },
+          "estimated_min_usd": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Estimated Min Usd",
+            "description": "The least of the readings when the statute's base is unsettled (a refund paid late, 'depends' lines, IL's 'deposit due'); None when it is the same as the max."
+          },
+          "base": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Base",
+            "description": "What a multiple of the amount withheld is taken of: withheld, wrongfully_withheld, entitled_balance or exceeds_damages."
+          },
           "estimated_max_usd": {
             "anyOf": [
               {
@@ -3585,8 +5670,16 @@
             "description": "fixed + multiple x basis amount (with any floor or cap); exposure, not a verdict. None when the basis is unknown (monthly rent not given)."
           },
           "forfeits_right_to_withhold": {
-            "type": "boolean",
-            "title": "Forfeits Right To Withhold"
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Forfeits Right To Withhold",
+            "description": "True: a late statement or refund takes away the right to withhold with no court finding; None: it does only on a finding (bad faith, willful, unreasonable); False: the statute states no such forfeiture."
           },
           "citation": {
             "type": "string",
@@ -3709,6 +5802,29 @@
             ],
             "title": "Basis"
           },
+          "base": {
+            "type": "string",
+            "enum": [
+              "withheld",
+              "wrongfully_withheld",
+              "entitled_balance",
+              "exceeds_damages"
+            ],
+            "title": "Base",
+            "default": "withheld"
+          },
+          "base_high": {
+            "anyOf": [
+              {
+                "type": "string",
+                "const": "deposit"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Base High"
+          },
           "condition": {
             "type": "string",
             "enum": [
@@ -3736,6 +5852,16 @@
             "type": "boolean",
             "title": "Forfeits Right To Withhold If Late",
             "default": false
+          },
+          "safe_harbor": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/SafeHarbor"
+              },
+              {
+                "type": "null"
+              }
+            ]
           },
           "note": {
             "anyOf": [
@@ -3817,6 +5943,36 @@
               "move_out",
               "after_repair"
             ]
+          },
+          "missing": {
+            "type": "string",
+            "enum": [
+              "warn",
+              "depends",
+              "bars"
+            ],
+            "title": "Missing",
+            "default": "warn"
+          },
+          "scope": {
+            "type": "string",
+            "enum": [
+              "lines",
+              "all"
+            ],
+            "title": "Scope",
+            "default": "lines"
+          },
+          "gate_note": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Gate Note"
           }
         },
         "additionalProperties": false,
@@ -4190,7 +6346,7 @@
             "type": "array",
             "maxItems": 100,
             "title": "Issues",
-            "description": "What was found, one plain-English item per entry, e.g. ['stained carpet in both bedrooms', 'nail holes everywhere', 'oven is filthy']. A room at the start sets the location ('Bedroom 2 carpet torn')."
+            "description": "What was found in plain English, e.g. ['stained carpet in both bedrooms', 'nail holes everywhere', 'oven is filthy']. Read like pasted notes: an entry may hold several conditions ('carpet stained, nail holes'; one finding each); a room before or after the condition sets the location ('Bedroom 2 carpet torn', 'mold in bathroom'); a written count sets the quantity ('3 blinds broken'); an entry saying there is no work ('no mold', 'leak fixed by tenant') is reported as not billed."
           },
           "unit_type": {
             "$ref": "#/components/schemas/UnitType",
@@ -4467,6 +6623,36 @@
               }
             ],
             "title": "Note"
+          },
+          "missing": {
+            "type": "string",
+            "enum": [
+              "warn",
+              "depends",
+              "bars"
+            ],
+            "title": "Missing",
+            "default": "warn"
+          },
+          "scope": {
+            "type": "string",
+            "enum": [
+              "lines",
+              "all"
+            ],
+            "title": "Scope",
+            "default": "lines"
+          },
+          "gate_note": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Gate Note"
           }
         },
         "additionalProperties": false,
@@ -4599,6 +6785,34 @@
         ],
         "title": "Region"
       },
+      "RentTier": {
+        "properties": {
+          "max_rent_usd": {
+            "anyOf": [
+              {
+                "type": "string",
+                "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Max Rent Usd"
+          },
+          "flat_usd": {
+            "type": "string",
+            "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+            "title": "Flat Usd"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "flat_usd"
+        ],
+        "title": "RentTier",
+        "description": "A flat late-fee limit for rents up to ``max_rent_usd`` (Iowa: $60 a month up to $700)."
+      },
       "Responsibility": {
         "type": "string",
         "enum": [
@@ -4695,6 +6909,26 @@
             "title": "Alternatives",
             "default": []
           },
+          "fallback": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/Fallback"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "not_if_abandoned": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/NotIfAbandoned"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
           "gate": {
             "anyOf": [
               {
@@ -4717,6 +6951,23 @@
             "title": "Rollover",
             "default": false
           },
+          "rollover_days": {
+            "items": {
+              "type": "string",
+              "enum": [
+                "saturday",
+                "sunday",
+                "holiday"
+              ]
+            },
+            "type": "array",
+            "title": "Rollover Days",
+            "default": [
+              "saturday",
+              "sunday",
+              "holiday"
+            ]
+          },
           "rollover_source": {
             "anyOf": [
               {
@@ -4732,6 +6983,59 @@
         "additionalProperties": false,
         "type": "object",
         "title": "ReturnRule"
+      },
+      "Returned": {
+        "properties": {
+          "what": {
+            "type": "string",
+            "enum": [
+              "nothing",
+              "full_refund",
+              "partial_refund",
+              "itemized_statement"
+            ],
+            "title": "What",
+            "description": "nothing: nothing returned yet; full_refund: the whole deposit; partial_refund: part of it, with no itemized statement; itemized_statement: an itemized statement of deductions (with any refund the same day)."
+          },
+          "on": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "On",
+            "description": "Day it was sent or delivered (YYYY-MM-DD); required unless what is nothing. Statutes count the day the landlord mails or delivers it; a postmark is the best evidence."
+          },
+          "amount_usd": {
+            "anyOf": [
+              {
+                "type": "number",
+                "maximum": 10000000.0,
+                "minimum": 0.0
+              },
+              {
+                "type": "string",
+                "pattern": "^\\$?[0-9][0-9,]*(\\.[0-9]+)?$"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Amount Usd",
+            "description": "Amount refunded, dollars (partial_refund or itemized_statement)."
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "what"
+        ],
+        "title": "Returned",
+        "description": "What the landlord has returned so far: lets the result say whether the refund and the\nitemized statement came on time (``timeliness``)."
       },
       "RulesRequest": {
         "properties": {
@@ -4817,6 +7121,25 @@
             "type": "array",
             "title": "Covered Cities",
             "description": "City overlays in this state ('Name, ST')."
+          },
+          "guides": {
+            "items": {
+              "$ref": "#/components/schemas/Guide"
+            },
+            "type": "array",
+            "title": "Guides",
+            "description": "Official plain-language guides for this state or city, where we have one."
+          },
+          "small_claims": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/Guide"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "The state courts' small claims page, where we have one."
           },
           "warnings": {
             "items": {
@@ -4913,6 +7236,49 @@
           "duration_ms"
         ],
         "title": "RunInfo"
+      },
+      "SafeHarbor": {
+        "properties": {
+          "when": {
+            "type": "string",
+            "const": "no_forwarding_address",
+            "title": "When",
+            "default": "no_forwarding_address"
+          },
+          "section": {
+            "type": "string",
+            "title": "Section"
+          },
+          "quote": {
+            "type": "string",
+            "maxLength": 600,
+            "title": "Quote"
+          },
+          "source": {
+            "type": "string",
+            "title": "Source"
+          },
+          "note": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Note"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "section",
+          "quote",
+          "source"
+        ],
+        "title": "SafeHarbor",
+        "description": "What takes the penalty away (Illinois 710/1(a), Pennsylvania 512(e), Ohio 5321.16(B), ...):\nthe tenant gave no forwarding address. Checked against ``tenant_gave_forwarding_address``\n(false: no penalty; unknown with no address received: an unknown says so)."
       },
       "ScopeLine": {
         "properties": {
@@ -5050,6 +7416,18 @@
             },
             "type": "array",
             "title": "Rule Ids"
+          },
+          "to_confirm": {
+            "type": "boolean",
+            "title": "To Confirm",
+            "description": "Every finding behind this line is uncertain, or it is a check-first assessment from the safety net: priced, but not in must/should/could, subtotal or total (see totals.to_confirm).",
+            "default": false
+          },
+          "needs_review": {
+            "type": "boolean",
+            "title": "Needs Review",
+            "description": "A finding behind this line was read by AI from free text: check it.",
+            "default": false
           }
         },
         "type": "object",
@@ -5151,6 +7529,12 @@
             "type": "array",
             "maxItems": 500,
             "title": "Decisions"
+          },
+          "retain": {
+            "type": "boolean",
+            "title": "Retain",
+            "description": "Optional (contract 0.5.0). false: keep none of this request's text. By default the finding descriptions are kept with contact details and access codes removed, to improve matching; the estimate is the same either way.",
+            "default": true
           },
           "detail": {
             "type": "string",
@@ -5357,7 +7741,7 @@
               },
               {
                 "type": "string",
-                "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$"
+                "pattern": "^\\$?[0-9][0-9,]*(\\.[0-9]+)?$"
               }
             ],
             "title": "Deposit Usd",
@@ -5372,7 +7756,7 @@
               },
               {
                 "type": "string",
-                "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$"
+                "pattern": "^\\$?[0-9][0-9,]*(\\.[0-9]+)?$"
               },
               {
                 "type": "null"
@@ -5440,6 +7824,18 @@
             "title": "Forwarding Address Received On",
             "description": "Day you received the tenant's written forwarding address (YYYY-MM-DD). Several states start or hold the clock on it (Texas, Connecticut, Iowa, Minnesota)."
           },
+          "tenant_gave_forwarding_address": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Tenant Gave Forwarding Address",
+            "description": "False when the tenant never gave a forwarding address in writing (not just 'not yet known'). Illinois, Pennsylvania, Ohio, Delaware, South Carolina and New Hampshire then relieve the landlord of the penalty. Implied true by forwarding_address_received_on."
+          },
           "demand_received_on": {
             "anyOf": [
               {
@@ -5464,7 +7860,38 @@
               }
             ],
             "title": "New Tenant Moved In On",
-            "description": "Day a new tenant moved in, if the unit was re-rented (YYYY-MM-DD). West Virginia and Wisconsin can end the period earlier."
+            "description": "Day a new tenant moved in, if the unit was re-rented (YYYY-MM-DD). West Virginia and Wisconsin can end the period earlier; rent claimed for days from it on is not recoverable (re-rent mitigation)."
+          },
+          "new_tenant_rent_usd": {
+            "anyOf": [
+              {
+                "type": "number",
+                "maximum": 10000000.0,
+                "minimum": 0.0
+              },
+              {
+                "type": "string",
+                "pattern": "^\\$?[0-9][0-9,]*(\\.[0-9]+)?$"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "New Tenant Rent Usd",
+            "description": "Monthly rent the new tenant pays (with new_tenant_moved_in_on): the rent received for overlapping days is credited against rent claimed for them."
+          },
+          "statement_sent_on": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Statement Sent On",
+            "description": "Day you sent (or delivered) the itemized statement (YYYY-MM-DD). With it the statement is judged on time or late; documentation.itemized_statement alone cannot tell."
           },
           "claim_notice_sent_on": {
             "anyOf": [
@@ -5477,7 +7904,7 @@
               }
             ],
             "title": "Claim Notice Sent On",
-            "description": "Day you sent the written notice of intent to impose a claim on the deposit (YYYY-MM-DD). Florida: the balance is due 30 days after it."
+            "description": "Day you sent the written notice of intent to impose a claim on the deposit (YYYY-MM-DD). Florida (due within 30 days of termination) and the District of Columbia (within 45 days): the balance is due 30 days after it; a late notice does not count."
           },
           "lease_return_days": {
             "anyOf": [
@@ -5505,6 +7932,156 @@
             "title": "Tenant Gave Proper Notice",
             "description": "A termination notice that meets the statute was given (Alaska: 14 days instead of 30 when nothing is deducted for damage)."
           },
+          "interest_paid_through": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Interest Paid Through",
+            "description": "Interest already paid or credited to the tenant up to this day (annual-payment rules: San Francisco, Los Angeles, Berkeley, Connecticut, Massachusetts, ...): interest is counted from it."
+          },
+          "nonstandard_provision_signed": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Nonstandard Provision Signed",
+            "description": "Wisconsin: the tenant signed a separate NONSTANDARD RENTAL PROVISIONS document covering the charge (ATCP 134.06(3)(b)); false makes such charges 'no'."
+          },
+          "pet_deposit_usd": {
+            "anyOf": [
+              {
+                "type": "number",
+                "maximum": 10000000.0,
+                "minimum": 0.0
+              },
+              {
+                "type": "string",
+                "pattern": "^\\$?[0-9][0-9,]*(\\.[0-9]+)?$"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Pet Deposit Usd",
+            "description": "The part of deposit_usd that is a pet deposit (outside the cap in Missouri, Alabama, North Dakota)."
+          },
+          "tenant_age_62_plus": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Tenant Age 62 Plus",
+            "description": "The tenant is 62 or older (Connecticut: a one-month cap)."
+          },
+          "small_landlord": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Small Landlord",
+            "description": "California AB 12 small landlord (a natural person or an LLC of natural persons owning at most two properties with at most four units; not for a service member): a two-month cap."
+          },
+          "owner_occupied": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Owner Occupied",
+            "description": "The landlord lives in the building (ME, NH, NJ and Chicago exempt small owner-occupied buildings; with building_units)."
+          },
+          "landlord_units_owned": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "minimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Landlord Units Owned",
+            "description": "Rental units the landlord owns in all (Arkansas 5 or fewer, Georgia 10 or fewer, with third_party_managed, may be exempt)."
+          },
+          "third_party_managed": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Third Party Managed",
+            "description": "A third party manages the unit or collects rent for a fee."
+          },
+          "prepaid_rent_usd": {
+            "anyOf": [
+              {
+                "type": "number",
+                "maximum": 10000000.0,
+                "minimum": 0.0
+              },
+              {
+                "type": "string",
+                "pattern": "^\\$?[0-9][0-9,]*(\\.[0-9]+)?$"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Prepaid Rent Usd",
+            "description": "Rent paid in advance beyond the first month, held besides deposit_usd (Connecticut counts it toward the cap)."
+          },
+          "tenancy_type": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "written_lease",
+                  "at_will"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Tenancy Type",
+            "description": "written_lease or at_will (Maine 6033(2): a written agreement's period, at most 30 days, or 21 days for a tenancy at will)."
+          },
+          "tenant_abandoned": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Tenant Abandoned",
+            "description": "The tenant abandoned the unit or was evicted (Maryland 8-203(h): the clock runs from the tenant's written demand; Louisiana 9:3251(C): the one-month rule does not apply). Left out: inferred from tenant_gave_proper_notice: false or a move-out before tenancy_ended_on."
+          },
           "contractor_needed": {
             "anyOf": [
               {
@@ -5517,6 +8094,88 @@
             "title": "Contractor Needed",
             "description": "Damage exceeds the deposit and needs a third-party contractor, and you said so in writing in time (Virginia, West Virginia: 15 more days)."
           },
+          "deposit_collected_on": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Deposit Collected On",
+            "description": "Day the deposit was collected (YYYY-MM-DD); defaults to move_in_on. California (AB 12, from 2024-07-01) and Colorado caps depend on it."
+          },
+          "lease_signed_or_renewed_on": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Lease Signed Or Renewed On",
+            "description": "Day the current lease was signed or last renewed (YYYY-MM-DD). Georgia (2024-07-01) and Maryland (2024-10-01) caps apply to leases from then; defaults to move_in_on, with a warning that a later renewal may bring the new cap."
+          },
+          "lease_term_months": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "maximum": 600.0,
+                "minimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Lease Term Months",
+            "description": "Term of the lease in months (0 for month-to-month). Delaware's cap applies to leases of a year or more, New Mexico's to shorter ones."
+          },
+          "furnished": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Furnished",
+            "description": "The unit is rented furnished (California before AB 12: 3 months; Kansas: 1.5 months; Delaware: no cap)."
+          },
+          "rent_ordinance_covered": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Rent Ordinance Covered",
+            "description": "The unit is covered by the city's rent ordinance (Los Angeles RSO, Berkeley Rent Ordinance). Their deposit interest is owed only then; unknown: the amount is shown beside the refund, not in it."
+          },
+          "interest_rate_percent": {
+            "anyOf": [
+              {
+                "type": "number",
+                "maximum": 25.0,
+                "minimum": 0.0
+              },
+              {
+                "type": "string",
+                "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Interest Rate Percent",
+            "description": "Annual rate the deposit account paid, where the law sets interest at the bank's rate (New Jersey, North Dakota, Illinois 765 ILCS 715, Portland). Without it that interest is unknown."
+          },
           "deductions": {
             "items": {
               "$ref": "#/components/schemas/Deduction"
@@ -5524,7 +8183,18 @@
             "type": "array",
             "maxItems": 50,
             "title": "Deductions",
-            "description": "What you intend to deduct; may be empty."
+            "description": "What you intend to deduct (or, for a tenant, what the landlord listed). An explicit empty list means nothing is deducted (it decides the shorter no-deduction periods, e.g. Montana 10 days, Alaska 14); leave it out when that is not known yet."
+          },
+          "returned": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/Returned"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "What the landlord has returned so far and when. With it, timeliness says whether the refund and the itemized statement were on time and how many days late."
           },
           "documentation": {
             "$ref": "#/components/schemas/Documentation",
@@ -5614,6 +8284,14 @@
               }
             ]
           },
+          "forfeiture": {
+            "items": {
+              "$ref": "#/components/schemas/ForfeitureCheck"
+            },
+            "type": "array",
+            "title": "Forfeiture",
+            "description": "The statute's forfeitures of the right to withhold, checked; a met one has already taken its lines out of the totals."
+          },
           "statement": {
             "anyOf": [
               {
@@ -5623,6 +8301,47 @@
                 "type": "null"
               }
             ]
+          },
+          "outcome": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/Outcome"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "What is owed to the tenant now, by when, and what is uncertain: the summary, deadline status and statement are worded from it."
+          },
+          "timeliness": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/Timeliness"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Present when the request says what was returned (returned)."
+          },
+          "guides": {
+            "items": {
+              "$ref": "#/components/schemas/Guide"
+            },
+            "type": "array",
+            "title": "Guides",
+            "description": "Official plain-language guides for this state or city, where we have one."
+          },
+          "small_claims": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/Guide"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "The state courts' small claims page, where we have one."
           },
           "citations": {
             "items": {
@@ -5696,6 +8415,84 @@
           "title"
         ],
         "title": "SourceRef"
+      },
+      "Stage": {
+        "properties": {
+          "duty": {
+            "type": "string",
+            "enum": [
+              "itemized_statement",
+              "refund",
+              "interest"
+            ],
+            "title": "Duty",
+            "description": "itemized_statement (or notice of claim, where it has its own date), refund (the deposit or the balance), or interest still unpaid after the refund."
+          },
+          "label": {
+            "type": "string",
+            "title": "Label",
+            "description": "The step in words."
+          },
+          "due_by": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Due By",
+            "description": "The last day, with the statute's roll-forward applied."
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "met",
+              "late",
+              "short",
+              "overdue",
+              "due_today",
+              "upcoming",
+              "not_started",
+              "none_in_statute"
+            ],
+            "title": "Status"
+          },
+          "done_on": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Done On"
+          },
+          "days": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Days",
+            "description": "Days left (upcoming), or days late (late, overdue, short)."
+          }
+        },
+        "type": "object",
+        "required": [
+          "duty",
+          "label",
+          "status"
+        ],
+        "title": "Stage",
+        "description": "One dated step of the rule, as it stands on as_of."
       },
       "Standards": {
         "properties": {
@@ -5820,6 +8617,13 @@
           },
           "penalty": {
             "$ref": "#/components/schemas/PenaltyRule"
+          },
+          "forfeiture": {
+            "items": {
+              "$ref": "#/components/schemas/Forfeiture"
+            },
+            "type": "array",
+            "title": "Forfeiture"
           },
           "deposit_cap_months_rent": {
             "anyOf": [
@@ -5972,6 +8776,228 @@
         ],
         "title": "Suggestion"
       },
+      "Timeliness": {
+        "properties": {
+          "what": {
+            "type": "string",
+            "enum": [
+              "nothing",
+              "full_refund",
+              "partial_refund",
+              "itemized_statement"
+            ],
+            "title": "What"
+          },
+          "on": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "On"
+          },
+          "late": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Late",
+            "description": "True: a duty is late or overdue (with nothing returned: every way the rule can be met has passed). False: on time or not yet due. None: no deadline, or the clock has not started."
+          },
+          "days_late": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Days Late",
+            "description": "Days late (the most of any duty; with nothing returned, the days since the last way of meeting the rule passed)."
+          },
+          "late_since": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Late Since",
+            "description": "With nothing returned: the day from which it is late."
+          },
+          "checks": {
+            "items": {
+              "$ref": "#/components/schemas/TimelyCheck"
+            },
+            "type": "array",
+            "title": "Checks"
+          },
+          "amount_returned_usd": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Amount Returned Usd"
+          },
+          "amount_kept_usd": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Amount Kept Usd",
+            "description": "Deposit minus the amount returned (what is withheld)."
+          },
+          "difference_usd": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Difference Usd",
+            "description": "totals.refund_due_usd minus the amount returned (positive: less came back than the rule's refund on the deductions given)."
+          },
+          "difference_min_usd": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Difference Min Usd",
+            "description": "The same against totals.refund_min_usd."
+          },
+          "note": {
+            "type": "string",
+            "title": "Note",
+            "default": ""
+          }
+        },
+        "type": "object",
+        "required": [
+          "what",
+          "late"
+        ],
+        "title": "Timeliness",
+        "description": "Whether what the landlord returned (``returned``) came on time."
+      },
+      "TimelyCheck": {
+        "properties": {
+          "duty": {
+            "type": "string",
+            "enum": [
+              "refund",
+              "itemized_statement"
+            ],
+            "title": "Duty"
+          },
+          "due_by": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Due By",
+            "description": "Last day under the rule, with the statute's weekend or holiday roll-forward applied (the legal limit)."
+          },
+          "done_on": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Done On",
+            "description": "When it was sent; None: not yet."
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "on_time",
+              "late",
+              "not_yet_due",
+              "overdue",
+              "not_started",
+              "none_in_statute"
+            ],
+            "title": "Status",
+            "description": "on_time / late (done, by or after due_by); not_yet_due / overdue (not done as of as_of); not_started (the start event is missing); none_in_statute."
+          },
+          "days_late": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Days Late",
+            "description": "Days after due_by (late, or overdue as of as_of)."
+          },
+          "days_left": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Days Left",
+            "description": "Days until due_by (not_yet_due)."
+          },
+          "note": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Note"
+          }
+        },
+        "type": "object",
+        "required": [
+          "duty",
+          "status"
+        ],
+        "title": "TimelyCheck",
+        "description": "One duty checked against its deadline: the refund, or the itemized statement."
+      },
       "Trade": {
         "type": "string",
         "enum": [
@@ -6042,6 +9068,33 @@
         ],
         "title": "TradeScope"
       },
+      "UnitTier": {
+        "properties": {
+          "max_units": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Max Units"
+          },
+          "percent": {
+            "type": "string",
+            "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+            "title": "Percent"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "percent"
+        ],
+        "title": "UnitTier",
+        "description": "A percentage for buildings up to ``max_units`` (Texas: 12% up to four units)."
+      },
       "UnitType": {
         "type": "string",
         "enum": [
@@ -6071,6 +9124,40 @@
           "visit"
         ],
         "title": "Uom"
+      },
+      "UtilityLimit": {
+        "properties": {
+          "kinds": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Kinds"
+          },
+          "section": {
+            "type": "string",
+            "title": "Section"
+          },
+          "quote": {
+            "type": "string",
+            "maxLength": 600,
+            "title": "Quote"
+          },
+          "source": {
+            "type": "string",
+            "title": "Source"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "kinds",
+          "section",
+          "quote",
+          "source"
+        ],
+        "title": "UtilityLimit",
+        "description": "Utility charges the statute lets the landlord deduct, by kind (Massachusetts: water only).\nA utility line is 'yes' for these kinds, 'no' for others, 'depends' when the kind is not\ngiven (``utility_kind`` on the line)."
       },
       "ValidationError": {
         "properties": {
@@ -6209,6 +9296,12 @@
             "title": "Allowed Usd",
             "description": "Sum of lines with allowed = yes."
           },
+          "depends_usd": {
+            "type": "string",
+            "title": "Depends Usd",
+            "description": "Sum of 'depends' lines at the amount the rule would allow if they stand (not in allowed_usd or the refund).",
+            "default": "0.00"
+          },
           "interest_usd": {
             "type": "string",
             "title": "Interest Usd",
@@ -6223,6 +9316,12 @@
             "type": "string",
             "title": "Tenant Owes Usd",
             "description": "Allowed deductions above deposit + interest (collect separately)."
+          },
+          "refund_min_usd": {
+            "type": "string",
+            "title": "Refund Min Usd",
+            "description": "The refund if every 'depends' line stands: deposit + interest - allowed - depends, never below 0. Equals refund_due_usd when nothing depends.",
+            "default": "0.00"
           }
         },
         "type": "object",
@@ -6307,7 +9406,7 @@
             "type": "string",
             "title": "Note",
             "description": "How the totals add up.",
-            "default": "must, should and could are work lines only. visit_charges (minimum call-out and trip fees, once per trade) are added on top: subtotal = must + should + could + visit_charges; total = subtotal + tax. allowances are outside the total."
+            "default": "must, should and could are work lines only. visit_charges (minimum call-out and trip fees, once per trade) are added on top: subtotal = must + should + could + visit_charges; total = subtotal + tax. allowances and to_confirm (uncertain items) are outside the total."
           },
           "must": {
             "$ref": "#/components/schemas/CostRange"
@@ -6339,6 +9438,10 @@
                 "type": "null"
               }
             ]
+          },
+          "to_confirm": {
+            "$ref": "#/components/schemas/CostRange",
+            "description": "Lines from uncertain findings ('maybe', '?', 'possible') and safety items read from plain words (the refer-out safety net): priced, but outside every total until confirmed on site. Those lines carry to_confirm: true (contract 0.7.0)."
           },
           "allowances": {
             "$ref": "#/components/schemas/CostRange",

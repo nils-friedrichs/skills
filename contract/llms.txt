@@ -6,7 +6,7 @@ Tools are grouped by domain (the world a tool operates in); each lists its audie
 
 ## Rental property (domain: rental-property)
 
-Free tools for the work between two tenants: what the turn costs, and what to return from the deposit. For landlords, property managers and the AI agents working for them.
+Free tools for the move-out: what the turn costs, what to return from the deposit, and whether a deposit came back on time. For landlords, property managers, tenants and the AI agents working for them.
 
 - [Rental property hub](https://tektolo.com/tools/rental-property/): the tools in order and coverage
 - Workflow move-out: 1. Property turnover estimate -> 2. Deposit settlement
@@ -16,7 +16,9 @@ Free tools for the work between two tenants: what the turn costs, and what to re
   - [Agent skill](https://tektolo.com/skills/property-turnover/SKILL.md): instructions for assistants using Property turnover estimate
 - [Deposit settlement](https://tektolo.com/capabilities/deposit-settlement): Settle a US rental security deposit under the state's rule (and a covered city's): the return deadline, each deduction assessed (allowed category, depreciation, documentation), interest owed, the refund, penalty exposure and a draft itemized statement, every number cited. (experimental; domain: rental-property; audiences: landlord_pm, ai_agent; workflow: move-out step 2)
   - [Web tool: Deposit settlement](https://tektolo.com/tools/rental-property/deposit-settlement): web form, free to try, no sign-in
+  - [Web tool: Security deposit check](https://tektolo.com/tools/rental-property/deposit-check): For tenants: the state, the move-out day, the deposit, what came back and when, and the deductions listed; answers whether the refund or itemized statement is late (deadline date, days late), which deductions the rule allows, interest, the statute's penalty with its citation, and a neutral summary to send (for tenants; same engine; web form, free, no sign-in)
   - [Deposit settlement: how it works](https://tektolo.com/capabilities/deposit-settlement/methodology): pipeline, ruleset version and hash, counts, confidence mix, sources
+  - [Agent skill](https://tektolo.com/skills/deposit-settlement/SKILL.md): instructions for assistants using Deposit settlement
 
 ## Reference
 
@@ -36,7 +38,7 @@ Reference pages, not tools: pages to read and cite, computed by the same engines
 ## Pricing
 
 Try every tool free. Agents and software get a free tier of 20 calls a day, then $0.02 a call. Some tools will add paid features. The paid lane is in testing today; until it opens, the free tier applies.
-Counted: deposit_settlement_settle, property_turnover_quick_estimate, property_turnover_scope (and its downloads). REST and MCP calls share one count per client per UTC day and the same price per call; the paid lane is REST only. Over the limit the REST route answers HTTP 429 (error free_tier_exhausted) with the reset time and the paid route, and an MCP tool returns the same message as a tool error. Responses under the limit carry X-TK-Free-Remaining. Volume or an integration: https://tektolo.com/contact
+Counted: deposit_settlement_settle, property_turnover_quick_estimate, property_turnover_scope (and its downloads). REST and MCP calls share one count per client per UTC day and the same price per call; the paid lane is REST only. Over the limit the REST route answers HTTP 429 (error free_tier_exhausted) with the reset time and the paid route, and an MCP tool returns the same message as a tool error. Responses under the limit carry X-TK-Free-Remaining. The web tools have their own allowance (50 estimates a day), separate from this tier. Volume or an integration: https://tektolo.com/contact
 
 ## Machine-readable
 

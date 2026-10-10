@@ -28,7 +28,9 @@
     "page": "https://tektolo.com/pricing",
     "model": "Try every tool free. Agents and software get a free tier of 20 calls a day, then $0.02 a call. Some tools will add paid features.",
     "free_calls_per_day": 20,
-    "free_tier": "Per client (IP address), per UTC day, REST and MCP calls together. Counts operations whose pricing model is free_tier; free lookups are not counted.",
+    "free_tier": "Per client, per UTC day, REST and MCP calls together. The client is a connector key when the call carries one; else, on MCP, the user id the assistant sends (ChatGPT's _meta openai/subject, stored only as a salted hash); else, for an assistant that sends no user id (Claude), one shared daily pool of 200 calls, matched by its published egress addresses; else the IP address. One IP address gets at most 1000 calls a day across its users (connector keys excepted). Counts operations whose pricing model is free_tier; free lookups are not counted.",
+    "host_pool_calls_per_day": 200,
+    "ip_ceiling_per_day": 1000,
     "then_usd_per_call": "0.02",
     "paid_lane": {
       "protocol": "x402",
@@ -37,7 +39,7 @@
       "guide": "https://tektolo.com/connect-your-ai#x402"
     },
     "over_limit": {
-      "rest": "HTTP 429, error free_tier_exhausted, with resets_at and paid_lane",
+      "rest": "HTTP 429, error free_tier_exhausted, with resets_at, paid_lane and allowance (which allowance ran out; also the X-TK-Free-Allowance header)",
       "mcp": "a tool error with the same message"
     },
     "headers": [
@@ -45,6 +47,8 @@
       "X-TK-Free-Limit",
       "X-TK-Free-Reset"
     ],
+    "web_estimates_per_day": 50,
+    "web_tier": "The web tool pages' own allowance (explicit estimates per client per UTC day, with the page's short-lived token); separate from the free tier above.",
     "volume": "https://tektolo.com/contact"
   },
   "feedback": {
@@ -59,8 +63,8 @@
     {
       "id": "rental-property",
       "name": "Rental property",
-      "description": "Free tools for the work between two tenants: what the turn costs, and what to return from the deposit.",
-      "audience_line": "For landlords, property managers and the AI agents working for them.",
+      "description": "Free tools for the move-out: what the turn costs, what to return from the deposit, and whether a deposit came back on time.",
+      "audience_line": "For landlords, property managers, tenants and the AI agents working for them.",
       "hub": "https://tektolo.com/tools/rental-property/",
       "capabilities": [
         "property-turnover",
@@ -124,7 +128,7 @@
     {
       "id": "property-turnover",
       "name": "Property turnover estimate",
-      "version": "0.3.0",
+      "version": "0.8.0",
       "status": "experimental",
       "summary": "Turn move-out inspection findings into a priced, vendor-ready make-ready scope.",
       "outcome": "A vendor-ready turnover scope and owner estimate in minutes, with every number traced to a source or a stated assumption.",
@@ -188,7 +192,8 @@
               "If the ZIP is missing or not exactly 5 digits, ask the user; never guess or pad it.",
               "Relay refer_outs first, then the totals; say the numbers are estimates, not quotes."
             ],
-            "example": "{\"zip\": \"43215\", \"bedrooms\": 2, \"bathrooms\": 1, \"issues\": [\"stained carpet in both bedrooms\", \"nail holes everywhere\", \"oven is filthy\"]}"
+            "example": "{\"zip\": \"43215\", \"bedrooms\": 2, \"bathrooms\": 1, \"issues\": [\"stained carpet in both bedrooms\", \"nail holes everywhere\", \"oven is filthy\"]}",
+            "mcp_description": "Estimates what it costs to turn over a US rental unit after move-out. Inputs: a 5-digit ZIP, bedrooms, bathrooms and the issues in plain English (e.g. \"stained carpet in both bedrooms\"); optional unit type, size, year built. Returns a priced make-ready estimate: repair tasks by trade with low/expected/high costs for the ZIP's labor market, must/should/could priorities, refer-outs to licensed professionals, assumptions, and links to the web tool and downloads. Same engine as property_turnover_scope. Not for: diagnosing hazards, legal advice on deposits, remodel bids, properties outside the US."
           },
           "examples": [],
           "x402": {
@@ -276,7 +281,8 @@
               "Rate card examples - {\"trade\": \"handyman\", \"unit_price\": 65, \"uom\": \"hour\"} or {\"task_id\": \"carpet.clean\", \"unit_price\": 0.2, \"uom\": \"sq_ft\"}; check rate_card_applied and rate_card_ignored before saying a rate was used.",
               "For the Excel workbook or owner estimate, give the user links.web_tool_prefilled (opens the free web tool with these findings) or POST the same arguments to links.downloads; do not build a spreadsheet yourself."
             ],
-            "example": "{\"property\": {\"zip\": \"43215\", \"bedrooms\": 2, \"bathrooms\": 1}, \"findings\": [{\"location\": \"Bedroom 2\", \"description\": \"pet urine in carpet\"}, {\"description\": \"3 blinds broken\", \"quantity\": {\"value\": 3, \"uom\": \"each\"}}]}"
+            "example": "{\"property\": {\"zip\": \"43215\", \"bedrooms\": 2, \"bathrooms\": 1}, \"findings\": [{\"location\": \"Bedroom 2\", \"description\": \"pet urine in carpet\"}, {\"description\": \"3 blinds broken\", \"quantity\": {\"value\": 3, \"uom\": \"each\"}}]}",
+            "mcp_description": "Turns move-out inspection findings for a US rental unit into a priced make-ready scope. Inputs: property (ZIP, bedrooms, bathrooms; optional unit type, size, year built) and findings (a plain description or an issue code, with location, extent and quantity); optional rate_card (the manager's own prices), decisions (owner approve/decline) and detail. Returns tasks by trade with regional low/expected/high costs, priorities, a scope per vendor, refer-outs to licensed professionals, assumptions, unknowns and download links. Not for: diagnosing hazards, legal advice on deposits, remodel bids, properties outside the US."
           },
           "examples": [
             {
@@ -820,7 +826,8 @@
               "Call with no arguments to list the taxonomy areas (in `areas`) and the first codes.",
               "Codes are optional for scoping; a plain description also works."
             ],
-            "example": "{} lists the areas and the first codes; {\"query\": \"pet stain carpet\"} searches; {\"area\": \"flooring\", \"limit\": 50} lists one area."
+            "example": "{} lists the areas and the first codes; {\"query\": \"pet stain carpet\"} searches; {\"area\": \"flooring\", \"limit\": 50} lists one area.",
+            "mcp_description": "Searches the standard taxonomy of rental-unit turnover issues (component.issue codes such as carpet.pet_urine). Inputs, all optional: query (keywords), area (e.g. flooring), limit (default 8). With no arguments it lists the taxonomy areas and the first codes. Returns matching codes with names and areas, and the total match count. Codes are optional: the turnover estimate tools also accept plain descriptions. Not for: cost estimates, legal or security-deposit questions, work other than rental turnover."
           },
           "examples": []
         }
@@ -828,7 +835,7 @@
       "privacy": {
         "retention_days": 730,
         "trains_models": false,
-        "personal_data": "Inputs need a ZIP code, not an address. Request bodies and free-text notes are never logged or stored. Each estimate leaves one anonymized record: first 3 digits of the ZIP, size and age in coarse buckets, issue codes, totals and a daily-rotating anonymous client fingerprint; no notes, labels, names, vendors, rate-card prices, IP address or user agent. Descriptions of issues the taxonomy could not match are kept with digits, emails and links removed. These records are deleted 730 days after they are written and are not used to train models. Optional feedback (a rating, a note, an email only if typed) is stored separately, with a few estimate identifiers (hashes, versions, region, total) but never the request or notes."
+        "personal_data": "Inputs need a ZIP code, not an address. Request bodies and free-text notes are never logged or stored. Each estimate leaves one anonymized record: first 3 digits of the ZIP, size and age in coarse buckets, issue codes, totals and a daily-rotating anonymous client fingerprint; no notes, labels, names, vendors, rate-card prices, IP address or user agent. Descriptions of issues the taxonomy could not match are kept with digits, emails and links removed. These records are deleted 730 days after they are written and are not used to train models. Optional feedback (a rating, a note, an email only if typed) is stored separately, with a few estimate identifiers (hashes, versions, region, total) but never the request or notes. The web tool's optional AI reader (\"Describe the unit in your own words\") sends the parts of that text our matcher cannot place to Microsoft Azure OpenAI (gpt-5-mini, any Azure region) and keeps its answer in memory only, for up to 24 hours; Microsoft does not use it to train models."
       },
       "limitations": [
         "Estimate ranges, not quotes. Prices vary by vendor, market and condition.",
@@ -836,8 +843,8 @@
         "Responsibility labels (wear vs damage) are hints, not legal determinations; deposit rules vary by state."
       ],
       "ruleset": {
-        "version": "pt-2026.10.3",
-        "hash": "sha256:376e6a62ee5dd8a3be85fcc0eb633330902847a97256c27bd9d0610bf77cb643",
+        "version": "pt-2026.10.6",
+        "hash": "sha256:194c1256c5beaf3885f0dbc98c6f4795cd26c14baacaee5d5305109c6f5cd432",
         "sources": [
           {
             "id": "hud.nspire.index",
@@ -1984,6 +1991,30 @@
             "title": "Carpet-cleaning per-sq-ft bid tabs, five agencies (research 09)",
             "publisher": "Tektolo research 09",
             "url": null
+          },
+          {
+            "id": "usmint.coin-specs",
+            "title": "Coin Specifications (circulating coins)",
+            "publisher": "United States Mint",
+            "url": "https://www.usmint.gov/learn/coins-and-medals/circulating-coins/coin-specifications"
+          },
+          {
+            "id": "ansur2.hand",
+            "title": "ANSUR II anthropometric survey (2012), hand length and hand breadth",
+            "publisher": "U.S. Army Natick Soldier Center, hosted by Penn State OpenLab",
+            "url": "https://www.openlab.psu.edu/ansur2/"
+          },
+          {
+            "id": "iso.216",
+            "title": "ISO 216:2007 Writing paper and certain classes of printed matter, trimmed sizes, A and B series",
+            "publisher": "ISO",
+            "url": "https://www.iso.org/standard/36631.html"
+          },
+          {
+            "id": "icc.irc-r311",
+            "title": "2021 International Residential Code, section R311.2 (egress door)",
+            "publisher": "International Code Council",
+            "url": "https://codes.iccsafe.org/content/IRC2021P1/chapter-3-building-planning"
           }
         ]
       },
@@ -2001,7 +2032,8 @@
           "url": "https://tektolo.com/turnover-costs/",
           "summary": "apartment turnover cost for 530 metro and nonmetropolitan areas: typical ranges by unit size, local labor by trade and unit prices, computed from BLS wages by the same engine as the free tool"
         }
-      ]
+      ],
+      "web_doors": []
     },
     {
       "id": "deposit-settlement",
@@ -2078,7 +2110,8 @@
               "Send the start-event dates a state needs when known (forwarding_address_received_on, demand_received_on, new_tenant_moved_in_on, claim_notice_sent_on in Florida); without them the clock is not_started.",
               "deadline.status none_in_statute means no statutory deadline; deadline.extended_to is the statute's weekend roll-forward, but advise acting by return_by."
             ],
-            "example": "{\"state\": \"CA\", \"deposit_usd\": \"2000\", \"monthly_rent_usd\": \"2000\", \"move_in_on\": \"2023-06-01\", \"vacated_on\": \"2026-09-30\", \"deductions\": [{\"category\": \"cleaning\", \"amount_usd\": \"150\"}, {\"category\": \"carpet\", \"amount_usd\": \"1200\", \"item_age_years\": 5}], \"as_of\": \"2026-10-09\"}"
+            "example": "{\"state\": \"CA\", \"deposit_usd\": \"2000\", \"monthly_rent_usd\": \"2000\", \"move_in_on\": \"2023-06-01\", \"vacated_on\": \"2026-09-30\", \"deductions\": [{\"category\": \"cleaning\", \"amount_usd\": \"150\"}, {\"category\": \"carpet\", \"amount_usd\": \"1200\", \"item_age_years\": 5}], \"as_of\": \"2026-10-09\"}",
+            "mcp_description": "Settles a US residential security deposit after move-out under the state's statute (50 states and DC) and a covered city's ordinance. Inputs: state, deposit_usd, vacated_on; optional city, monthly_rent_usd, move_in_on, deductions (category, amount, item age, whether the tenant caused it), the dates that start a state's clock, and as_of. Returns the return deadline and its status, each deduction allowed or not (with depreciation), interest owed, refund due, penalty exposure, a draft itemized statement and a citation for every rule. Not for: legal advice, tenant demand letters, repair cost estimates, pet deposits, rentals outside the US."
           },
           "examples": [
             {
@@ -2223,7 +2256,8 @@
             "when_to_use": "Someone asks what a state's (or a covered city's) security deposit rules are without a specific move-out to settle, or which states are covered.",
             "when_not_to_use": "To settle a specific deposit (use deposit_settlement_settle, which applies the rules to the dates and deductions). Other landlord-tenant topics (evictions, rent control, notice periods) are not covered.",
             "tips": [],
-            "example": "{\"state\": \"IL\", \"city\": \"Chicago\"}"
+            "example": "{\"state\": \"IL\", \"city\": \"Chicago\"}",
+            "mcp_description": "Looks up the security deposit rules (deposits only) for one US state, with a covered city's deposit ordinance (Chicago, San Francisco, Berkeley, Los Angeles, Seattle, Portland, Minneapolis, Saint Paul). Inputs: state (two-letter code); optional city. Returns the deposit return deadline and what starts it, itemization and documentation duties, allowed deductions and depreciation, deposit interest, penalties, the deposit cap and recent changes, with citations. Not for: settling a specific move-out (deposit_settlement_settle does that), evictions, unpaid-rent collection, rent increases or rent control, lease renewal or notice periods, legal advice."
           },
           "examples": []
         }
@@ -2242,8 +2276,8 @@
         "Some rule text is summarised rather than quoted; each citation says which."
       ],
       "ruleset": {
-        "version": "sd-2026.10.1",
-        "hash": "sha256:3777ac89e2a1b9400e9abf225feca8733c14c19cdecf5740e24a00faf4631cd8",
+        "version": "sd-2026.10.23",
+        "hash": "sha256:365d2a81eafc2b3b2c70d3718e047578ce002dddce0b2118cc6940c6a368a1b0",
         "sources": [
           {
             "id": "al.code-35-9a-201",
@@ -2604,6 +2638,12 @@
             "title": "14 M.R.S. 6032 Maximum security deposit",
             "publisher": "Maine Legislature, Office of the Revisor of Statutes",
             "url": "https://legislature.maine.gov/statutes/14/title14sec6032.html"
+          },
+          {
+            "id": "me.14-6030",
+            "title": "14 M.R.S. 6030 Unfair agreements",
+            "publisher": "Maine Legislature, Office of the Revisor of Statutes",
+            "url": "https://legislature.maine.gov/statutes/14/title14sec6030.html"
           },
           {
             "id": "me.14-6033",
@@ -3354,6 +3394,408 @@
             "title": "Daily Treasury Par Yield Curve Rates (1-year), first business day of 2024, 2025 and 2026",
             "publisher": "U.S. Department of the Treasury",
             "url": "https://home.treasury.gov/resource-center/data-chart-center/interest-rates/TextView?type=daily_treasury_yield_curve"
+          },
+          {
+            "id": "tx.oag-renters-rights",
+            "title": "Renter's Rights",
+            "publisher": "Office of the Texas Attorney General",
+            "url": "https://www.texasattorneygeneral.gov/consumer-protection/home-real-estate-and-travel/renters-rights"
+          },
+          {
+            "id": "ny.oag-tenants-rights-guide",
+            "title": "Residential Tenants' Rights Guide",
+            "publisher": "Office of the New York State Attorney General",
+            "url": "https://ag.ny.gov/publications/residential-tenants-rights-guide"
+          },
+          {
+            "id": "fl.fdacs-landlord-tenant",
+            "title": "Landlord/Tenant Law in Florida",
+            "publisher": "Florida Department of Agriculture and Consumer Services",
+            "url": "https://www.fdacs.gov/Consumer-Resources/Landlord-Tenant-Law-in-Florida"
+          },
+          {
+            "id": "seattle.renting-deposit-return",
+            "title": "Return of Your Security Deposit (Renting in Seattle)",
+            "publisher": "City of Seattle",
+            "url": "https://www.seattle.gov/rentinginseattle/renters/moving-out/return-of-your-security-deposit"
+          },
+          {
+            "id": "ca.courts-small-claims",
+            "title": "Small claims in California (Self Help Guide)",
+            "publisher": "Judicial Council of California",
+            "url": "https://selfhelp.courts.ca.gov/small-claims-california"
+          },
+          {
+            "id": "tx.sll-small-claims-max",
+            "title": "How much can I sue for in a small claims court?",
+            "publisher": "Texas State Law Library",
+            "url": "https://www.sll.texas.gov/faqs/small-claims-maximum/"
+          },
+          {
+            "id": "ny.courts-small-claims",
+            "title": "Small Claims (CourtHelp)",
+            "publisher": "New York State Unified Court System",
+            "url": "https://www.nycourts.gov/help/small-claims"
+          },
+          {
+            "id": "fl.courts-diy-small-claims",
+            "title": "DIY Florida (Florida Courts Help)",
+            "publisher": "Florida State Courts Administrator",
+            "url": "https://www.flcourts.gov/Courts-System/florida-courts-help/diy-florida"
+          },
+          {
+            "id": "il.courts-small-claims-howto",
+            "title": "How to File and Serve a Small Claims Complaint and Summons (Illinois standardized forms)",
+            "publisher": "Illinois Courts",
+            "url": "https://www.illinoiscourts.gov/Resources/fc725e38-19e3-4eaf-b7ae-2292402109d0/SMC_HowtoFileandServeaSmallClaimsComplaintandSummons.pdf"
+          },
+          {
+            "id": "wa.courts-small-claims",
+            "title": "Small Claims Court",
+            "publisher": "Washington State Administrative Office of the Courts",
+            "url": "https://www.courts.wa.gov/newsinfo/resources/?altMenu=smal&fa=newsinfo_jury.scc"
+          },
+          {
+            "id": "mt.70-25-203",
+            "title": "Montana Code Annotated 70-25-203 Forfeiture of right to withhold",
+            "publisher": "Montana Legislature",
+            "url": "https://leg.mt.gov/bills/mca/title_0700/chapter_0250/part_0020/section_0030/0700-0250-0020-0030.html"
+          },
+          {
+            "id": "mt.70-25-206",
+            "title": "Montana Code Annotated 70-25-206 Statement of condition of premises",
+            "publisher": "Montana Legislature",
+            "url": "https://leg.mt.gov/bills/mca/title_0700/chapter_0250/part_0020/section_0060/0700-0250-0020-0060.html"
+          },
+          {
+            "id": "wa.rcw-59.18.260",
+            "title": "RCW 59.18.260 Moneys paid as deposit or security; written rental agreement and checklist",
+            "publisher": "Washington State Legislature",
+            "url": "https://app.leg.wa.gov/RCW/default.aspx?cite=59.18.260"
+          },
+          {
+            "id": "co.crs-38-12-105",
+            "title": "Colorado Revised Statutes 38-12-105 Late fees charged to tenants",
+            "publisher": "Colorado General Assembly (Office of Legislative Legal Services)",
+            "url": "https://leg.colorado.gov/sites/default/files/images/olls/crs2024-title-38.pdf"
+          },
+          {
+            "id": "ct.cgs-47a-15a",
+            "title": "Connecticut General Statutes 47a-15a Payment of rent; late charges",
+            "publisher": "Connecticut General Assembly",
+            "url": "https://www.cga.ct.gov/current/pub/chap_830.htm"
+          },
+          {
+            "id": "de.code-25-5501",
+            "title": "25 Del. C. 5501 Rent; late charges",
+            "publisher": "Delaware Code Online",
+            "url": "https://delcode.delaware.gov/title25/c055/index.html"
+          },
+          {
+            "id": "dc.code-42-3505.31",
+            "title": "D.C. Code 42-3505.31 Late fees",
+            "publisher": "Council of the District of Columbia",
+            "url": "https://code.dccouncil.gov/us/dc/council/code/sections/42-3505.31"
+          },
+          {
+            "id": "hi.hrs-521-21",
+            "title": "HRS 521-21 Rent (late charges)",
+            "publisher": "Hawaii State Legislature",
+            "url": "https://www.capitol.hawaii.gov/hrscurrent/Vol12_Ch0501-0588/HRS0521/HRS_0521-0021.htm"
+          },
+          {
+            "id": "ia.code-562a.9",
+            "title": "Iowa Code 562A.9 Rental agreement (late fees)",
+            "publisher": "Iowa Legislature",
+            "url": "https://www.legis.iowa.gov/docs/ico/chapter/562A.pdf"
+          },
+          {
+            "id": "me.14-6028",
+            "title": "14 M.R.S. 6028 Late payment of rent",
+            "publisher": "Maine Legislature",
+            "url": "https://legislature.maine.gov/statutes/14/title14sec6028.html"
+          },
+          {
+            "id": "md.rp-8-208",
+            "title": "Md. Code, Real Property 8-208 Lease provisions (late penalty)",
+            "publisher": "Maryland General Assembly",
+            "url": "https://mgaleg.maryland.gov/mgawebsite/Laws/StatuteText?article=grp&section=8-208&enactments=false"
+          },
+          {
+            "id": "mn.504b-177",
+            "title": "Minn. Stat. 504B.177 Late fees",
+            "publisher": "Minnesota Revisor of Statutes",
+            "url": "https://www.revisor.mn.gov/statutes/cite/504B.177"
+          },
+          {
+            "id": "nv.nrs-118a-210",
+            "title": "NRS 118A.210 Rent (late fees)",
+            "publisher": "Nevada Legislature",
+            "url": "https://www.leg.state.nv.us/nrs/nrs-118a.html"
+          },
+          {
+            "id": "ny.rpl-238-a",
+            "title": "N.Y. Real Property Law 238-a Fees and charges",
+            "publisher": "New York State Senate",
+            "url": "https://www.nysenate.gov/legislation/laws/RPP/238-A"
+          },
+          {
+            "id": "nc.gs-42-46",
+            "title": "N.C. Gen. Stat. 42-46 Authorized fees",
+            "publisher": "North Carolina General Assembly",
+            "url": "https://www.ncleg.gov/EnactedLegislation/Statutes/HTML/BySection/Chapter_42/GS_42-46.html"
+          },
+          {
+            "id": "nm.47-8-15",
+            "title": "NMSA 1978 47-8-15 Rent obligation (late fees)",
+            "publisher": "New Mexico Compilation Commission (read on a mirror)",
+            "url": "https://nmonesource.com/nmos/nmsa/en/item/4408/index.do"
+          },
+          {
+            "id": "or.ors-90.260",
+            "title": "ORS 90.260 Late rent payment charge or fee",
+            "publisher": "Oregon State Legislature",
+            "url": "https://www.oregonlegislature.gov/bills_laws/ors/ors090.html"
+          },
+          {
+            "id": "or.ors-90.302",
+            "title": "ORS 90.302 Fees allowed; written rental agreement",
+            "publisher": "Oregon State Legislature",
+            "url": "https://www.oregonlegislature.gov/bills_laws/ors/ors090.html"
+          },
+          {
+            "id": "tn.66-28-201",
+            "title": "Tenn. Code Ann. 66-28-201 Rental agreements (late fees)",
+            "publisher": "legalfix.com (mirror)",
+            "url": "https://www.legalfix.com/statutes/state-codes/tennessee/title-66/chapter-28/part-2/section-66-28-201"
+          },
+          {
+            "id": "va.55.1-1204",
+            "title": "Va. Code 55.1-1204 Terms and conditions of rental agreement (late charges)",
+            "publisher": "Virginia Law (Division of Legislative Services)",
+            "url": "https://law.lis.virginia.gov/vacode/title55.1/chapter12/section55.1-1204/"
+          },
+          {
+            "id": "fl.stat-83.595",
+            "title": "Fla. Stat. 83.595 Choice of remedies upon breach or early termination by tenant",
+            "publisher": "Florida Legislature",
+            "url": "https://www.leg.state.fl.us/statutes/index.cfm?App_mode=Display_Statute&URL=0000-0099/0083/Sections/0083.595.html"
+          },
+          {
+            "id": "chicago.rlto-5-12-140",
+            "title": "Chicago Municipal Code 5-12-140 Prohibited lease provisions (late fees)",
+            "publisher": "American Legal Publishing (official Chicago code host)",
+            "url": "https://codelibrary.amlegal.com/codes/chicago/latest/chicago_il/0-0-0-2639257"
+          },
+          {
+            "id": "seattle.smc-7.24.034",
+            "title": "Seattle Municipal Code 7.24.034 Late fees (SDCI rental agreement regulation summary)",
+            "publisher": "City of Seattle SDCI",
+            "url": "https://www.seattle.gov/construction-and-inspections/codes/codes-we-enforce-(a-z)/rental-agreement-regulation"
+          },
+          {
+            "id": "al.time-computation",
+            "title": "Ala. Code 1-1-4 (computation of time)",
+            "publisher": "Mirror (official site blocked or script-rendered)",
+            "url": "https://web.archive.org/web/2023/http://alisondb.legislature.state.al.us/alison/CodeOfAlabama/1975/1-1-4.htm"
+          },
+          {
+            "id": "ak.time-computation",
+            "title": "AS 01.10.080 (computation of time)",
+            "publisher": "State legislature",
+            "url": "https://www.akleg.gov/basis/statutes.asp#01.10.080"
+          },
+          {
+            "id": "az.time-computation",
+            "title": "A.R.S. 1-243 (computation of time)",
+            "publisher": "State legislature",
+            "url": "https://www.azleg.gov/ars/1/00243.htm"
+          },
+          {
+            "id": "co.time-computation",
+            "title": "C.R.S. 2-4-108 (computation of time)",
+            "publisher": "Mirror (official site blocked or script-rendered)",
+            "url": "https://codes.findlaw.com/co/title-2-legislative/co-rev-st-sect-2-4-108/"
+          },
+          {
+            "id": "ga.time-computation",
+            "title": "O.C.G.A. 1-3-1(d)(3) (computation of time)",
+            "publisher": "Mirror (official site blocked or script-rendered)",
+            "url": "https://codes.findlaw.com/ga/title-1-general-provisions/ga-code-sect-1-3-1/"
+          },
+          {
+            "id": "hi.time-computation",
+            "title": "HRS 1-29 (computation of time)",
+            "publisher": "State legislature",
+            "url": "https://www.capitol.hawaii.gov/hrscurrent/Vol01_Ch0001-0042F/HRS0001/HRS_0001-0029.htm"
+          },
+          {
+            "id": "id.time-computation",
+            "title": "Idaho Code 73-109 (computation of time)",
+            "publisher": "State legislature",
+            "url": "https://legislature.idaho.gov/statutesrules/idstat/Title73/T73CH1/SECT73-109/"
+          },
+          {
+            "id": "il.time-computation",
+            "title": "5 ILCS 70/1.11 (computation of time)",
+            "publisher": "State legislature",
+            "url": "https://www.ilga.gov/Documents/legislation/ilcs/documents/000500700K1.11.htm"
+          },
+          {
+            "id": "ia.time-computation",
+            "title": "Iowa Code 4.1(34) (computation of time)",
+            "publisher": "State legislature",
+            "url": "https://www.legis.iowa.gov/docs/code/4.1.pdf"
+          },
+          {
+            "id": "ks.time-computation",
+            "title": "K.S.A. 60-206(a) (computation of time)",
+            "publisher": "State legislature",
+            "url": "https://www.kslegislature.gov/li/b2025_26/statute/060_000_0000_chapter/060_002_0000_article/060_002_0006_section/060_002_0006_k/"
+          },
+          {
+            "id": "ky.time-computation",
+            "title": "KRS 446.030(1)(a) (computation of time)",
+            "publisher": "State legislature",
+            "url": "https://apps.legislature.ky.gov/law/statutes/statute.aspx?id=19391"
+          },
+          {
+            "id": "la.time-computation",
+            "title": "La. C.C.P. art. 5059 (also La. R.S. 1:55) (computation of time)",
+            "publisher": "State legislature",
+            "url": "https://legis.la.gov/legis/Law.aspx?d=112147"
+          },
+          {
+            "id": "md.time-computation",
+            "title": "Md. Code, General Provisions 1-302 (computation of time)",
+            "publisher": "State legislature",
+            "url": "https://mgaleg.maryland.gov/mgawebsite/Laws/StatuteText?article=ggp&section=1-302&enactments=false"
+          },
+          {
+            "id": "ma.time-computation",
+            "title": "M.G.L. c. 4, s. 9 (computation of time)",
+            "publisher": "State legislature",
+            "url": "https://malegislature.gov/Laws/GeneralLaws/PartI/TitleI/Chapter4/Section9"
+          },
+          {
+            "id": "mi.time-computation",
+            "title": "MCL 8.6 (computation of time)",
+            "publisher": "State legislature",
+            "url": "https://www.legislature.mi.gov/Laws/MCL?objectName=mcl-8-6"
+          },
+          {
+            "id": "mn.time-computation",
+            "title": "Minn. Stat. 645.15 (computation of time)",
+            "publisher": "State legislature",
+            "url": "https://www.revisor.mn.gov/statutes/cite/645.15"
+          },
+          {
+            "id": "mo.time-computation",
+            "title": "RSMo 1.040 (computation of time)",
+            "publisher": "State legislature",
+            "url": "https://revisor.mo.gov/main/OneSection.aspx?section=1.040"
+          },
+          {
+            "id": "mt.time-computation",
+            "title": "MCA 1-1-307 (computation of time)",
+            "publisher": "State legislature",
+            "url": "https://leg.mt.gov/bills/mca/title_0010/chapter_0010/part_0030/section_0070/0010-0010-0030-0070.html"
+          },
+          {
+            "id": "nm.time-computation",
+            "title": "N.M. Stat. 12-2A-7(E)-(F) (Uniform Statute and Rule Construction Act) (computation of time)",
+            "publisher": "Mirror (official site blocked or script-rendered)",
+            "url": "https://www.casemine.com/act/us/644e51babddbd02d63c9aeca"
+          },
+          {
+            "id": "nd.time-computation",
+            "title": "N.D. Cent. Code 1-02-15 (also 1-03-05) (computation of time)",
+            "publisher": "State legislature",
+            "url": "https://ndlegis.gov/cencode/t01c02.pdf"
+          },
+          {
+            "id": "oh.time-computation",
+            "title": "Ohio Rev. Code 1.14 (computation of time)",
+            "publisher": "State legislature",
+            "url": "https://codes.ohio.gov/ohio-revised-code/section-1.14"
+          },
+          {
+            "id": "ok.time-computation",
+            "title": "Okla. Stat. tit. 25, 82.1(A), (C) (computation of time)",
+            "publisher": "State legislature",
+            "url": "https://www.oklegislature.gov/OK_Statutes/CompleteTitles/os25.rtf"
+          },
+          {
+            "id": "pa.time-computation",
+            "title": "1 Pa.C.S. 1908 (computation of time)",
+            "publisher": "State legislature",
+            "url": "https://www.legis.state.pa.us/WU01/LI/LI/CT/HTM/01/00.019.008.000..HTM"
+          },
+          {
+            "id": "sd.time-computation",
+            "title": "S.D. Codified Laws 2-14-14 (computation of time)",
+            "publisher": "State legislature",
+            "url": "https://sdlegislature.gov/Statutes/2-14-14"
+          },
+          {
+            "id": "ut.time-computation",
+            "title": "Utah Code 68-3-7 (computation of time)",
+            "publisher": "State legislature",
+            "url": "https://le.utah.gov/xcode/Title68/Chapter3/C68-3-S7_1800010118000101.html"
+          },
+          {
+            "id": "va.time-computation",
+            "title": "Va. Code 1-210(E) (also (B) judicial proceedings, (C) legal-action limits) (computation of time)",
+            "publisher": "State legislature",
+            "url": "https://law.lis.virginia.gov/vacode/title1/chapter2/section1-210/"
+          },
+          {
+            "id": "wa.time-computation",
+            "title": "RCW 1.12.040 (computation of time)",
+            "publisher": "State legislature",
+            "url": "https://app.leg.wa.gov/RCW/default.aspx?cite=1.12.040"
+          },
+          {
+            "id": "wv.time-computation",
+            "title": "W. Va. Code 2-2-2(a); also 2-2-1(d)-(e) (computation of time)",
+            "publisher": "State legislature",
+            "url": "https://code.wvlegislature.gov/2-2-2/"
+          },
+          {
+            "id": "wi.time-computation",
+            "title": "Wis. Stat. 990.001(4)(b)-(c) (computation of time)",
+            "publisher": "State legislature",
+            "url": "https://docs.legis.wisconsin.gov/statutes/statutes/990/001/4"
+          },
+          {
+            "id": "co.crs-38-12-102.5",
+            "title": "C.R.S. 38-12-102.5 Security deposits - maximum amount (SB23-184)",
+            "publisher": "Colorado General Assembly (Office of Legislative Legal Services)",
+            "url": "https://leg.colorado.gov/sites/default/files/images/olls/crs2024-title-38.pdf"
+          },
+          {
+            "id": "stpaul.code-193.02",
+            "title": "Saint Paul Legislative Code 193.02 Security deposit and prepaid rent (Ord. 25-31)",
+            "publisher": "City of Saint Paul (Municode)",
+            "url": "https://library.municode.com/mn/st._paul/codes/code_of_ordinances?nodeId=PTIILECO_TITXIXCOPR_CH193TEPR_S193.02SEDEPRRE"
+          },
+          {
+            "id": "ut.57-22-4",
+            "title": "Utah Code 57-22-4 Owner's duties (Utah Fit Premises Act)",
+            "publisher": "Utah State Legislature",
+            "url": "https://le.utah.gov/xcode/Title57/Chapter22/C57-22-S4_2021050520210505.html"
+          },
+          {
+            "id": "id.code-55-305",
+            "title": "Idaho Code 55-305 Fees imposed on residential tenants",
+            "publisher": "Idaho Legislature",
+            "url": "https://legislature.idaho.gov/statutesrules/idstat/Title55/T55CH3/SECT55-305"
+          },
+          {
+            "id": "ms.89-8-7",
+            "title": "Miss. Code 89-8-7 Definitions (Residential Landlord and Tenant Act)",
+            "publisher": "Mississippi Attorney General (reproduction of the Act)",
+            "url": "https://attorneygenerallynnfitch.com/wp-content/uploads/2021/07/Residential-Landlord-and-Tenant-Act.pdf"
           }
         ]
       },
@@ -3370,6 +3812,21 @@
           "label": "Deposit rules by state",
           "url": "https://tektolo.com/deposit-settlement/by-state",
           "summary": "security deposit return deadlines, allowed deductions, interest and penalties in all 50 US states and DC plus 8 city overlays: the rule per state and city in plain words, the quoted text and a worked example"
+        }
+      ],
+      "web_doors": [
+        {
+          "id": "deposit-check",
+          "name": "Security deposit check",
+          "url": "https://tektolo.com/tools/rental-property/deposit-check",
+          "audiences": [
+            "tenant"
+          ],
+          "audience_names": [
+            "Tenants"
+          ],
+          "outcome": "See whether your landlord returned your deposit on time and which deductions your state's rule allows.",
+          "summary": "For tenants: the state, the move-out day, the deposit, what came back and when, and the deductions listed; answers whether the refund or itemized statement is late (deadline date, days late), which deductions the rule allows, interest, the statute's penalty with its citation, and a neutral summary to send"
         }
       ]
     }

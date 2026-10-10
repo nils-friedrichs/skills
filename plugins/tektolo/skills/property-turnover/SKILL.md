@@ -105,9 +105,12 @@ extent). Do not guess hidden damage. Mention what you could not see in your repl
   prices used), so the user can correct them and re-run.
 - Group the work by `trade_scopes` when the user wants to brief vendors. Offer the
   workbook or vendor CSV downloads.
-- Keep the `result_hash` and `run.ruleset_version` if the user needs an audit trail.
-- If a call says the daily free tier is used up, tell the user when it resets (the message
-  names the time) and do not retry; volume and integrations go through the Contact page.
+- If the user needs an audit trail, keep the `result_hash` and `run.ruleset_version`. Over MCP
+  they come back only when you call with `audit: true` (REST always returns them).
+- If a call says the daily free limit is reached, tell the user when it resets (the message
+  names the time) and do not retry. On a hosted assistant (Claude, ChatGPT) the shared server
+  URL has one limit for everyone; the message names the page for a free personal connector URL.
+  Volume and integrations go through the Contact page.
 
 ## Make it yours
 
