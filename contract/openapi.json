@@ -864,8 +864,10 @@
                 "contractor_needed",
                 "damages_exceed_deposit",
                 "written_lease",
+                "at_will",
                 "abandoned",
-                "charges_only"
+                "charges_only",
+                "relet_before_end"
               ]
             },
             "type": "array",
@@ -946,6 +948,15 @@
             ],
             "title": "Combine",
             "default": "replace"
+          },
+          "extends": {
+            "type": "string",
+            "enum": [
+              "deadline",
+              "itemization"
+            ],
+            "title": "Extends",
+            "default": "deadline"
           },
           "notice_within_days": {
             "anyOf": [
@@ -1293,6 +1304,11 @@
             "title": "Routine",
             "default": "barred"
           },
+          "routine_signed_provision": {
+            "type": "boolean",
+            "title": "Routine Signed Provision",
+            "default": false
+          },
           "condition": {
             "anyOf": [
               {
@@ -1529,6 +1545,19 @@
             "title": "Extended To",
             "description": "Where the state's code rolls a last day on a weekend or holiday to the next business day: that later date. Act by return_by; this is the legal outer limit."
           },
+          "interest_due_by": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Interest Due By",
+            "description": "Last day to pay the interest owed, when the rule gives it its own date earlier than the deposit's (San Francisco Admin. Code 49.2(c): two weeks after the tenant vacated; Connecticut 47a-21(i): 21 days after the termination)."
+          },
           "start_event": {
             "type": "string",
             "title": "Start Event",
@@ -1604,7 +1633,7 @@
               }
             ],
             "title": "Days Remaining",
-            "description": "Days from as_of to the last day: extended_to when the statute extends a weekend or holiday last day, else return_by (negative when overdue). None once met."
+            "description": "Days from as_of to the last day: extended_to when the statute extends a weekend or holiday last day, else return_by (negative when overdue); when the open step is another one (an extended itemized statement), to outcome.next_due. None once met."
           },
           "alternatives": {
             "items": {
@@ -1612,7 +1641,7 @@
             },
             "type": "array",
             "title": "Alternatives",
-            "description": "Earlier dates that apply on facts not given (send the named input)."
+            "description": "Other dates that apply on facts not given (send the named input): an earlier one the facts cannot rule in, or the later one when the earlier date leads."
           },
           "note": {
             "anyOf": [
@@ -1637,9 +1666,17 @@
       "DeadlineAlternative": {
         "properties": {
           "on": {
-            "type": "string",
-            "format": "date",
-            "title": "On"
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "On",
+            "description": "The date on that reading; null: no statutory deadline then (an exemption or a rule that does not apply)."
           },
           "applies_if": {
             "type": "string",
@@ -1654,7 +1691,6 @@
         },
         "type": "object",
         "required": [
-          "on",
           "applies_if",
           "send"
         ],
@@ -2248,6 +2284,45 @@
               }
             ]
           },
+          "nonstandard_only": {
+            "items": {
+              "type": "string",
+              "enum": [
+                "unpaid_rent",
+                "unpaid_utilities",
+                "cleaning",
+                "carpet",
+                "flooring",
+                "paint",
+                "blinds_window_coverings",
+                "appliance",
+                "fixture_or_hardware",
+                "wall_or_door_repair",
+                "key_or_lock",
+                "late_fees",
+                "lease_break_fee",
+                "moving_and_storage",
+                "reletting_costs",
+                "trash_and_abandoned_items",
+                "other_damage",
+                "other"
+              ]
+            },
+            "type": "array",
+            "title": "Nonstandard Only",
+            "default": []
+          },
+          "nonstandard_section": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Nonstandard Section"
+          },
           "cleaning": {
             "items": {
               "$ref": "#/components/schemas/CleaningRule"
@@ -2456,7 +2531,8 @@
                 "type": "string",
                 "enum": [
                   "small_landlord",
-                  "tenant_age_62_plus"
+                  "tenant_age_62_plus",
+                  "month_to_month"
                 ]
               },
               {
@@ -2474,6 +2550,30 @@
             "type": "boolean",
             "title": "Counts Prepaid Rent",
             "default": false
+          },
+          "pet_allowance_months": {
+            "anyOf": [
+              {
+                "type": "string",
+                "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Pet Allowance Months"
+          },
+          "prepaid_cap_months": {
+            "anyOf": [
+              {
+                "type": "string",
+                "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Prepaid Cap Months"
           },
           "note": {
             "anyOf": [
@@ -2562,6 +2662,18 @@
             ],
             "title": "Alternative Cap Usd",
             "description": "The other limit when the cap depends on facts not given."
+          },
+          "counted_usd": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Counted Usd",
+            "description": "The amount checked against the cap: the deposit, plus rent paid in advance where the statute counts it, less a pet deposit allowed on top."
           },
           "citation": {
             "type": "string",
@@ -2896,7 +3008,7 @@
               }
             ],
             "title": "Move In Condition Statement",
-            "description": "You gave the tenant a written move-in condition statement or checklist (Montana 70-25-206, Washington 59.18.260)."
+            "description": "You gave the tenant a written move-in condition statement or checklist (Montana 70-25-206, Washington 59.18.260; listed as a duty in Georgia 44-7-33(a), Kentucky 383.580(2), Michigan 554.608 and Virginia 55.1-1214)."
           },
           "move_out_list": {
             "anyOf": [
@@ -3839,6 +3951,16 @@
             "title": "Tenant Notice Relief",
             "default": false
           },
+          "not_if_abandoned": {
+            "type": "boolean",
+            "title": "Not If Abandoned",
+            "default": false
+          },
+          "short_interest_contested": {
+            "type": "boolean",
+            "title": "Short Interest Contested",
+            "default": false
+          },
           "effective_on": {
             "anyOf": [
               {
@@ -4586,6 +4708,58 @@
             ],
             "title": "Rate Published By"
           },
+          "includes_prepaid_rent": {
+            "type": "boolean",
+            "title": "Includes Prepaid Rent",
+            "default": false
+          },
+          "bank_rate_lesser": {
+            "type": "boolean",
+            "title": "Bank Rate Lesser",
+            "default": false
+          },
+          "due_days": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "exclusiveMinimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Due Days"
+          },
+          "due_start": {
+            "type": "string",
+            "enum": [
+              "vacate",
+              "termination",
+              "later_of_vacate_and_termination",
+              "forwarding_address",
+              "demand",
+              "later_of_termination_and_address",
+              "latest_of_termination_possession_and_address",
+              "earlier_of_termination_and_surrender",
+              "surrender_or_termination_first",
+              "new_tenant_occupancy",
+              "termination_possession_and_demand",
+              "claim_notice"
+            ],
+            "title": "Due Start",
+            "default": "vacate"
+          },
+          "due_section": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Due Section"
+          },
           "note": {
             "anyOf": [
               {
@@ -4859,6 +5033,16 @@
             "title": "Refund With List",
             "default": false
           },
+          "after_refund": {
+            "type": "boolean",
+            "title": "After Refund",
+            "default": false
+          },
+          "on_full_refund": {
+            "type": "boolean",
+            "title": "On Full Refund",
+            "default": false
+          },
           "note": {
             "anyOf": [
               {
@@ -5108,6 +5292,11 @@
             "title": "Excludes Later Rent",
             "default": false
           },
+          "keeps_retake_month_rent": {
+            "type": "boolean",
+            "title": "Keeps Retake Month Rent",
+            "default": false
+          },
           "exclusion_section": {
             "anyOf": [
               {
@@ -5258,7 +5447,8 @@
             "type": "string",
             "enum": [
               "depends",
-              "bars"
+              "bars",
+              "warn"
             ],
             "title": "Missing",
             "default": "depends"
@@ -5271,6 +5461,11 @@
             ],
             "title": "Scope",
             "default": "lines"
+          },
+          "rent_exempt": {
+            "type": "boolean",
+            "title": "Rent Exempt",
+            "default": false
           },
           "note": {
             "anyOf": [
@@ -5431,7 +5626,7 @@
               }
             ],
             "title": "Owed Now Usd",
-            "description": "Still owed to the tenant: refund_due_usd minus returned_usd, never below 0 (None when the amount returned is not known)."
+            "description": "Still owed to the tenant: refund_due_usd minus returned_usd, never below 0 (None when the amount returned is not known, or when required interest is still owed but not computed: see the interest_still_owed warning)."
           },
           "owed_now_min_usd": {
             "anyOf": [
@@ -5556,6 +5751,59 @@
           "transaction"
         ],
         "title": "PaymentInfo"
+      },
+      "PaymentMethod": {
+        "properties": {
+          "kind": {
+            "type": "string",
+            "enum": [
+              "electronic_after_notice",
+              "electronic_if_paid_electronically"
+            ],
+            "title": "Kind"
+          },
+          "effective_on": {
+            "type": "string",
+            "format": "date",
+            "title": "Effective On"
+          },
+          "days": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "exclusiveMinimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Days"
+          },
+          "section": {
+            "type": "string",
+            "title": "Section"
+          },
+          "note": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Note"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "kind",
+          "effective_on",
+          "section"
+        ],
+        "title": "PaymentMethod",
+        "description": "How the balance is paid changes the duty (``returned.method``, round 5 G-MI-01).\n``electronic_after_notice``: an electronic balance may follow a timely notice of damages by\n``days`` (Michigan 554.609(3), 2026 PA 102: a check goes with the notice); with the method\nunknown the later date is an alternative. ``electronic_if_paid_electronically``: the balance\ngoes back electronically when the deposit or rent was paid that way, unless agreed otherwise\nin writing (California 1950.5 as amended by AB 414): a check is warned about."
       },
       "PenaltyExposure": {
         "properties": {
@@ -5817,13 +6065,74 @@
             "anyOf": [
               {
                 "type": "string",
-                "const": "deposit"
+                "enum": [
+                  "deposit",
+                  "withheld"
+                ]
               },
               {
                 "type": "null"
               }
             ],
             "title": "Base High"
+          },
+          "late_refund_in_base": {
+            "type": "boolean",
+            "title": "Late Refund In Base",
+            "default": true
+          },
+          "not_if_abandoned": {
+            "type": "boolean",
+            "title": "Not If Abandoned",
+            "default": false
+          },
+          "multiple_if_statement_late": {
+            "type": "boolean",
+            "title": "Multiple If Statement Late",
+            "default": false
+          },
+          "base_if_no_statement": {
+            "anyOf": [
+              {
+                "type": "string",
+                "const": "deposit_less_claims"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Base If No Statement"
+          },
+          "no_statement_note": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "No Statement Note"
+          },
+          "interest_in_base": {
+            "type": "boolean",
+            "title": "Interest In Base",
+            "default": false
+          },
+          "credited_against_rent": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "rent_due",
+                  "rent_beyond_deposit"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Credited Against Rent"
           },
           "condition": {
             "type": "string",
@@ -5834,7 +6143,8 @@
               "late",
               "any_violation",
               "without_reasonable_basis",
-              "court_discretion"
+              "court_discretion",
+              "unpaid_annual_interest"
             ],
             "title": "Condition"
           },
@@ -5904,6 +6214,18 @@
           "required": {
             "type": "boolean",
             "title": "Required"
+          },
+          "threshold_usd": {
+            "anyOf": [
+              {
+                "type": "string",
+                "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Threshold Usd"
           },
           "note": {
             "anyOf": [
@@ -6929,6 +7251,16 @@
               }
             ]
           },
+          "payment_method": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/PaymentMethod"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
           "gate": {
             "anyOf": [
               {
@@ -6978,6 +7310,34 @@
               }
             ],
             "title": "Rollover Source"
+          },
+          "rollover_unsettled": {
+            "type": "boolean",
+            "title": "Rollover Unsettled",
+            "default": false
+          },
+          "determination_days": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "exclusiveMinimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Determination Days"
+          },
+          "determination_section": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Determination Section"
           }
         },
         "additionalProperties": false,
@@ -7027,6 +7387,23 @@
             ],
             "title": "Amount Usd",
             "description": "Amount refunded, dollars (partial_refund or itemized_statement)."
+          },
+          "method": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "check",
+                  "electronic",
+                  "other"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Method",
+            "description": "How the money went back: check, electronic (direct deposit or electronic transfer) or other. Some statutes key on it (Michigan 554.609(3): an electronic balance may follow the notice by 10 days; California 1950.5 as amended by AB 414: electronic return when the deposit or rent was paid electronically)."
           }
         },
         "additionalProperties": false,
@@ -7803,7 +8180,20 @@
               }
             ],
             "title": "Tenancy Ended On",
-            "description": "Lease end or termination date (YYYY-MM-DD), if different."
+            "description": "When the tenancy actually ended (YYYY-MM-DD): the lease's end, or an earlier termination or accepted surrender. Deadlines that run from the end of the tenancy use it. For a tenant who left before the lease was due to end, send the scheduled end as lease_end_on (older callers sent it here, which still works: the deadline is then counted from it, with the move-out date as an earlier alternative where the facts point to one)."
+          },
+          "lease_end_on": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Lease End On",
+            "description": "Day the lease was scheduled to end (YYYY-MM-DD), when it differs from when the tenancy actually ended (a broken lease). Lost rent and lease-break charges run to it; deadlines do not (they follow tenancy_ended_on, else the move-out, with the scheduled end as a later alternative)."
           },
           "vacated_on": {
             "type": "string",
@@ -7973,7 +8363,7 @@
               }
             ],
             "title": "Pet Deposit Usd",
-            "description": "The part of deposit_usd that is a pet deposit (outside the cap in Missouri, Alabama, North Dakota)."
+            "description": "The part of deposit_usd that is a pet deposit (outside the cap in Missouri, Alabama, North Dakota and Saint Paul; allowed on top of it up to one month in Hawaii and Alaska, half a month in Kansas, a quarter in Nebraska)."
           },
           "tenant_age_62_plus": {
             "anyOf": [
@@ -7986,6 +8376,18 @@
             ],
             "title": "Tenant Age 62 Plus",
             "description": "The tenant is 62 or older (Connecticut: a one-month cap)."
+          },
+          "tenant_age_60_plus": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Tenant Age 60 Plus",
+            "description": "A person 60 or older occupies the unit (New Hampshire 540-A:5, I: the owner-occupied exemption does not reach the unit). tenant_age_62_plus true implies it."
           },
           "small_landlord": {
             "anyOf": [
@@ -8052,7 +8454,7 @@
               }
             ],
             "title": "Prepaid Rent Usd",
-            "description": "Rent paid in advance beyond the first month, held besides deposit_usd (Connecticut counts it toward the cap)."
+            "description": "Rent paid in advance beyond the first month, held besides deposit_usd. Counts toward the cap in AK, AZ, CA, CT, MD, MI and NY; earns interest in CT, MA (last month's rent), MD and Chicago; in Minneapolis it lowers the deposit cap to half a month."
           },
           "tenancy_type": {
             "anyOf": [
@@ -8068,7 +8470,7 @@
               }
             ],
             "title": "Tenancy Type",
-            "description": "written_lease or at_will (Maine 6033(2): a written agreement's period, at most 30 days, or 21 days for a tenancy at will)."
+            "description": "written_lease or at_will (Maine 6033(2): a written agreement's period, at most 30 days, or 21 days for a tenancy at will; Massachusetts 15B(4): at will, 30 days after the move-out, a written lease, 30 days after its end). Left out with a move-out before tenancy_ended_on: the earlier (at-will) date leads and the other is listed."
           },
           "tenant_abandoned": {
             "anyOf": [
@@ -8080,7 +8482,7 @@
               }
             ],
             "title": "Tenant Abandoned",
-            "description": "The tenant abandoned the unit or was evicted (Maryland 8-203(h): the clock runs from the tenant's written demand; Louisiana 9:3251(C): the one-month rule does not apply). Left out: inferred from tenant_gave_proper_notice: false or a move-out before tenancy_ended_on."
+            "description": "The tenant abandoned the unit or was evicted (Maryland 8-203(h): the clock runs from the tenant's written demand; Washington 59.18.280: from when the landlord learns of it; Louisiana 9:3251(C): the one-month rule does not apply). Left out: inferred from tenant_gave_proper_notice: false; with a move-out before tenancy_ended_on the earlier abandonment clock leads and the other date is listed."
           },
           "contractor_needed": {
             "anyOf": [
@@ -8174,7 +8576,7 @@
               }
             ],
             "title": "Interest Rate Percent",
-            "description": "Annual rate the deposit account paid, where the law sets interest at the bank's rate (New Jersey, North Dakota, Illinois 765 ILCS 715, Portland). Without it that interest is unknown."
+            "description": "Annual rate the deposit account paid, where the law sets interest at the bank's rate (New Jersey, North Dakota, New Hampshire, New York, Pennsylvania, Portland), or caps it (Massachusetts: 5% or the bank's lesser rate). Without it bank-rate interest is unknown. Illinois 765 ILCS 715 uses IDFPR's published rate instead."
           },
           "deductions": {
             "items": {
@@ -8911,7 +9313,8 @@
             "type": "string",
             "enum": [
               "refund",
-              "itemized_statement"
+              "itemized_statement",
+              "interest"
             ],
             "title": "Duty"
           },
@@ -9303,14 +9706,27 @@
             "default": "0.00"
           },
           "interest_usd": {
-            "type": "string",
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
             "title": "Interest Usd",
-            "description": "Interest credited (0 when none or unknown)."
+            "description": "Interest credited (0 when none is owed; null when interest is or may be owed but its amount is not computed, so it is not in the refund)."
+          },
+          "counted_floor_usd": {
+            "type": "string",
+            "title": "Counted Floor Usd",
+            "description": "The certain minimum of the 'depends' lines (their least amount on every reading), counted in the refund and itemized on the statement as its own deduction. The statement's total deductions are allowed_usd + counted_floor_usd.",
+            "default": "0.00"
           },
           "refund_due_usd": {
             "type": "string",
             "title": "Refund Due Usd",
-            "description": "deposit + interest - allowed, never below 0."
+            "description": "deposit + interest - allowed - counted_floor, never below 0."
           },
           "tenant_owes_usd": {
             "type": "string",
@@ -9329,7 +9745,6 @@
           "deposit_usd",
           "claimed_usd",
           "allowed_usd",
-          "interest_usd",
           "refund_due_usd",
           "tenant_owes_usd"
         ],

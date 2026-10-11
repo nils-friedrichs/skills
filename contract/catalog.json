@@ -66,6 +66,7 @@
       "description": "Free tools for the move-out: what the turn costs, what to return from the deposit, and whether a deposit came back on time.",
       "audience_line": "For landlords, property managers, tenants and the AI agents working for them.",
       "hub": "https://tektolo.com/tools/rental-property/",
+      "mcp": "https://tektolo.com/mcp/rental-property",
       "capabilities": [
         "property-turnover",
         "deposit-settlement"
@@ -86,42 +87,50 @@
     {
       "id": "landlord_pm",
       "name": "Landlords and property managers",
-      "description": "People who own or run rental units, and their maintenance and leasing staff."
+      "description": "People who own or run rental units, and their maintenance and leasing staff.",
+      "short": "Landlords"
     },
     {
       "id": "tenant",
       "name": "Tenants",
-      "description": "People who rent the place they live in."
+      "description": "People who rent the place they live in.",
+      "short": "Tenants"
     },
     {
       "id": "saas_founder",
       "name": "SaaS founders",
-      "description": "People who run software or subscription businesses."
+      "description": "People who run software or subscription businesses.",
+      "short": "SaaS founders"
     },
     {
       "id": "marketplace_seller",
       "name": "Marketplace sellers",
-      "description": "People who sell physical products online or in stores."
+      "description": "People who sell physical products online or in stores.",
+      "short": "Sellers"
     },
     {
       "id": "employer",
       "name": "Employers",
-      "description": "People who hire, schedule and pay staff."
+      "description": "People who hire, schedule and pay staff.",
+      "short": "Employers"
     },
     {
       "id": "consumer",
       "name": "Consumers",
-      "description": "People handling their own purchases, debts and accounts."
+      "description": "People handling their own purchases, debts and accounts.",
+      "short": "Consumers"
     },
     {
       "id": "developer",
       "name": "Developers",
-      "description": "People who build on the API or the MCP server."
+      "description": "People who build on the API or the MCP server.",
+      "short": "Developers"
     },
     {
       "id": "ai_agent",
       "name": "AI agents",
-      "description": "Assistants and agents calling the tools on someone's behalf."
+      "description": "Assistants and agents calling the tools on someone's behalf.",
+      "short": "AI agents"
     }
   ],
   "capabilities": [
@@ -152,6 +161,16 @@
         "make-ready",
         "maintenance",
         "estimating"
+      ],
+      "search_phrases": [
+        "make ready cost",
+        "how much to get an apartment ready after a tenant moves out",
+        "move-out repair estimate",
+        "unit turn scope of work",
+        "cost to paint and clean a rental",
+        "carpet replacement cost",
+        "punch list from inspection notes",
+        "rental repair cost by ZIP code"
       ],
       "determinism": "strict",
       "coverage": {
@@ -2022,7 +2041,8 @@
         "page": "https://tektolo.com/capabilities/property-turnover",
         "api": "https://tektolo.com/v1/capabilities/property-turnover",
         "openapi": "https://tektolo.com/openapi.json",
-        "mcp": "https://tektolo.com/mcp",
+        "mcp": "https://tektolo.com/mcp/rental-property",
+        "mcp_all": "https://tektolo.com/mcp",
         "hub": "https://tektolo.com/tools/rental-property/",
         "web_tool": "https://tektolo.com/tools/rental-property/property-turnover"
       },
@@ -2063,6 +2083,15 @@
         "landlord-tenant",
         "compliance",
         "deadlines"
+      ],
+      "search_phrases": [
+        "return a tenant's security deposit",
+        "itemized deduction statement",
+        "deposit return deadline",
+        "how much can I deduct from a deposit",
+        "charge a tenant for damage",
+        "security deposit law by state",
+        "move-out deposit letter"
       ],
       "determinism": "strict",
       "coverage": {
@@ -2269,15 +2298,15 @@
       },
       "limitations": [
         "Computes and cites the published rule; it is not legal advice. Check the statute, your lease and local ordinances before you sign the statement.",
-        "Covers the 50 states and DC and eight city overlays; other local ordinances are not applied (the result warns).",
+        "Covers the 50 states and DC and nine city overlays; other local ordinances are not applied (the result warns).",
         "Several state rows were read on a mirror (FindLaw, public.law) rather than the official code site, and some quotes are summaries; each citation says which.",
         "Useful lives come from HUD's chart and industry tables (carpet 8 years, 10 in California and Colorado; paint 3, 2 in California with the DRE guide's step table; blinds 3; appliances 10). Send your own with useful_life_years.",
         "Penalty amounts are statutory exposure, not a prediction of what a court would award.",
         "Some rule text is summarised rather than quoted; each citation says which."
       ],
       "ruleset": {
-        "version": "sd-2026.10.23",
-        "hash": "sha256:365d2a81eafc2b3b2c70d3718e047578ce002dddce0b2118cc6940c6a368a1b0",
+        "version": "sd-2026.11.12",
+        "hash": "sha256:372f534a971d2bf77540bfb4710fbf9c377c9b440cd352fa841f63337ad208b4",
         "sources": [
           {
             "id": "al.code-35-9a-201",
@@ -3072,6 +3101,12 @@
             "url": "https://legislature.vermont.gov/statutes/section/09/137/04461"
           },
           {
+            "id": "va.55.1-1214",
+            "title": "Code of Virginia 55.1-1214 Inspection of dwelling unit (move-in report)",
+            "publisher": "Virginia General Assembly (Legislative Information System)",
+            "url": "https://law.lis.virginia.gov/vacode/title55.1/chapter12/section55.1-1214/"
+          },
+          {
             "id": "va.55.1-1226",
             "title": "Va. Code 55.1-1226 Security deposits",
             "publisher": "Virginia Division of Legislative Automated Systems",
@@ -3796,6 +3831,24 @@
             "title": "Miss. Code 89-8-7 Definitions (Residential Landlord and Tenant Act)",
             "publisher": "Mississippi Attorney General (reproduction of the Act)",
             "url": "https://attorneygenerallynnfitch.com/wp-content/uploads/2021/07/Residential-Landlord-and-Tenant-Act.pdf"
+          },
+          {
+            "id": "il.idfpr-deposit-rate-2026",
+            "title": "IDFPR, Interest rates affecting the Security Deposit Interest Act (2026 announcement)",
+            "publisher": "Illinois Department of Financial and Professional Regulation",
+            "url": "https://idfpr.illinois.gov/news/2026/interest-rates-affecting-security-deposit-act.html"
+          },
+          {
+            "id": "evanston.code-5-3",
+            "title": "Evanston City Code Title 5, Chapter 3 Residential Landlord and Tenant Ordinance (5-3-1, 5-3-3-3, 5-3-5-1, 5-3-13)",
+            "publisher": "City of Evanston (Municode, Supplement 22 Update 1)",
+            "url": "https://library.municode.com/il/evanston/codes/code_of_ordinances?nodeId=TIT5HORE_CH3HOPRTERE"
+          },
+          {
+            "id": "evanston.rlto-page",
+            "title": "City of Evanston, Residential Landlord and Tenant Ordinance",
+            "publisher": "City of Evanston",
+            "url": "https://www.cityofevanston.org/departments/community_development/housing_grants/landlord_tenant_resources/rlto_ordinance.php"
           }
         ]
       },
@@ -3803,7 +3856,8 @@
         "page": "https://tektolo.com/capabilities/deposit-settlement",
         "api": "https://tektolo.com/v1/capabilities/deposit-settlement",
         "openapi": "https://tektolo.com/openapi.json",
-        "mcp": "https://tektolo.com/mcp",
+        "mcp": "https://tektolo.com/mcp/rental-property",
+        "mcp_all": "https://tektolo.com/mcp",
         "hub": "https://tektolo.com/tools/rental-property/",
         "web_tool": "https://tektolo.com/tools/rental-property/deposit-settlement"
       },
@@ -3811,7 +3865,7 @@
         {
           "label": "Deposit rules by state",
           "url": "https://tektolo.com/deposit-settlement/by-state",
-          "summary": "security deposit return deadlines, allowed deductions, interest and penalties in all 50 US states and DC plus 8 city overlays: the rule per state and city in plain words, the quoted text and a worked example"
+          "summary": "security deposit return deadlines, allowed deductions, interest and penalties in all 50 US states and DC plus 9 city overlays: the rule per state and city in plain words, the quoted text and a worked example"
         }
       ],
       "web_doors": [
@@ -3826,7 +3880,17 @@
             "Tenants"
           ],
           "outcome": "See whether your landlord returned your deposit on time and which deductions your state's rule allows.",
-          "summary": "For tenants: the state, the move-out day, the deposit, what came back and when, and the deductions listed; answers whether the refund or itemized statement is late (deadline date, days late), which deductions the rule allows, interest, the statute's penalty with its citation, and a neutral summary to send"
+          "summary": "For tenants: the state, the move-out day, the deposit, what came back and when, and the deductions listed; answers whether the refund or itemized statement is late (deadline date, days late), which deductions the rule allows, interest, the statute's penalty with its citation, and a neutral summary to send",
+          "search_phrases": [
+            "my landlord kept my deposit",
+            "get my security deposit back",
+            "landlord didn't return my deposit",
+            "deposit refund late",
+            "how long does a landlord have to return a deposit",
+            "unfair deductions from my deposit",
+            "can my landlord charge for cleaning or carpet",
+            "tenant rights deposit"
+          ]
         }
       ]
     }

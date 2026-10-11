@@ -63,6 +63,7 @@
           "id": "rental-property",
           "name": "Rental property",
           "hub": "https://tektolo.com/tools/rental-property/",
+          "mcp": "https://tektolo.com/mcp/rental-property",
           "capabilities": [
             "property-turnover",
             "deposit-settlement"
@@ -73,7 +74,7 @@
         {
           "id": "deposit-settlement",
           "contract_version": "0.1.0",
-          "ruleset_hash": "sha256:365d2a81eafc2b3b2c70d3718e047578ce002dddce0b2118cc6940c6a368a1b0",
+          "ruleset_hash": "sha256:372f534a971d2bf77540bfb4710fbf9c377c9b440cd352fa841f63337ad208b4",
           "domain": "rental-property",
           "audiences": [
             "landlord_pm",

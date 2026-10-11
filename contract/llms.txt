@@ -25,7 +25,7 @@ Free tools for the move-out: what the turn costs, what to return from the deposi
 Reference pages, not tools: pages to read and cite, computed by the same engines as the tools. Index: https://tektolo.com/reference/
 
 - [Turnover costs by city](https://tektolo.com/turnover-costs/): apartment turnover cost for 530 metro and nonmetropolitan areas: typical ranges by unit size, local labor by trade and unit prices, computed from BLS wages by the same engine as the free tool (domain: rental-property)
-- [Deposit rules by state](https://tektolo.com/deposit-settlement/by-state): security deposit return deadlines, allowed deductions, interest and penalties in all 50 US states and DC plus 8 city overlays: the rule per state and city in plain words, the quoted text and a worked example (domain: rental-property)
+- [Deposit rules by state](https://tektolo.com/deposit-settlement/by-state): security deposit return deadlines, allowed deductions, interest and penalties in all 50 US states and DC plus 9 city overlays: the rule per state and city in plain words, the quoted text and a worked example (domain: rental-property)
 
 ## Pages
 
@@ -46,6 +46,7 @@ Counted: deposit_settlement_settle, property_turnover_quick_estimate, property_t
 - [OpenAPI](https://tektolo.com/openapi.json): REST API description (OpenAPI 3.1)
 - [API catalog](https://tektolo.com/.well-known/api-catalog): RFC 9727 linkset of the above
 - [MCP server](https://tektolo.com/mcp): Model Context Protocol endpoint (streamable HTTP, no authentication in the free tier); one tool per operation
+  - [Rental property only](https://tektolo.com/mcp/rental-property): just this domain's tools, a smaller tool list for the assistant to carry
 - [MCP server card](https://tektolo.com/mcp/server-card): connection metadata for MCP clients
 
 ## Paid lane (x402, testnet)
