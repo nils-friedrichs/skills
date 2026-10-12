@@ -183,7 +183,7 @@
           "property-turnover"
         ],
         "summary": "Quick turnover estimate (start here)",
-        "description": "The easiest way to estimate a US rental turnover: a ZIP, bedrooms, bathrooms and a list of plain-English issues in, a priced make-ready estimate out (same engine and result as property_turnover_scope, short summary by default).\nWhen to use: Start here when the user describes a move-out or turnover in words (\"carpet stained in both bedrooms, oven filthy\") and wants a cost estimate or what to tell vendors. Use property_turnover_scope instead for rate cards, owner decisions, measured quantities or per-finding control.\nNot for: Diagnosing hazards (they come back as refer-outs to a licensed professional); legal advice on deposits; remodel bids; properties outside the US.\nTip: If the ZIP is missing or not exactly 5 digits, ask the user; never guess or pad it.\nTip: Relay refer_outs first, then the totals; say the numbers are estimates, not quotes.\nDeterministic: the same input returns the same result_hash. Capability property-turnover v0.8.0 (experimental).",
+        "description": "The easiest way to estimate a US rental turnover: a ZIP, bedrooms, bathrooms and a list of plain-English issues in, a priced make-ready estimate out (same engine and result as property_turnover_scope, short summary by default).\nWhen to use: Start here when the user describes a move-out or turnover in words (\"carpet stained in both bedrooms, oven filthy\") and wants a cost estimate or what to tell vendors. Use property_turnover_scope instead for rate cards, owner decisions, measured quantities or per-finding control.\nNot for: Diagnosing hazards (they come back as refer-outs to a licensed professional); legal advice on deposits; remodel bids; properties outside the US.\nTip: If the ZIP is missing or not exactly 5 digits, ask the user; never guess or pad it.\nTip: Relay refer_outs first, then the totals; say the numbers are estimates, not quotes.\nDeterministic: the same input returns the same result_hash. Capability property-turnover v0.9.0 (experimental).",
         "operationId": "property_turnover_quick_estimate",
         "requestBody": {
           "content": {
@@ -225,7 +225,7 @@
           "property-turnover"
         ],
         "summary": "Scope a property turnover",
-        "description": "Turn move-out / turnover inspection findings for a US rental unit into a priced make-ready scope: standardized tasks by trade, regional low/expected/high costs, must/should/could priorities, vendor scopes, refer-outs to licensed professionals, and every assumption stated.\nWhen to use: Turnover findings for a US rental unit when you need control: rooms, measured quantities, the manager's own prices (rate_card) or owner approve/decline decisions. For a plain-English estimate, property_turnover_quick_estimate is easier.\nNot for: Diagnosing hazards (they come back as refer-outs to a licensed professional); legal advice on deposits; remodel bids; properties outside the US.\nTip: If the ZIP is missing or not exactly 5 digits, ask the user; never guess or pad it.\nTip: Describe each finding in plain words (description). Only send a code returned by property_turnover_issue_codes; unmatched findings come back as manual-quote lines with suggested codes.\nTip: Give measured quantities when you have them (e.g. 120 sq_ft); otherwise typical sizes are assumed and listed in assumptions.\nTip: Send property.floor_coverings when you know whether there is carpet, and unit_type single_family for houses; both change the baseline scope.\nTip: Relay the summary, refer_outs, assumptions and unknowns to the user; costs are estimate ranges, not quotes.\nTip: Use detail=summary unless the user asks for every line item (summary already lists every line tied to a finding).\nTip: Rate card examples - {\"trade\": \"handyman\", \"unit_price\": 65, \"uom\": \"hour\"} or {\"task_id\": \"carpet.clean\", \"unit_price\": 0.2, \"uom\": \"sq_ft\"}; check rate_card_applied and rate_card_ignored before saying a rate was used.\nTip: For the Excel workbook or owner estimate, give the user links.web_tool_prefilled (opens the free web tool with these findings) or POST the same arguments to links.downloads; do not build a spreadsheet yourself.\nDeterministic: the same input returns the same result_hash. Capability property-turnover v0.8.0 (experimental).",
+        "description": "Turn move-out / turnover inspection findings for a US rental unit into a priced make-ready scope: standardized tasks by trade, regional low/expected/high costs, must/should/could priorities, vendor scopes, refer-outs to licensed professionals, and every assumption stated.\nWhen to use: Turnover findings for a US rental unit when you need control: rooms, measured quantities, the manager's own prices (rate_card) or owner approve/decline decisions. For a plain-English estimate, property_turnover_quick_estimate is easier.\nNot for: Diagnosing hazards (they come back as refer-outs to a licensed professional); legal advice on deposits; remodel bids; properties outside the US.\nTip: If the ZIP is missing or not exactly 5 digits, ask the user; never guess or pad it.\nTip: Describe each finding in plain words (description). Only send a code returned by property_turnover_issue_codes; unmatched findings come back as manual-quote lines with suggested codes.\nTip: Give measured quantities when you have them (e.g. 120 sq_ft); otherwise typical sizes are assumed and listed in assumptions.\nTip: Send property.floor_coverings when you know whether there is carpet, and unit_type single_family for houses; both change the baseline scope.\nTip: Relay the summary, refer_outs, assumptions and unknowns to the user; costs are estimate ranges, not quotes.\nTip: Use detail=summary unless the user asks for every line item (summary already lists every line tied to a finding).\nTip: Rate card examples - {\"trade\": \"handyman\", \"unit_price\": 65, \"uom\": \"hour\"} or {\"task_id\": \"carpet.clean\", \"unit_price\": 0.2, \"uom\": \"sq_ft\"}; check rate_card_applied and rate_card_ignored before saying a rate was used.\nTip: For the Excel workbook or owner estimate, give the user links.web_tool_prefilled (opens the free web tool with these findings) or POST the same arguments to links.downloads; do not build a spreadsheet yourself.\nDeterministic: the same input returns the same result_hash. Capability property-turnover v0.9.0 (experimental).",
         "operationId": "property_turnover_scope",
         "requestBody": {
           "content": {
@@ -435,7 +435,7 @@
           "property-turnover"
         ],
         "summary": "Look up turnover issue codes",
-        "description": "Search the standard taxonomy of rental-unit turnover issues (component.issue codes) by keyword or area.\nWhen to use: Only while preparing findings for a turnover cost estimate, to find the standard issue code for something observed (e.g. \"pet stain on carpet\"). Never needed to answer a question; call with no arguments to list the taxonomy areas and the first codes.\nNot for: Legal or security-deposit questions; anything outside rental turnover and make-ready work. Not needed before quick_estimate or scope: a plain description works there.\nTip: Call with no arguments to list the taxonomy areas (in `areas`) and the first codes.\nTip: Codes are optional for scoping; a plain description also works.\nDeterministic: the same input returns the same result_hash. Capability property-turnover v0.8.0 (experimental).",
+        "description": "Search the standard taxonomy of rental-unit turnover issues (component.issue codes) by keyword or area.\nWhen to use: Only while preparing findings for a turnover cost estimate, to find the standard issue code for something observed (e.g. \"pet stain on carpet\"). Never needed to answer a question; call with no arguments to list the taxonomy areas and the first codes.\nNot for: Legal or security-deposit questions; anything outside rental turnover and make-ready work. Not needed before quick_estimate or scope: a plain description works there.\nTip: Call with no arguments to list the taxonomy areas (in `areas`) and the first codes.\nTip: Codes are optional for scoping; a plain description also works.\nDeterministic: the same input returns the same result_hash. Capability property-turnover v0.9.0 (experimental).",
         "operationId": "property_turnover_issue_codes",
         "requestBody": {
           "content": {
@@ -4858,6 +4858,7 @@
             "maximum": 200.0,
             "minimum": 1.0,
             "title": "Limit",
+            "description": "Most codes to return.",
             "default": 8
           },
           "include_aliases": {
@@ -6672,6 +6673,7 @@
           },
           "unit_type": {
             "$ref": "#/components/schemas/UnitType",
+            "description": "Single-family homes and townhomes get house-sized defaults (floor area, locks).",
             "default": "apartment"
           },
           "sq_ft": {
@@ -6699,7 +6701,8 @@
                 "type": "null"
               }
             ],
-            "title": "Year Built"
+            "title": "Year Built",
+            "description": "Drives lead-paint (pre-1978) handling."
           },
           "carpet": {
             "anyOf": [
@@ -6715,10 +6718,12 @@
           },
           "profile": {
             "$ref": "#/components/schemas/Profile",
+            "description": "minimum (rent-ready basics) | standard | premium (higher finish).",
             "default": "standard"
           },
           "price_tier": {
             "$ref": "#/components/schemas/PriceTier",
+            "description": "bulk_contract (portfolio contract prices) | pm_vendor (default: a property manager buying turns from local vendors) | retail_one_off (an owner hiring one contractor).",
             "default": "pm_vendor"
           },
           "detail": {
@@ -7847,7 +7852,8 @@
             "description": "Your own reference ids (e.g. unit_id, job_id). Echoed back, never used."
           },
           "property": {
-            "$ref": "#/components/schemas/PropertyProfile"
+            "$ref": "#/components/schemas/PropertyProfile",
+            "description": "The unit: ZIP, size, type and year built."
           },
           "findings": {
             "items": {
@@ -7855,10 +7861,12 @@
             },
             "type": "array",
             "maxItems": 200,
-            "title": "Findings"
+            "title": "Findings",
+            "description": "Move-out inspection findings, one per condition, with location and extent."
           },
           "standards": {
-            "$ref": "#/components/schemas/Standards"
+            "$ref": "#/components/schemas/Standards",
+            "description": "Finish profile, price tier and overrides."
           },
           "rate_card": {
             "items": {
@@ -7866,7 +7874,8 @@
             },
             "type": "array",
             "maxItems": 300,
-            "title": "Rate Card"
+            "title": "Rate Card",
+            "description": "Your own prices by trade or task; they replace the regional library prices."
           },
           "trade_vendors": {
             "additionalProperties": {
@@ -7876,10 +7885,12 @@
               "$ref": "#/components/schemas/Trade"
             },
             "type": "object",
-            "title": "Trade Vendors"
+            "title": "Trade Vendors",
+            "description": "Vendor (name, contact) to put on each trade's lines."
           },
           "constraints": {
-            "$ref": "#/components/schemas/Constraints"
+            "$ref": "#/components/schemas/Constraints",
+            "description": "Target ready date, whether the unit is occupied, access notes."
           },
           "tax_rate": {
             "anyOf": [
@@ -7905,7 +7916,8 @@
             },
             "type": "array",
             "maxItems": 500,
-            "title": "Decisions"
+            "title": "Decisions",
+            "description": "Approve, decline or defer lines or findings from an earlier scope."
           },
           "retain": {
             "type": "boolean",

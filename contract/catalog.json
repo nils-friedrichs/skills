@@ -137,7 +137,7 @@
     {
       "id": "property-turnover",
       "name": "Property turnover estimate",
-      "version": "0.8.0",
+      "version": "0.9.0",
       "status": "experimental",
       "summary": "Turn move-out inspection findings into a priced, vendor-ready make-ready scope.",
       "outcome": "A vendor-ready turnover scope and owner estimate in minutes, with every number traced to a source or a stated assumption.",
@@ -212,7 +212,7 @@
               "Relay refer_outs first, then the totals; say the numbers are estimates, not quotes."
             ],
             "example": "{\"zip\": \"43215\", \"bedrooms\": 2, \"bathrooms\": 1, \"issues\": [\"stained carpet in both bedrooms\", \"nail holes everywhere\", \"oven is filthy\"]}",
-            "mcp_description": "Estimates what it costs to turn over a US rental unit after move-out. Inputs: a 5-digit ZIP, bedrooms, bathrooms and the issues in plain English (e.g. \"stained carpet in both bedrooms\"); optional unit type, size, year built. Returns a priced make-ready estimate: repair tasks by trade with low/expected/high costs for the ZIP's labor market, must/should/could priorities, refer-outs to licensed professionals, assumptions, and links to the web tool and downloads. Same engine as property_turnover_scope. Not for: diagnosing hazards, legal advice on deposits, remodel bids, properties outside the US."
+            "mcp_description": "Estimates what it costs to turn over a US rental unit after move-out; the first tool for a turnover estimate. Inputs: a 5-digit ZIP, bedrooms, bathrooms and the issues in plain English (e.g. \"stained carpet in both bedrooms\"); optional unit type, size, year built. Returns a priced make-ready estimate: repair tasks by trade with low/expected/high costs for the ZIP's labor market, must/should/could priorities, refer-outs to licensed professionals, assumptions, and links to the web tool and downloads. Same engine as property_turnover_scope. Not for: diagnosing hazards, legal advice on deposits, remodel bids, properties outside the US."
           },
           "examples": [],
           "x402": {
@@ -301,7 +301,7 @@
               "For the Excel workbook or owner estimate, give the user links.web_tool_prefilled (opens the free web tool with these findings) or POST the same arguments to links.downloads; do not build a spreadsheet yourself."
             ],
             "example": "{\"property\": {\"zip\": \"43215\", \"bedrooms\": 2, \"bathrooms\": 1}, \"findings\": [{\"location\": \"Bedroom 2\", \"description\": \"pet urine in carpet\"}, {\"description\": \"3 blinds broken\", \"quantity\": {\"value\": 3, \"uom\": \"each\"}}]}",
-            "mcp_description": "Turns move-out inspection findings for a US rental unit into a priced make-ready scope. Inputs: property (ZIP, bedrooms, bathrooms; optional unit type, size, year built) and findings (a plain description or an issue code, with location, extent and quantity); optional rate_card (the manager's own prices), decisions (owner approve/decline) and detail. Returns tasks by trade with regional low/expected/high costs, priorities, a scope per vendor, refer-outs to licensed professionals, assumptions, unknowns and download links. Not for: diagnosing hazards, legal advice on deposits, remodel bids, properties outside the US."
+            "mcp_description": "Turns move-out inspection findings for a US rental unit into a priced make-ready scope. For a first estimate use property_turnover_quick_estimate; use this one for rate cards, owner decisions or measured quantities. Inputs: property (ZIP, bedrooms, bathrooms; optional unit type, size, year built) and findings (a description or issue code, with location, extent and quantity); optional rate_card, decisions and detail. Returns tasks by trade with low/expected/high costs for the ZIP, priorities, vendor scopes, refer-outs to licensed professionals, assumptions, unknowns and download links. Not for: diagnosing hazards, legal advice on deposits, remodel bids, properties outside the US."
           },
           "examples": [
             {
@@ -862,8 +862,8 @@
         "Responsibility labels (wear vs damage) are hints, not legal determinations; deposit rules vary by state."
       ],
       "ruleset": {
-        "version": "pt-2026.10.6",
-        "hash": "sha256:194c1256c5beaf3885f0dbc98c6f4795cd26c14baacaee5d5305109c6f5cd432",
+        "version": "pt-2026.10.8",
+        "hash": "sha256:d6e8a59907b2b82f76a965429c211d75ba8592a5dd5e29126aef60fb7c29f1ac",
         "sources": [
           {
             "id": "hud.nspire.index",
@@ -2034,6 +2034,48 @@
             "title": "2021 International Residential Code, section R311.2 (egress door)",
             "publisher": "International Code Council",
             "url": "https://codes.iccsafe.org/content/IRC2021P1/chapter-3-building-planning"
+          },
+          {
+            "id": "usfa.appliance-electrical",
+            "title": "U.S. Fire Administration, Appliance and electrical fire safety",
+            "publisher": "U.S. Fire Administration (FEMA)",
+            "url": "https://www.usfa.fema.gov/prevention/home-fires/prevent-fires/appliance-and-electrical/"
+          },
+          {
+            "id": "icc.irc-m1502",
+            "title": "2021 International Residential Code, section M1502.4 Dryer exhaust ducts",
+            "publisher": "International Code Council",
+            "url": "https://codes.iccsafe.org/s/IRC2021P3/chapter-15-exhaust-systems/IRC2021P3-Pt05-Ch15-SecM1502.4"
+          },
+          {
+            "id": "csia.level2-fireplace",
+            "title": "CSIA Standard Operating Procedure, Level 2 inspection of a masonry fireplace",
+            "publisher": "Chimney Safety Institute of America",
+            "url": "https://web.csia.org/external/wcpages/wcmedia/documents/CSIA_Level2_MasonryFireplace%20Revision%20Final.pdf"
+          },
+          {
+            "id": "ecfr.16-cfr-1211",
+            "title": "16 CFR Part 1211, Safety Standard for Automatic Residential Garage Door Operators",
+            "publisher": "CPSC / eCFR",
+            "url": "https://www.ecfr.gov/current/title-16/chapter-II/subchapter-B/part-1211"
+          },
+          {
+            "id": "cpsc.pool-barriers-362",
+            "title": "CPSC Publication 362, Safety Barrier Guidelines for Residential Pools",
+            "publisher": "U.S. Consumer Product Safety Commission",
+            "url": "https://www.cpsc.gov/s3fs-public/362%20Safety%20Barrier%20Guidelines%20for%20Pools.pdf"
+          },
+          {
+            "id": "esfi.extension-cords",
+            "title": "ESFI, Extension cord safety tips",
+            "publisher": "Electrical Safety Foundation International",
+            "url": "https://www.esfi.org/extension-cord-safety-tips/"
+          },
+          {
+            "id": "whirlpool.cooktop-cracked",
+            "title": "Whirlpool electric cooktop user instructions (W11206695)",
+            "publisher": "Whirlpool",
+            "url": "https://www.whirlpool.com/content/dam/global/documents/201806/use-and-care-w11206695-rev-a.pdf"
           }
         ]
       },
