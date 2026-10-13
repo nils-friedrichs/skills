@@ -1,0 +1,6 @@
+
+# Secrets: keep real keys in a gitignored .env / .local/
+.env
+.env.*
+!.env.example
+.local/
