@@ -137,7 +137,7 @@
     {
       "id": "property-turnover",
       "name": "Property turnover estimate",
-      "version": "0.9.0",
+      "version": "0.11.0",
       "status": "experimental",
       "summary": "Turn move-out inspection findings into a priced, vendor-ready make-ready scope.",
       "outcome": "A vendor-ready turnover scope and owner estimate in minutes, with every number traced to a source or a stated assumption.",
@@ -214,7 +214,28 @@
             "example": "{\"zip\": \"43215\", \"bedrooms\": 2, \"bathrooms\": 1, \"issues\": [\"stained carpet in both bedrooms\", \"nail holes everywhere\", \"oven is filthy\"]}",
             "mcp_description": "Estimates what it costs to turn over a US rental unit after move-out; the first tool for a turnover estimate. Inputs: a 5-digit ZIP, bedrooms, bathrooms and the issues in plain English (e.g. \"stained carpet in both bedrooms\"); optional unit type, size, year built. Returns a priced make-ready estimate: repair tasks by trade with low/expected/high costs for the ZIP's labor market, must/should/could priorities, refer-outs to licensed professionals, assumptions, and links to the web tool and downloads. Same engine as property_turnover_scope. Not for: diagnosing hazards, legal advice on deposits, remodel bids, properties outside the US."
           },
-          "examples": [],
+          "examples": [
+            {
+              "path": "examples/notes/charlotte_move_out_notes.json",
+              "input": {
+                "zip": "28202",
+                "bedrooms": 1,
+                "bathrooms": "1",
+                "sq_ft": 700,
+                "year_built": 2008,
+                "issues": [
+                  "BR - tv mount holes in wall + couple nail holes",
+                  "LR carpet pet urine stains by the couch, smells",
+                  "burn mark on kitchen counter",
+                  "oven filthy, fridge gross",
+                  "2 blinds busted in LR",
+                  "towel bar ripped off in bath",
+                  "only 1 of 2 keys returned",
+                  "scuffs in hallway"
+                ]
+              }
+            }
+          ],
           "x402": {
             "protocol": "x402",
             "x402_version": 2,
@@ -862,8 +883,8 @@
         "Responsibility labels (wear vs damage) are hints, not legal determinations; deposit rules vary by state."
       ],
       "ruleset": {
-        "version": "pt-2026.10.8",
-        "hash": "sha256:d6e8a59907b2b82f76a965429c211d75ba8592a5dd5e29126aef60fb7c29f1ac",
+        "version": "pt-2026.10.11",
+        "hash": "sha256:7f72b12003b18b9f7cd69ecc7081392cad6d004a21ebc1612215c558dc1ebe2e",
         "sources": [
           {
             "id": "hud.nspire.index",
@@ -1206,6 +1227,12 @@
             "title": "A Brief Guide to Mold, Moisture and Your Home",
             "publisher": "U.S. EPA",
             "url": "https://www.epa.gov/mold/brief-guide-mold-moisture-and-your-home"
+          },
+          {
+            "id": "usda.fsis-molds-on-food",
+            "title": "Molds on Food - Are They Dangerous?",
+            "publisher": "USDA Food Safety and Inspection Service",
+            "url": "https://www.fsis.usda.gov/sites/default/files/media_file/2021-02/Molds_on_Food.pdf"
           },
           {
             "id": "cfr.40-745-rrp",
@@ -2158,7 +2185,33 @@
             "input": "https://tektolo.com/v1/capabilities/deposit-settlement/schemas/settle/input.json",
             "output": "https://tektolo.com/v1/capabilities/deposit-settlement/schemas/settle/output.json"
           },
-          "artifacts": {},
+          "artifacts": {
+            "html": {
+              "rest": "https://tektolo.com/v1/deposit-settlement/settle/render/html",
+              "method": "POST",
+              "media_type": "text/html; charset=utf-8"
+            },
+            "pdf": {
+              "rest": "https://tektolo.com/v1/deposit-settlement/settle/render/pdf",
+              "method": "POST",
+              "media_type": "application/pdf"
+            },
+            "csv": {
+              "rest": "https://tektolo.com/v1/deposit-settlement/settle/render/csv",
+              "method": "POST",
+              "media_type": "text/csv; charset=utf-8"
+            },
+            "tenant_html": {
+              "rest": "https://tektolo.com/v1/deposit-settlement/settle/render/tenant_html",
+              "method": "POST",
+              "media_type": "text/html; charset=utf-8"
+            },
+            "tenant_pdf": {
+              "rest": "https://tektolo.com/v1/deposit-settlement/settle/render/tenant_pdf",
+              "method": "POST",
+              "media_type": "application/pdf"
+            }
+          },
           "requires_key": false,
           "pricing": {
             "model": "free_tier",
@@ -2176,7 +2229,9 @@
               "Give item_installed_on or item_age_years for carpet, paint, blinds and appliances; without them the tenancy length is assumed.",
               "Mark normal wear with caused_by_tenant false; it is never deductible.",
               "Relay deadline.return_by and its status, totals.refund_due_usd, penalty_exposure and the citations; say it is not legal advice.",
-              "Offer statement.text as the draft itemized statement; it has no names or addresses.",
+              "Offer statement.text as the draft itemized statement (no names or addresses); in the copy for the tenant keep only the statement.notes whose audience is tenant.",
+              "For a printable statement to sign and send (HTML or PDF) or the deductions ledger (CSV), POST the same arguments as JSON to links.downloads; do not build the file yourself.",
+              "For a tenant (arguments with returned), links.downloads tenant_pdf or tenant_html is a neutral summary of the facts and the rule to send to the landlord; give the user that, not the landlord's statement.",
               "Relay warnings, assumptions and unknowns (for example the Texas forwarding address).",
               "Send the start-event dates a state needs when known (forwarding_address_received_on, demand_received_on, new_tenant_moved_in_on, claim_notice_sent_on in Florida); without them the clock is not_started.",
               "deadline.status none_in_statute means no statutory deadline; deadline.extended_to is the statute's weekend roll-forward, but advise acting by return_by."
@@ -2274,6 +2329,74 @@
                 ],
                 "as_of": "2026-10-09"
               }
+            },
+            {
+              "path": "examples/charlotte_move_out_deposit.json",
+              "input": {
+                "state": "NC",
+                "city": "Charlotte",
+                "deposit_usd": "1200",
+                "monthly_rent_usd": "1200",
+                "move_in_on": "2024-08-01",
+                "vacated_on": "2026-09-30",
+                "deductions": [
+                  {
+                    "category": "wall_or_door_repair",
+                    "amount_usd": "142.80",
+                    "work_kind": "repair",
+                    "has_receipt": true,
+                    "has_photos": true
+                  },
+                  {
+                    "category": "cleaning",
+                    "amount_usd": "142.40",
+                    "cleaning_kind": "beyond_wear",
+                    "has_receipt": true,
+                    "has_photos": true
+                  },
+                  {
+                    "category": "other_damage",
+                    "amount_usd": "77.25",
+                    "work_kind": "repair",
+                    "has_receipt": true,
+                    "has_photos": true
+                  },
+                  {
+                    "category": "blinds_window_coverings",
+                    "amount_usd": "73.08",
+                    "work_kind": "replace",
+                    "item_installed_on": "2024-07-15",
+                    "has_receipt": true,
+                    "has_photos": true
+                  },
+                  {
+                    "category": "fixture_or_hardware",
+                    "amount_usd": "31.16",
+                    "work_kind": "replace",
+                    "has_receipt": true,
+                    "has_photos": true
+                  },
+                  {
+                    "category": "cleaning",
+                    "amount_usd": "12.75",
+                    "cleaning_kind": "beyond_wear",
+                    "has_receipt": true,
+                    "has_photos": true
+                  },
+                  {
+                    "category": "key_or_lock",
+                    "amount_usd": "8.62",
+                    "has_receipt": true
+                  }
+                ],
+                "documentation": {
+                  "itemized_statement": true,
+                  "receipts": true,
+                  "photos_move_out": true,
+                  "photos_after_repair": false
+                },
+                "as_of": "2026-10-09"
+              }
             }
           ],
           "x402": {
@@ -2294,7 +2417,33 @@
               "method": "POST",
               "url": "https://tektolo.com/v1/x402/deposit-settlement/settle"
             },
-            "artifacts": {},
+            "artifacts": {
+              "html": {
+                "method": "POST",
+                "url": "https://tektolo.com/v1/x402/deposit-settlement/settle/render/html",
+                "price_usd": "0.05"
+              },
+              "pdf": {
+                "method": "POST",
+                "url": "https://tektolo.com/v1/x402/deposit-settlement/settle/render/pdf",
+                "price_usd": "0.05"
+              },
+              "csv": {
+                "method": "POST",
+                "url": "https://tektolo.com/v1/x402/deposit-settlement/settle/render/csv",
+                "price_usd": "0.05"
+              },
+              "tenant_html": {
+                "method": "POST",
+                "url": "https://tektolo.com/v1/x402/deposit-settlement/settle/render/tenant_html",
+                "price_usd": "0.05"
+              },
+              "tenant_pdf": {
+                "method": "POST",
+                "url": "https://tektolo.com/v1/x402/deposit-settlement/settle/render/tenant_pdf",
+                "price_usd": "0.05"
+              }
+            },
             "headers": {
               "request": "PAYMENT-SIGNATURE",
               "challenge": "PAYMENT-REQUIRED",
@@ -2347,8 +2496,8 @@
         "Some rule text is summarised rather than quoted; each citation says which."
       ],
       "ruleset": {
-        "version": "sd-2026.11.12",
-        "hash": "sha256:372f534a971d2bf77540bfb4710fbf9c377c9b440cd352fa841f63337ad208b4",
+        "version": "sd-2026.11.14",
+        "hash": "sha256:bb8821a7e2fac7086a70d5abb9556a39f5eb22e4c89e6586424f5af097eee0b5",
         "sources": [
           {
             "id": "al.code-35-9a-201",

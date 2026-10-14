@@ -48,7 +48,7 @@
   ],
   "_meta": {
     "com.tektolo/capabilities": {
-      "contact": "hello@tektolo.com",
+      "contact": "support@tektolo.com",
       "contact_page": "https://tektolo.com/contact",
       "setup": "https://tektolo.com/connect-your-ai",
       "reference": "https://tektolo.com/reference/",
@@ -74,7 +74,7 @@
         {
           "id": "deposit-settlement",
           "contract_version": "0.1.0",
-          "ruleset_hash": "sha256:372f534a971d2bf77540bfb4710fbf9c377c9b440cd352fa841f63337ad208b4",
+          "ruleset_hash": "sha256:bb8821a7e2fac7086a70d5abb9556a39f5eb22e4c89e6586424f5af097eee0b5",
           "domain": "rental-property",
           "audiences": [
             "landlord_pm",
@@ -87,8 +87,8 @@
         },
         {
           "id": "property-turnover",
-          "contract_version": "0.9.0",
-          "ruleset_hash": "sha256:d6e8a59907b2b82f76a965429c211d75ba8592a5dd5e29126aef60fb7c29f1ac",
+          "contract_version": "0.11.0",
+          "ruleset_hash": "sha256:7f72b12003b18b9f7cd69ecc7081392cad6d004a21ebc1612215c558dc1ebe2e",
           "domain": "rental-property",
           "audiences": [
             "landlord_pm",

@@ -99,7 +99,7 @@
           "deposit-settlement"
         ],
         "summary": "Settle a security deposit after move-out",
-        "description": "Security deposit settlement for a US rental under the state's statute (and a covered city's ordinance): the date to return the deposit and itemized statement, each intended deduction assessed (allowed or not, prorated by useful life, documentation needed), interest owed, refund due, penalty exposure, a draft itemized statement and a citation for every rule. Covers all 50 states and DC, with city overlays for Chicago, San Francisco, Berkeley, Los Angeles, Seattle, Portland, Minneapolis and Saint Paul.\nWhen to use: A landlord or property manager is closing a move-out and asks when the deposit must be returned, what they may deduct (carpet, paint, cleaning, unpaid rent), how much interest is owed, what to put in the itemized statement, or what happens if they are late.\nNot for: Not legal advice and not a tenant demand letter. It does not price repairs (use property_turnover_quick_estimate for that), hold or account for deposits, or cover pet deposits, last-month's rent handling or non-US rentals. Where the statute sets no deadline (Kentucky, Tennessee) it says so; never present a guessed date as the rule.\nTip: Send as_of (today's date) for a repeatable answer; it defaults to today in UTC.\nTip: Give item_installed_on or item_age_years for carpet, paint, blinds and appliances; without them the tenancy length is assumed.\nTip: Mark normal wear with caused_by_tenant false; it is never deductible.\nTip: Relay deadline.return_by and its status, totals.refund_due_usd, penalty_exposure and the citations; say it is not legal advice.\nTip: Offer statement.text as the draft itemized statement; it has no names or addresses.\nTip: Relay warnings, assumptions and unknowns (for example the Texas forwarding address).\nTip: Send the start-event dates a state needs when known (forwarding_address_received_on, demand_received_on, new_tenant_moved_in_on, claim_notice_sent_on in Florida); without them the clock is not_started.\nTip: deadline.status none_in_statute means no statutory deadline; deadline.extended_to is the statute's weekend roll-forward, but advise acting by return_by.\nDeterministic: the same input returns the same result_hash. Capability deposit-settlement v0.1.0 (experimental).",
+        "description": "Security deposit settlement for a US rental under the state's statute (and a covered city's ordinance): the date to return the deposit and itemized statement, each intended deduction assessed (allowed or not, prorated by useful life, documentation needed), interest owed, refund due, penalty exposure, a draft itemized statement and a citation for every rule. Covers all 50 states and DC, with city overlays for Chicago, San Francisco, Berkeley, Los Angeles, Seattle, Portland, Minneapolis and Saint Paul.\nWhen to use: A landlord or property manager is closing a move-out and asks when the deposit must be returned, what they may deduct (carpet, paint, cleaning, unpaid rent), how much interest is owed, what to put in the itemized statement, or what happens if they are late.\nNot for: Not legal advice and not a tenant demand letter. It does not price repairs (use property_turnover_quick_estimate for that), hold or account for deposits, or cover pet deposits, last-month's rent handling or non-US rentals. Where the statute sets no deadline (Kentucky, Tennessee) it says so; never present a guessed date as the rule.\nTip: Send as_of (today's date) for a repeatable answer; it defaults to today in UTC.\nTip: Give item_installed_on or item_age_years for carpet, paint, blinds and appliances; without them the tenancy length is assumed.\nTip: Mark normal wear with caused_by_tenant false; it is never deductible.\nTip: Relay deadline.return_by and its status, totals.refund_due_usd, penalty_exposure and the citations; say it is not legal advice.\nTip: Offer statement.text as the draft itemized statement (no names or addresses); in the copy for the tenant keep only the statement.notes whose audience is tenant.\nTip: For a printable statement to sign and send (HTML or PDF) or the deductions ledger (CSV), POST the same arguments as JSON to links.downloads; do not build the file yourself.\nTip: For a tenant (arguments with returned), links.downloads tenant_pdf or tenant_html is a neutral summary of the facts and the rule to send to the landlord; give the user that, not the landlord's statement.\nTip: Relay warnings, assumptions and unknowns (for example the Texas forwarding address).\nTip: Send the start-event dates a state needs when known (forwarding_address_received_on, demand_received_on, new_tenant_moved_in_on, claim_notice_sent_on in Florida); without them the clock is not_started.\nTip: deadline.status none_in_statute means no statutory deadline; deadline.extended_to is the statute's weekend roll-forward, but advise acting by return_by.\nDeterministic: the same input returns the same result_hash. Capability deposit-settlement v0.1.0 (experimental).",
         "operationId": "deposit_settlement_settle",
         "requestBody": {
           "content": {
@@ -118,6 +118,216 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/DepositSettlementSettleResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/deposit-settlement/settle/render/html": {
+      "post": {
+        "tags": [
+          "deposit-settlement"
+        ],
+        "summary": "Settle a security deposit after move-out (rendered as html)",
+        "description": "Same body as the operation. Runs it, then renders the result as text/html; charset=utf-8. The artifact itself is not stored. Rate limited more tightly than the JSON endpoint.",
+        "operationId": "deposit_settlement_settle_render_html",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SettleRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "text/html; charset=utf-8": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/deposit-settlement/settle/render/pdf": {
+      "post": {
+        "tags": [
+          "deposit-settlement"
+        ],
+        "summary": "Settle a security deposit after move-out (rendered as pdf)",
+        "description": "Same body as the operation. Runs it, then renders the result as application/pdf. The artifact itself is not stored. Rate limited more tightly than the JSON endpoint.",
+        "operationId": "deposit_settlement_settle_render_pdf",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SettleRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/pdf": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/deposit-settlement/settle/render/csv": {
+      "post": {
+        "tags": [
+          "deposit-settlement"
+        ],
+        "summary": "Settle a security deposit after move-out (rendered as csv)",
+        "description": "Same body as the operation. Runs it, then renders the result as text/csv; charset=utf-8. The artifact itself is not stored. Rate limited more tightly than the JSON endpoint.",
+        "operationId": "deposit_settlement_settle_render_csv",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SettleRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "text/csv; charset=utf-8": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/deposit-settlement/settle/render/tenant_html": {
+      "post": {
+        "tags": [
+          "deposit-settlement"
+        ],
+        "summary": "Settle a security deposit after move-out (rendered as tenant_html)",
+        "description": "Same body as the operation. Runs it, then renders the result as text/html; charset=utf-8. The artifact itself is not stored. Rate limited more tightly than the JSON endpoint.",
+        "operationId": "deposit_settlement_settle_render_tenant_html",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SettleRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "text/html; charset=utf-8": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/deposit-settlement/settle/render/tenant_pdf": {
+      "post": {
+        "tags": [
+          "deposit-settlement"
+        ],
+        "summary": "Settle a security deposit after move-out (rendered as tenant_pdf)",
+        "description": "Same body as the operation. Runs it, then renders the result as application/pdf. The artifact itself is not stored. Rate limited more tightly than the JSON endpoint.",
+        "operationId": "deposit_settlement_settle_render_tenant_pdf",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SettleRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/pdf": {
+                "schema": {
+                  "type": "string"
                 }
               }
             }
@@ -183,7 +393,7 @@
           "property-turnover"
         ],
         "summary": "Quick turnover estimate (start here)",
-        "description": "The easiest way to estimate a US rental turnover: a ZIP, bedrooms, bathrooms and a list of plain-English issues in, a priced make-ready estimate out (same engine and result as property_turnover_scope, short summary by default).\nWhen to use: Start here when the user describes a move-out or turnover in words (\"carpet stained in both bedrooms, oven filthy\") and wants a cost estimate or what to tell vendors. Use property_turnover_scope instead for rate cards, owner decisions, measured quantities or per-finding control.\nNot for: Diagnosing hazards (they come back as refer-outs to a licensed professional); legal advice on deposits; remodel bids; properties outside the US.\nTip: If the ZIP is missing or not exactly 5 digits, ask the user; never guess or pad it.\nTip: Relay refer_outs first, then the totals; say the numbers are estimates, not quotes.\nDeterministic: the same input returns the same result_hash. Capability property-turnover v0.9.0 (experimental).",
+        "description": "The easiest way to estimate a US rental turnover: a ZIP, bedrooms, bathrooms and a list of plain-English issues in, a priced make-ready estimate out (same engine and result as property_turnover_scope, short summary by default).\nWhen to use: Start here when the user describes a move-out or turnover in words (\"carpet stained in both bedrooms, oven filthy\") and wants a cost estimate or what to tell vendors. Use property_turnover_scope instead for rate cards, owner decisions, measured quantities or per-finding control.\nNot for: Diagnosing hazards (they come back as refer-outs to a licensed professional); legal advice on deposits; remodel bids; properties outside the US.\nTip: If the ZIP is missing or not exactly 5 digits, ask the user; never guess or pad it.\nTip: Relay refer_outs first, then the totals; say the numbers are estimates, not quotes.\nDeterministic: the same input returns the same result_hash. Capability property-turnover v0.11.0 (experimental).",
         "operationId": "property_turnover_quick_estimate",
         "requestBody": {
           "content": {
@@ -225,7 +435,7 @@
           "property-turnover"
         ],
         "summary": "Scope a property turnover",
-        "description": "Turn move-out / turnover inspection findings for a US rental unit into a priced make-ready scope: standardized tasks by trade, regional low/expected/high costs, must/should/could priorities, vendor scopes, refer-outs to licensed professionals, and every assumption stated.\nWhen to use: Turnover findings for a US rental unit when you need control: rooms, measured quantities, the manager's own prices (rate_card) or owner approve/decline decisions. For a plain-English estimate, property_turnover_quick_estimate is easier.\nNot for: Diagnosing hazards (they come back as refer-outs to a licensed professional); legal advice on deposits; remodel bids; properties outside the US.\nTip: If the ZIP is missing or not exactly 5 digits, ask the user; never guess or pad it.\nTip: Describe each finding in plain words (description). Only send a code returned by property_turnover_issue_codes; unmatched findings come back as manual-quote lines with suggested codes.\nTip: Give measured quantities when you have them (e.g. 120 sq_ft); otherwise typical sizes are assumed and listed in assumptions.\nTip: Send property.floor_coverings when you know whether there is carpet, and unit_type single_family for houses; both change the baseline scope.\nTip: Relay the summary, refer_outs, assumptions and unknowns to the user; costs are estimate ranges, not quotes.\nTip: Use detail=summary unless the user asks for every line item (summary already lists every line tied to a finding).\nTip: Rate card examples - {\"trade\": \"handyman\", \"unit_price\": 65, \"uom\": \"hour\"} or {\"task_id\": \"carpet.clean\", \"unit_price\": 0.2, \"uom\": \"sq_ft\"}; check rate_card_applied and rate_card_ignored before saying a rate was used.\nTip: For the Excel workbook or owner estimate, give the user links.web_tool_prefilled (opens the free web tool with these findings) or POST the same arguments to links.downloads; do not build a spreadsheet yourself.\nDeterministic: the same input returns the same result_hash. Capability property-turnover v0.9.0 (experimental).",
+        "description": "Turn move-out / turnover inspection findings for a US rental unit into a priced make-ready scope: standardized tasks by trade, regional low/expected/high costs, must/should/could priorities, vendor scopes, refer-outs to licensed professionals, and every assumption stated.\nWhen to use: Turnover findings for a US rental unit when you need control: rooms, measured quantities, the manager's own prices (rate_card) or owner approve/decline decisions. For a plain-English estimate, property_turnover_quick_estimate is easier.\nNot for: Diagnosing hazards (they come back as refer-outs to a licensed professional); legal advice on deposits; remodel bids; properties outside the US.\nTip: If the ZIP is missing or not exactly 5 digits, ask the user; never guess or pad it.\nTip: Describe each finding in plain words (description). Only send a code returned by property_turnover_issue_codes; unmatched findings come back as manual-quote lines with suggested codes.\nTip: Give measured quantities when you have them (e.g. 120 sq_ft); otherwise typical sizes are assumed and listed in assumptions.\nTip: Send property.floor_coverings when you know whether there is carpet, and unit_type single_family for houses; both change the baseline scope.\nTip: Relay the summary, refer_outs, assumptions and unknowns to the user; costs are estimate ranges, not quotes.\nTip: Use detail=summary unless the user asks for every line item (summary already lists every line tied to a finding).\nTip: Rate card examples - {\"trade\": \"handyman\", \"unit_price\": 65, \"uom\": \"hour\"} or {\"task_id\": \"carpet.clean\", \"unit_price\": 0.2, \"uom\": \"sq_ft\"}; check rate_card_applied and rate_card_ignored before saying a rate was used.\nTip: For the Excel workbook or owner estimate, give the user links.web_tool_prefilled (opens the free web tool with these findings) or POST the same arguments to links.downloads; do not build a spreadsheet yourself.\nDeterministic: the same input returns the same result_hash. Capability property-turnover v0.11.0 (experimental).",
         "operationId": "property_turnover_scope",
         "requestBody": {
           "content": {
@@ -435,7 +645,7 @@
           "property-turnover"
         ],
         "summary": "Look up turnover issue codes",
-        "description": "Search the standard taxonomy of rental-unit turnover issues (component.issue codes) by keyword or area.\nWhen to use: Only while preparing findings for a turnover cost estimate, to find the standard issue code for something observed (e.g. \"pet stain on carpet\"). Never needed to answer a question; call with no arguments to list the taxonomy areas and the first codes.\nNot for: Legal or security-deposit questions; anything outside rental turnover and make-ready work. Not needed before quick_estimate or scope: a plain description works there.\nTip: Call with no arguments to list the taxonomy areas (in `areas`) and the first codes.\nTip: Codes are optional for scoping; a plain description also works.\nDeterministic: the same input returns the same result_hash. Capability property-turnover v0.9.0 (experimental).",
+        "description": "Search the standard taxonomy of rental-unit turnover issues (component.issue codes) by keyword or area.\nWhen to use: Only while preparing findings for a turnover cost estimate, to find the standard issue code for something observed (e.g. \"pet stain on carpet\"). Never needed to answer a question; call with no arguments to list the taxonomy areas and the first codes.\nNot for: Legal or security-deposit questions; anything outside rental turnover and make-ready work. Not needed before quick_estimate or scope: a plain description works there.\nTip: Call with no arguments to list the taxonomy areas (in `areas`) and the first codes.\nTip: Codes are optional for scoping; a plain description also works.\nDeterministic: the same input returns the same result_hash. Capability property-turnover v0.11.0 (experimental).",
         "operationId": "property_turnover_issue_codes",
         "requestBody": {
           "content": {
@@ -496,6 +706,226 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/DepositSettlementSettlePaidResponse"
+                }
+              }
+            }
+          },
+          "402": {
+            "description": "Payment required (x402 v2). The PAYMENT-REQUIRED header carries the base64 payment requirements; retry with a PAYMENT-SIGNATURE header. Also returned for an invalid payment or a failed settlement (nothing charged)."
+          },
+          "422": {
+            "description": "Invalid input. Checked before payment; never charged."
+          },
+          "429": {
+            "description": "Rate limited (per payer wallet or per client). Never charged."
+          },
+          "503": {
+            "description": "Payment facilitator unreachable. Never charged."
+          }
+        }
+      }
+    },
+    "/v1/x402/deposit-settlement/settle/render/html": {
+      "post": {
+        "tags": [
+          "x402"
+        ],
+        "summary": "Settle a security deposit after move-out (rendered as html, paid)",
+        "description": "Paid lane (x402 v2, exact scheme, USDC on Base Sepolia testnet, $0.05 per call). Same body as POST /v1/deposit-settlement/settle/render/html, which stays free within its rate limits. Unpaid requests get HTTP 402 with PAYMENT-REQUIRED; only successful results are charged. Not available over MCP. The PAYMENT-RESPONSE and x-payment-* headers carry the transaction.",
+        "operationId": "x402_deposit_settlement_settle_render_html",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SettleRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "text/html; charset=utf-8": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "402": {
+            "description": "Payment required (x402 v2). The PAYMENT-REQUIRED header carries the base64 payment requirements; retry with a PAYMENT-SIGNATURE header. Also returned for an invalid payment or a failed settlement (nothing charged)."
+          },
+          "422": {
+            "description": "Invalid input. Checked before payment; never charged."
+          },
+          "429": {
+            "description": "Rate limited (per payer wallet or per client). Never charged."
+          },
+          "503": {
+            "description": "Payment facilitator unreachable. Never charged."
+          }
+        }
+      }
+    },
+    "/v1/x402/deposit-settlement/settle/render/pdf": {
+      "post": {
+        "tags": [
+          "x402"
+        ],
+        "summary": "Settle a security deposit after move-out (rendered as pdf, paid)",
+        "description": "Paid lane (x402 v2, exact scheme, USDC on Base Sepolia testnet, $0.05 per call). Same body as POST /v1/deposit-settlement/settle/render/pdf, which stays free within its rate limits. Unpaid requests get HTTP 402 with PAYMENT-REQUIRED; only successful results are charged. Not available over MCP. The PAYMENT-RESPONSE and x-payment-* headers carry the transaction.",
+        "operationId": "x402_deposit_settlement_settle_render_pdf",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SettleRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/pdf": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "402": {
+            "description": "Payment required (x402 v2). The PAYMENT-REQUIRED header carries the base64 payment requirements; retry with a PAYMENT-SIGNATURE header. Also returned for an invalid payment or a failed settlement (nothing charged)."
+          },
+          "422": {
+            "description": "Invalid input. Checked before payment; never charged."
+          },
+          "429": {
+            "description": "Rate limited (per payer wallet or per client). Never charged."
+          },
+          "503": {
+            "description": "Payment facilitator unreachable. Never charged."
+          }
+        }
+      }
+    },
+    "/v1/x402/deposit-settlement/settle/render/csv": {
+      "post": {
+        "tags": [
+          "x402"
+        ],
+        "summary": "Settle a security deposit after move-out (rendered as csv, paid)",
+        "description": "Paid lane (x402 v2, exact scheme, USDC on Base Sepolia testnet, $0.05 per call). Same body as POST /v1/deposit-settlement/settle/render/csv, which stays free within its rate limits. Unpaid requests get HTTP 402 with PAYMENT-REQUIRED; only successful results are charged. Not available over MCP. The PAYMENT-RESPONSE and x-payment-* headers carry the transaction.",
+        "operationId": "x402_deposit_settlement_settle_render_csv",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SettleRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "text/csv; charset=utf-8": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "402": {
+            "description": "Payment required (x402 v2). The PAYMENT-REQUIRED header carries the base64 payment requirements; retry with a PAYMENT-SIGNATURE header. Also returned for an invalid payment or a failed settlement (nothing charged)."
+          },
+          "422": {
+            "description": "Invalid input. Checked before payment; never charged."
+          },
+          "429": {
+            "description": "Rate limited (per payer wallet or per client). Never charged."
+          },
+          "503": {
+            "description": "Payment facilitator unreachable. Never charged."
+          }
+        }
+      }
+    },
+    "/v1/x402/deposit-settlement/settle/render/tenant_html": {
+      "post": {
+        "tags": [
+          "x402"
+        ],
+        "summary": "Settle a security deposit after move-out (rendered as tenant_html, paid)",
+        "description": "Paid lane (x402 v2, exact scheme, USDC on Base Sepolia testnet, $0.05 per call). Same body as POST /v1/deposit-settlement/settle/render/tenant_html, which stays free within its rate limits. Unpaid requests get HTTP 402 with PAYMENT-REQUIRED; only successful results are charged. Not available over MCP. The PAYMENT-RESPONSE and x-payment-* headers carry the transaction.",
+        "operationId": "x402_deposit_settlement_settle_render_tenant_html",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SettleRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "text/html; charset=utf-8": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "402": {
+            "description": "Payment required (x402 v2). The PAYMENT-REQUIRED header carries the base64 payment requirements; retry with a PAYMENT-SIGNATURE header. Also returned for an invalid payment or a failed settlement (nothing charged)."
+          },
+          "422": {
+            "description": "Invalid input. Checked before payment; never charged."
+          },
+          "429": {
+            "description": "Rate limited (per payer wallet or per client). Never charged."
+          },
+          "503": {
+            "description": "Payment facilitator unreachable. Never charged."
+          }
+        }
+      }
+    },
+    "/v1/x402/deposit-settlement/settle/render/tenant_pdf": {
+      "post": {
+        "tags": [
+          "x402"
+        ],
+        "summary": "Settle a security deposit after move-out (rendered as tenant_pdf, paid)",
+        "description": "Paid lane (x402 v2, exact scheme, USDC on Base Sepolia testnet, $0.05 per call). Same body as POST /v1/deposit-settlement/settle/render/tenant_pdf, which stays free within its rate limits. Unpaid requests get HTTP 402 with PAYMENT-REQUIRED; only successful results are charged. Not available over MCP. The PAYMENT-RESPONSE and x-payment-* headers carry the transaction.",
+        "operationId": "x402_deposit_settlement_settle_render_tenant_pdf",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SettleRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/pdf": {
+                "schema": {
+                  "type": "string"
                 }
               }
             }
@@ -779,30 +1209,6 @@
         }
       }
     },
-    "/v1/x402/metrics": {
-      "get": {
-        "tags": [
-          "x402"
-        ],
-        "summary": "x402 paid-lane metrics (aggregates only)",
-        "description": "Aggregate settlement counts for the configured network: by payer class and route,\nexternal payers and revenue, and ``qualified_repeat_demand`` (at least 5 external\nwallets with at least 5 settled calls each). No wallet addresses; refreshed every few\nminutes.",
-        "operationId": "x402_metrics_v1_x402_metrics_get",
-        "responses": {
-          "200": {
-            "description": "Successful Response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "additionalProperties": true,
-                  "type": "object",
-                  "title": "Response X402 Metrics V1 X402 Metrics Get"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
     "/v1/feedback": {
       "post": {
         "tags": [
@@ -837,6 +1243,9 @@
           },
           "429": {
             "description": "Rate limited"
+          },
+          "503": {
+            "description": "Not saved (storage unavailable); nothing was kept, try again"
           }
         }
       }
@@ -3295,9 +3704,12 @@
         "properties": {
           "method": {
             "type": "string",
-            "const": "ai",
+            "enum": [
+              "ai",
+              "ai_document"
+            ],
             "title": "Method",
-            "description": "'ai': read by a language model from free text."
+            "description": "'ai': read by a language model from free text. 'ai_document': read by a language model from a page of an uploaded document."
           },
           "model": {
             "type": "string",
@@ -3320,6 +3732,31 @@
             ],
             "title": "Confidence",
             "description": "The reader's confidence, 0 to 1."
+          },
+          "page": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "maximum": 100.0,
+                "minimum": 1.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Page",
+            "description": "'ai_document' only: the page of the upload it was read from (1-based)."
+          },
+          "review": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ExtractionReview"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "'ai_document' only: the person's review before estimating (confirmed, accepted or edited). Leave out when the finding was not checked; it then needs review."
           }
         },
         "additionalProperties": false,
@@ -3330,7 +3767,63 @@
           "confidence"
         ],
         "title": "Extraction",
-        "description": "How a finding was produced, when software read it from free text (contract 0.4.0).\n\nSet by the web tool when its AI reader (Azure OpenAI) turned a person's own words into this\nfinding. The engine reports such a finding as ``resolution: \"ai\"`` with ``needs_review``\nand flags its lines; it never changes how the finding is priced."
+        "description": "How a finding was produced, when software read it from free text (contract 0.4.0) or\nfrom an uploaded document (``ai_document`` and ``page``, additive).\n\nSet by the web tool when its AI reader (Azure OpenAI) turned a person's own words, or a page\nof their inspection report, into this finding. The engine reports such a finding as\n``resolution: \"ai\"`` with ``needs_review`` and flags its lines; it never changes how the\nfinding is priced."
+      },
+      "ExtractionReview": {
+        "properties": {
+          "outcome": {
+            "type": "string",
+            "enum": [
+              "confirmed",
+              "accepted",
+              "edited"
+            ],
+            "title": "Outcome"
+          },
+          "flags": {
+            "items": {
+              "type": "string",
+              "enum": [
+                "low_confidence",
+                "medium_confidence",
+                "quote_not_on_page",
+                "count_unread",
+                "column_unclear",
+                "ok_unclear",
+                "unmatched",
+                "loose_match",
+                "ai_match"
+              ]
+            },
+            "type": "array",
+            "maxItems": 9,
+            "title": "Flags",
+            "description": "Why the page flagged it, if it did."
+          },
+          "changed": {
+            "items": {
+              "type": "string",
+              "enum": [
+                "description",
+                "area",
+                "label",
+                "extent",
+                "quantity"
+              ]
+            },
+            "type": "array",
+            "maxItems": 5,
+            "title": "Changed",
+            "description": "'edited': the fields the person changed."
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "outcome"
+        ],
+        "title": "ExtractionReview",
+        "description": "What the person did with a finding the web tool read from an uploaded document, before\nestimating (contract 0.11.0, additive). ``confirmed``: they pressed \"Looks right\";\n``accepted``: left as read, on a row the page did not flag; ``edited``: they changed it\n(``changed`` names what). A reviewed finding keeps its ``extraction`` (where it came from)\nbut is no longer reported as needing review: the person has checked it."
       },
       "Fallback": {
         "properties": {
@@ -5559,6 +6052,41 @@
         "title": "NotIfAbandoned",
         "description": "The return rule does not apply when the tenant abandons (Louisiana 9:3251(C)): decided by\n``tenant_abandoned`` (else no proper notice or a move-out before the end of the tenancy)."
       },
+      "NoteFormat": {
+        "properties": {
+          "bold": {
+            "type": "boolean",
+            "title": "Bold",
+            "default": false
+          },
+          "min_pt": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Min Pt",
+            "description": "Smallest type size, in points."
+          },
+          "larger_than_body_pt": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Larger Than Body Pt",
+            "description": "At least this many points larger than the body text."
+          }
+        },
+        "type": "object",
+        "title": "NoteFormat"
+      },
       "Outcome": {
         "properties": {
           "status": {
@@ -7039,7 +7567,7 @@
           "unconfirmed": {
             "type": "boolean",
             "title": "Unconfirmed",
-            "description": "Every triggering finding was hedged ('maybe', '?'): check first; no phase is held until the condition is confirmed (see warnings).",
+            "description": "No finding confirms it: every finding that raised it was hedged ('maybe', '?'), named the hazard only in its words (description, notes or location label) rather than through its issue code, or stated an older year built than the request. Check first; no phase is held until the condition is confirmed (see warnings).",
             "default": false
           }
         },
@@ -9126,7 +9654,15 @@
           "text": {
             "type": "string",
             "title": "Text",
-            "description": "Draft itemized statement, plain text, no names or addresses."
+            "description": "Draft itemized statement, plain text, no names or addresses, with every note for both audiences (the manager's full draft; see notes for which is which)."
+          },
+          "notes": {
+            "items": {
+              "$ref": "#/components/schemas/StatementNote"
+            },
+            "type": "array",
+            "title": "Notes",
+            "description": "The statement's notes with their audience: put only the tenant notes on the statement you send; the manager notes are for you. Where a manager note would leave the tenant's copy silent, a neutral tenant note follows it (not repeated in text)."
           }
         },
         "type": "object",
@@ -9171,6 +9707,71 @@
           "label"
         ],
         "title": "StatementLine"
+      },
+      "StatementNote": {
+        "properties": {
+          "text": {
+            "type": "string",
+            "title": "Text"
+          },
+          "audience": {
+            "type": "string",
+            "enum": [
+              "tenant",
+              "manager"
+            ],
+            "title": "Audience",
+            "description": "tenant: belongs on the statement the tenant receives; manager: for the landlord or manager only (what to attach, what is not counted yet, what to do)."
+          },
+          "kind": {
+            "type": "string",
+            "enum": [
+              "note",
+              "required_notice",
+              "attestation"
+            ],
+            "title": "Kind",
+            "description": "required_notice: wording the statute requires on the statement, printed as given (with format); attestation: the statute's oath, printed above the signature line. Omitted for an ordinary note.",
+            "default": "note"
+          },
+          "citation": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Citation",
+            "description": "The section that requires the wording (required wording only)."
+          },
+          "format": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/NoteFormat"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "How the statute says the wording must print, when it says."
+          },
+          "blanks": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Blanks",
+            "description": "Blanks in the text (a line of underscores) the manager fills in by hand, in order: the capability never takes names or addresses."
+          }
+        },
+        "type": "object",
+        "required": [
+          "text",
+          "audience"
+        ],
+        "title": "StatementNote"
       },
       "Suggestion": {
         "properties": {
