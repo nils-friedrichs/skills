@@ -34,7 +34,8 @@ every assumption it made. The same input always gives the same result (`result_h
   estimate, give the user `links.web_tool_prefilled` from the result.
 - **REST**: `POST https://tektolo.com/v1/property-turnover/scope` with the JSON below.
   Downloads: `POST .../scope/render/xlsx` (workbook), `.../render/html` (owner estimate),
-  `.../render/csv` (work orders), `.../render/vendor_csv` (zip of per-trade scopes).
+  `.../render/csv` (work orders), `.../render/vendor_csv` (zip of per-trade scopes),
+  `.../render/bids_html` (work lists for bids: one section per trade, no prices).
 - Catalog and schemas: `https://tektolo.com/catalog.json`, `https://tektolo.com/capabilities/property-turnover`.
 - **Web**: the free tool is `https://tektolo.com/tools/rental-property/property-turnover`; typical
   costs by area are at `https://tektolo.com/turnover-costs/`.
@@ -76,8 +77,31 @@ every assumption it made. The same input always gives the same result (`result_h
    needs every line. A finding's `location` may be a plain string ("Bedroom 2"). Hedged notes
    ("mold?") come back as "check first" refer-outs that hold no work until confirmed.
 
-From photos: describe each visible condition as a finding (location, what it is, rough
-extent). Do not guess hidden damage. Mention what you could not see in your reply.
+## From photos
+
+Tektolo does not look at photos. You do, then you send findings and the engine prices them.
+
+- Describe only what is visible, one finding per condition. Give its location (the room or
+  area) and what it is. Use an issue code when one clearly fits (look it up with
+  `property_turnover_issue_codes`); otherwise write a short plain `description`.
+- Give `extent` (`spot`, `partial` or `full`) only when the photo shows how far it goes.
+  Otherwise leave it out and say so in your reply.
+- If you are not sure what a photo shows, or how far damage goes, hedge the description
+  ("possible water stain on bedroom ceiling", "mold?"). The engine marks hedged findings
+  `uncertain`: their lines are priced but kept out of the totals (`totals.to_confirm`) until
+  someone confirms them, and hedged safety items become check-first refer-outs.
+  You can also ask the user for a better photo or a closer look.
+- Ask the user about what photos cannot show, and do not guess it: whether appliances and
+  fixtures work, odors and smoke, pests, and size or extent (square feet, counts). Send a
+  `quantity` only when the user gives you a measurement or a count.
+- Never write that the tenant caused something because of a photo. A photo shows a condition,
+  not who caused it. Leave tenant fault out of the descriptions: the `responsibility_hint` on
+  each line comes from the engine and is only a hint.
+- A photo of a written checklist or inspection report is different. Transcribe what it says,
+  as it says it, one finding per entry, and do not add your own reading of the rooms.
+- Never send faces, names, addresses or other personal details. Describe the room, not the
+  people or the street.
+- Mention what you could not see in your reply, and list what you asked the user to confirm.
 
 ## Example
 

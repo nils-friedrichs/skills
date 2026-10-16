@@ -6,15 +6,17 @@ Tools are grouped by domain (the world a tool operates in); each lists its audie
 
 ## Rental property (domain: rental-property)
 
-Free tools for the move-out: what the turn costs, what to return from the deposit, and whether a deposit came back on time. For landlords, property managers, tenants and the AI agents working for them.
+Free tools for the move-out: what the turn costs, what to return from the deposit, and whether a deposit came back on time. For small landlords, property managers, tenants and the AI agents working for them.
 
 - [Rental property hub](https://tektolo.com/tools/rental-property/): the tools in order and coverage
 - Workflow move-out: 1. Property turnover estimate -> 2. Deposit settlement
 - [Property turnover estimate](https://tektolo.com/capabilities/property-turnover): Turn move-out inspection findings into a priced, vendor-ready make-ready scope. (experimental; domain: rental-property; audiences: landlord_pm, ai_agent; workflow: move-out step 1)
+  - Questions it answers: make ready cost; how much to get an apartment ready after a tenant moves out; move-out repair estimate; unit turn scope of work; cost to paint and clean a rental; carpet replacement cost; punch list from inspection notes; rental repair cost by ZIP code; turnover tool for a few apartments I own; apartment turnover cost estimate
   - [Web tool: Property turnover estimate](https://tektolo.com/tools/rental-property/property-turnover): web form, free to try, no sign-in
   - [Property turnover estimate: how it works](https://tektolo.com/capabilities/property-turnover/methodology): pipeline, ruleset version and hash, counts, confidence mix, sources
   - [Agent skill](https://tektolo.com/skills/property-turnover/SKILL.md): instructions for assistants using Property turnover estimate
 - [Deposit settlement](https://tektolo.com/capabilities/deposit-settlement): Settle a US rental security deposit under the state's rule (and a covered city's): the return deadline, each deduction assessed (allowed category, depreciation, documentation), interest owed, the refund, penalty exposure and a draft itemized statement, every number cited. (experimental; domain: rental-property; audiences: landlord_pm, ai_agent; workflow: move-out step 2)
+  - Questions it answers: return a tenant's security deposit; itemized deduction statement; deposit return deadline; how much can I deduct from a deposit; charge a tenant for damage; security deposit law by state; move-out deposit letter; security deposit deduction calculator; how much can I charge a tenant for carpet or paint
   - [Web tool: Deposit settlement](https://tektolo.com/tools/rental-property/deposit-settlement): web form, free to try, no sign-in
   - [Web tool: Security deposit check](https://tektolo.com/tools/rental-property/deposit-check): For tenants: the state, the move-out day, the deposit, what came back and when, and the deductions listed; answers whether the refund or itemized statement is late (deadline date, days late), which deductions the rule allows, interest, the statute's penalty with its citation, and a neutral summary to send (for tenants; same engine; web form, free, no sign-in)
   - [Deposit settlement: how it works](https://tektolo.com/capabilities/deposit-settlement/methodology): pipeline, ruleset version and hash, counts, confidence mix, sources
@@ -27,6 +29,12 @@ Reference pages, not tools: pages to read and cite, computed by the same engines
 - [Turnover costs by city](https://tektolo.com/turnover-costs/): apartment turnover cost for 530 metro and nonmetropolitan areas: typical ranges by unit size, local labor by trade and unit prices, computed from BLS wages by the same engine as the free tool (domain: rental-property)
 - [Deposit rules by state](https://tektolo.com/deposit-settlement/by-state): security deposit return deadlines, allowed deductions, interest and penalties in all 50 US states and DC plus 9 city overlays: the rule per state and city in plain words, the quoted text and a worked example (domain: rental-property)
 
+## Open data
+
+Datasets under CC BY 4.0 (credit Tektolo, tektolo.com, with the version), built from the same rulesets as the tools. Index: https://tektolo.com/data/
+
+- [Security deposit rules by US state and city](https://tektolo.com/data/deposit-rules/): version sd-2026.11.20, 60 jurisdictions; [CSV](https://tektolo.com/data/deposit-rules/latest/deposit-rules.csv), [JSON](https://tektolo.com/data/deposit-rules/latest/deposit-rules.json), [datapackage.json](https://tektolo.com/data/deposit-rules/latest/datapackage.json)
+
 ## Pages
 
 - [Tools](https://tektolo.com/tools/): every tool, grouped by domain, filterable by audience
@@ -34,6 +42,7 @@ Reference pages, not tools: pages to read and cite, computed by the same engines
 - [Developers](https://tektolo.com/capabilities/): the technical reference: every capability's operations, REST paths, MCP tools, schemas, limits and price per call, by domain
 - [Connect your AI](https://tektolo.com/connect-your-ai): add the MCP server to Claude, ChatGPT, Claude Code or any MCP client, or call the REST API
 - [Pricing](https://tektolo.com/pricing): free to try; the daily free tier for agents and software, then the price per call
+- [Rules changelog](https://tektolo.com/changelog): every ruleset version and what it changed, by state; Atom feeds at https://tektolo.com/changelog/feed.xml and one per state (https://tektolo.com/changelog/tx.xml)
 
 ## Pricing
 
@@ -65,6 +74,7 @@ Pay-per-call routes for agents that need more than the daily free tier (20 calls
 - POST https://tektolo.com/v1/x402/property-turnover/scope/render/html: $0.05 per call
 - POST https://tektolo.com/v1/x402/property-turnover/scope/render/csv: $0.05 per call
 - POST https://tektolo.com/v1/x402/property-turnover/scope/render/vendor_csv: $0.05 per call
+- POST https://tektolo.com/v1/x402/property-turnover/scope/render/bids_html: $0.05 per call
 - [Pay per call guide](https://tektolo.com/connect-your-ai#x402); prices and endpoints are also in [catalog.json](https://tektolo.com/catalog.json) under each operation's `x402`
 
 ## Feedback

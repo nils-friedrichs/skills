@@ -101,15 +101,53 @@
         "summary": "Settle a security deposit after move-out",
         "description": "Security deposit settlement for a US rental under the state's statute (and a covered city's ordinance): the date to return the deposit and itemized statement, each intended deduction assessed (allowed or not, prorated by useful life, documentation needed), interest owed, refund due, penalty exposure, a draft itemized statement and a citation for every rule. Covers all 50 states and DC, with city overlays for Chicago, San Francisco, Berkeley, Los Angeles, Seattle, Portland, Minneapolis and Saint Paul.\nWhen to use: A landlord or property manager is closing a move-out and asks when the deposit must be returned, what they may deduct (carpet, paint, cleaning, unpaid rent), how much interest is owed, what to put in the itemized statement, or what happens if they are late.\nNot for: Not legal advice and not a tenant demand letter. It does not price repairs (use property_turnover_quick_estimate for that), hold or account for deposits, or cover pet deposits, last-month's rent handling or non-US rentals. Where the statute sets no deadline (Kentucky, Tennessee) it says so; never present a guessed date as the rule.\nTip: Send as_of (today's date) for a repeatable answer; it defaults to today in UTC.\nTip: Give item_installed_on or item_age_years for carpet, paint, blinds and appliances; without them the tenancy length is assumed.\nTip: Mark normal wear with caused_by_tenant false; it is never deductible.\nTip: Relay deadline.return_by and its status, totals.refund_due_usd, penalty_exposure and the citations; say it is not legal advice.\nTip: Offer statement.text as the draft itemized statement (no names or addresses); in the copy for the tenant keep only the statement.notes whose audience is tenant.\nTip: For a printable statement to sign and send (HTML or PDF) or the deductions ledger (CSV), POST the same arguments as JSON to links.downloads; do not build the file yourself.\nTip: For a tenant (arguments with returned), links.downloads tenant_pdf or tenant_html is a neutral summary of the facts and the rule to send to the landlord; give the user that, not the landlord's statement.\nTip: Relay warnings, assumptions and unknowns (for example the Texas forwarding address).\nTip: Send the start-event dates a state needs when known (forwarding_address_received_on, demand_received_on, new_tenant_moved_in_on, claim_notice_sent_on in Florida); without them the clock is not_started.\nTip: deadline.status none_in_statute means no statutory deadline; deadline.extended_to is the statute's weekend roll-forward, but advise acting by return_by.\nDeterministic: the same input returns the same result_hash. Capability deposit-settlement v0.1.0 (experimental).",
         "operationId": "deposit_settlement_settle",
+        "parameters": [
+          {
+            "name": "Tektolo-Ruleset",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Optional. The ruleset version you built against, as results carry it in provenance.ruleset_version (e.g. 'sd-2026.11.14'), or its sha256: hash. If the rules have changed since, the call fails (nothing computed, nothing charged) and says what is in force now, so you upgrade on your own schedule. Leave it out to answer under the current rules.",
+              "title": "Tektolo-Ruleset"
+            },
+            "description": "Optional. The ruleset version you built against, as results carry it in provenance.ruleset_version (e.g. 'sd-2026.11.14'), or its sha256: hash. If the rules have changed since, the call fails (nothing computed, nothing charged) and says what is in force now, so you upgrade on your own schedule. Leave it out to answer under the current rules."
+          },
+          {
+            "name": "Tektolo-Ruleset-Mode",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Optional, with Tektolo-Ruleset. 'serve' asks us to answer under the ruleset version you named even when the rules have changed since, from that version's signed bundle. The answer says so (run.served_from_bundle and the Tektolo-Ruleset-Served header). We refuse (412, with a reason) a version older than 12 months, one a later correction or law change replaced for your state, or one we have no bundle for. Leave it out to be refused whenever the rules have changed.",
+              "title": "Tektolo-Ruleset-Mode"
+            },
+            "description": "Optional, with Tektolo-Ruleset. 'serve' asks us to answer under the ruleset version you named even when the rules have changed since, from that version's signed bundle. The answer says so (run.served_from_bundle and the Tektolo-Ruleset-Served header). We refuse (412, with a reason) a version older than 12 months, one a later correction or law change replaced for your state, or one we have no bundle for. Leave it out to be refused whenever the rules have changed."
+          }
+        ],
         "requestBody": {
+          "required": true,
           "content": {
             "application/json": {
               "schema": {
                 "$ref": "#/components/schemas/SettleRequest"
               }
             }
-          },
-          "required": true
+          }
         },
         "responses": {
           "200": {
@@ -121,6 +159,9 @@
                 }
               }
             }
+          },
+          "412": {
+            "description": "The ruleset named in the Tektolo-Ruleset header is not the one in force, and the call did not ask to be answered under it (Tektolo-Ruleset-Mode: serve) or that version can't be served (the body's reason says why). Nothing was computed or charged; the body names both versions."
           },
           "422": {
             "description": "Validation Error",
@@ -143,15 +184,53 @@
         "summary": "Settle a security deposit after move-out (rendered as html)",
         "description": "Same body as the operation. Runs it, then renders the result as text/html; charset=utf-8. The artifact itself is not stored. Rate limited more tightly than the JSON endpoint.",
         "operationId": "deposit_settlement_settle_render_html",
+        "parameters": [
+          {
+            "name": "Tektolo-Ruleset",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Optional. The ruleset version you built against, as results carry it in provenance.ruleset_version (e.g. 'sd-2026.11.14'), or its sha256: hash. If the rules have changed since, the call fails (nothing computed, nothing charged) and says what is in force now, so you upgrade on your own schedule. Leave it out to answer under the current rules.",
+              "title": "Tektolo-Ruleset"
+            },
+            "description": "Optional. The ruleset version you built against, as results carry it in provenance.ruleset_version (e.g. 'sd-2026.11.14'), or its sha256: hash. If the rules have changed since, the call fails (nothing computed, nothing charged) and says what is in force now, so you upgrade on your own schedule. Leave it out to answer under the current rules."
+          },
+          {
+            "name": "Tektolo-Ruleset-Mode",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Optional, with Tektolo-Ruleset. 'serve' asks us to answer under the ruleset version you named even when the rules have changed since, from that version's signed bundle. The answer says so (run.served_from_bundle and the Tektolo-Ruleset-Served header). We refuse (412, with a reason) a version older than 12 months, one a later correction or law change replaced for your state, or one we have no bundle for. Leave it out to be refused whenever the rules have changed.",
+              "title": "Tektolo-Ruleset-Mode"
+            },
+            "description": "Optional, with Tektolo-Ruleset. 'serve' asks us to answer under the ruleset version you named even when the rules have changed since, from that version's signed bundle. The answer says so (run.served_from_bundle and the Tektolo-Ruleset-Served header). We refuse (412, with a reason) a version older than 12 months, one a later correction or law change replaced for your state, or one we have no bundle for. Leave it out to be refused whenever the rules have changed."
+          }
+        ],
         "requestBody": {
+          "required": true,
           "content": {
             "application/json": {
               "schema": {
                 "$ref": "#/components/schemas/SettleRequest"
               }
             }
-          },
-          "required": true
+          }
         },
         "responses": {
           "200": {
@@ -163,6 +242,9 @@
                 }
               }
             }
+          },
+          "412": {
+            "description": "The ruleset named in the Tektolo-Ruleset header is not the one in force, and the call did not ask to be answered under it (Tektolo-Ruleset-Mode: serve) or that version can't be served (the body's reason says why). Nothing was computed or charged; the body names both versions."
           },
           "422": {
             "description": "Validation Error",
@@ -185,15 +267,53 @@
         "summary": "Settle a security deposit after move-out (rendered as pdf)",
         "description": "Same body as the operation. Runs it, then renders the result as application/pdf. The artifact itself is not stored. Rate limited more tightly than the JSON endpoint.",
         "operationId": "deposit_settlement_settle_render_pdf",
+        "parameters": [
+          {
+            "name": "Tektolo-Ruleset",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Optional. The ruleset version you built against, as results carry it in provenance.ruleset_version (e.g. 'sd-2026.11.14'), or its sha256: hash. If the rules have changed since, the call fails (nothing computed, nothing charged) and says what is in force now, so you upgrade on your own schedule. Leave it out to answer under the current rules.",
+              "title": "Tektolo-Ruleset"
+            },
+            "description": "Optional. The ruleset version you built against, as results carry it in provenance.ruleset_version (e.g. 'sd-2026.11.14'), or its sha256: hash. If the rules have changed since, the call fails (nothing computed, nothing charged) and says what is in force now, so you upgrade on your own schedule. Leave it out to answer under the current rules."
+          },
+          {
+            "name": "Tektolo-Ruleset-Mode",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Optional, with Tektolo-Ruleset. 'serve' asks us to answer under the ruleset version you named even when the rules have changed since, from that version's signed bundle. The answer says so (run.served_from_bundle and the Tektolo-Ruleset-Served header). We refuse (412, with a reason) a version older than 12 months, one a later correction or law change replaced for your state, or one we have no bundle for. Leave it out to be refused whenever the rules have changed.",
+              "title": "Tektolo-Ruleset-Mode"
+            },
+            "description": "Optional, with Tektolo-Ruleset. 'serve' asks us to answer under the ruleset version you named even when the rules have changed since, from that version's signed bundle. The answer says so (run.served_from_bundle and the Tektolo-Ruleset-Served header). We refuse (412, with a reason) a version older than 12 months, one a later correction or law change replaced for your state, or one we have no bundle for. Leave it out to be refused whenever the rules have changed."
+          }
+        ],
         "requestBody": {
+          "required": true,
           "content": {
             "application/json": {
               "schema": {
                 "$ref": "#/components/schemas/SettleRequest"
               }
             }
-          },
-          "required": true
+          }
         },
         "responses": {
           "200": {
@@ -205,6 +325,9 @@
                 }
               }
             }
+          },
+          "412": {
+            "description": "The ruleset named in the Tektolo-Ruleset header is not the one in force, and the call did not ask to be answered under it (Tektolo-Ruleset-Mode: serve) or that version can't be served (the body's reason says why). Nothing was computed or charged; the body names both versions."
           },
           "422": {
             "description": "Validation Error",
@@ -227,15 +350,53 @@
         "summary": "Settle a security deposit after move-out (rendered as csv)",
         "description": "Same body as the operation. Runs it, then renders the result as text/csv; charset=utf-8. The artifact itself is not stored. Rate limited more tightly than the JSON endpoint.",
         "operationId": "deposit_settlement_settle_render_csv",
+        "parameters": [
+          {
+            "name": "Tektolo-Ruleset",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Optional. The ruleset version you built against, as results carry it in provenance.ruleset_version (e.g. 'sd-2026.11.14'), or its sha256: hash. If the rules have changed since, the call fails (nothing computed, nothing charged) and says what is in force now, so you upgrade on your own schedule. Leave it out to answer under the current rules.",
+              "title": "Tektolo-Ruleset"
+            },
+            "description": "Optional. The ruleset version you built against, as results carry it in provenance.ruleset_version (e.g. 'sd-2026.11.14'), or its sha256: hash. If the rules have changed since, the call fails (nothing computed, nothing charged) and says what is in force now, so you upgrade on your own schedule. Leave it out to answer under the current rules."
+          },
+          {
+            "name": "Tektolo-Ruleset-Mode",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Optional, with Tektolo-Ruleset. 'serve' asks us to answer under the ruleset version you named even when the rules have changed since, from that version's signed bundle. The answer says so (run.served_from_bundle and the Tektolo-Ruleset-Served header). We refuse (412, with a reason) a version older than 12 months, one a later correction or law change replaced for your state, or one we have no bundle for. Leave it out to be refused whenever the rules have changed.",
+              "title": "Tektolo-Ruleset-Mode"
+            },
+            "description": "Optional, with Tektolo-Ruleset. 'serve' asks us to answer under the ruleset version you named even when the rules have changed since, from that version's signed bundle. The answer says so (run.served_from_bundle and the Tektolo-Ruleset-Served header). We refuse (412, with a reason) a version older than 12 months, one a later correction or law change replaced for your state, or one we have no bundle for. Leave it out to be refused whenever the rules have changed."
+          }
+        ],
         "requestBody": {
+          "required": true,
           "content": {
             "application/json": {
               "schema": {
                 "$ref": "#/components/schemas/SettleRequest"
               }
             }
-          },
-          "required": true
+          }
         },
         "responses": {
           "200": {
@@ -247,6 +408,9 @@
                 }
               }
             }
+          },
+          "412": {
+            "description": "The ruleset named in the Tektolo-Ruleset header is not the one in force, and the call did not ask to be answered under it (Tektolo-Ruleset-Mode: serve) or that version can't be served (the body's reason says why). Nothing was computed or charged; the body names both versions."
           },
           "422": {
             "description": "Validation Error",
@@ -269,15 +433,53 @@
         "summary": "Settle a security deposit after move-out (rendered as tenant_html)",
         "description": "Same body as the operation. Runs it, then renders the result as text/html; charset=utf-8. The artifact itself is not stored. Rate limited more tightly than the JSON endpoint.",
         "operationId": "deposit_settlement_settle_render_tenant_html",
+        "parameters": [
+          {
+            "name": "Tektolo-Ruleset",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Optional. The ruleset version you built against, as results carry it in provenance.ruleset_version (e.g. 'sd-2026.11.14'), or its sha256: hash. If the rules have changed since, the call fails (nothing computed, nothing charged) and says what is in force now, so you upgrade on your own schedule. Leave it out to answer under the current rules.",
+              "title": "Tektolo-Ruleset"
+            },
+            "description": "Optional. The ruleset version you built against, as results carry it in provenance.ruleset_version (e.g. 'sd-2026.11.14'), or its sha256: hash. If the rules have changed since, the call fails (nothing computed, nothing charged) and says what is in force now, so you upgrade on your own schedule. Leave it out to answer under the current rules."
+          },
+          {
+            "name": "Tektolo-Ruleset-Mode",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Optional, with Tektolo-Ruleset. 'serve' asks us to answer under the ruleset version you named even when the rules have changed since, from that version's signed bundle. The answer says so (run.served_from_bundle and the Tektolo-Ruleset-Served header). We refuse (412, with a reason) a version older than 12 months, one a later correction or law change replaced for your state, or one we have no bundle for. Leave it out to be refused whenever the rules have changed.",
+              "title": "Tektolo-Ruleset-Mode"
+            },
+            "description": "Optional, with Tektolo-Ruleset. 'serve' asks us to answer under the ruleset version you named even when the rules have changed since, from that version's signed bundle. The answer says so (run.served_from_bundle and the Tektolo-Ruleset-Served header). We refuse (412, with a reason) a version older than 12 months, one a later correction or law change replaced for your state, or one we have no bundle for. Leave it out to be refused whenever the rules have changed."
+          }
+        ],
         "requestBody": {
+          "required": true,
           "content": {
             "application/json": {
               "schema": {
                 "$ref": "#/components/schemas/SettleRequest"
               }
             }
-          },
-          "required": true
+          }
         },
         "responses": {
           "200": {
@@ -289,6 +491,9 @@
                 }
               }
             }
+          },
+          "412": {
+            "description": "The ruleset named in the Tektolo-Ruleset header is not the one in force, and the call did not ask to be answered under it (Tektolo-Ruleset-Mode: serve) or that version can't be served (the body's reason says why). Nothing was computed or charged; the body names both versions."
           },
           "422": {
             "description": "Validation Error",
@@ -311,15 +516,53 @@
         "summary": "Settle a security deposit after move-out (rendered as tenant_pdf)",
         "description": "Same body as the operation. Runs it, then renders the result as application/pdf. The artifact itself is not stored. Rate limited more tightly than the JSON endpoint.",
         "operationId": "deposit_settlement_settle_render_tenant_pdf",
+        "parameters": [
+          {
+            "name": "Tektolo-Ruleset",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Optional. The ruleset version you built against, as results carry it in provenance.ruleset_version (e.g. 'sd-2026.11.14'), or its sha256: hash. If the rules have changed since, the call fails (nothing computed, nothing charged) and says what is in force now, so you upgrade on your own schedule. Leave it out to answer under the current rules.",
+              "title": "Tektolo-Ruleset"
+            },
+            "description": "Optional. The ruleset version you built against, as results carry it in provenance.ruleset_version (e.g. 'sd-2026.11.14'), or its sha256: hash. If the rules have changed since, the call fails (nothing computed, nothing charged) and says what is in force now, so you upgrade on your own schedule. Leave it out to answer under the current rules."
+          },
+          {
+            "name": "Tektolo-Ruleset-Mode",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Optional, with Tektolo-Ruleset. 'serve' asks us to answer under the ruleset version you named even when the rules have changed since, from that version's signed bundle. The answer says so (run.served_from_bundle and the Tektolo-Ruleset-Served header). We refuse (412, with a reason) a version older than 12 months, one a later correction or law change replaced for your state, or one we have no bundle for. Leave it out to be refused whenever the rules have changed.",
+              "title": "Tektolo-Ruleset-Mode"
+            },
+            "description": "Optional, with Tektolo-Ruleset. 'serve' asks us to answer under the ruleset version you named even when the rules have changed since, from that version's signed bundle. The answer says so (run.served_from_bundle and the Tektolo-Ruleset-Served header). We refuse (412, with a reason) a version older than 12 months, one a later correction or law change replaced for your state, or one we have no bundle for. Leave it out to be refused whenever the rules have changed."
+          }
+        ],
         "requestBody": {
+          "required": true,
           "content": {
             "application/json": {
               "schema": {
                 "$ref": "#/components/schemas/SettleRequest"
               }
             }
-          },
-          "required": true
+          }
         },
         "responses": {
           "200": {
@@ -331,6 +574,9 @@
                 }
               }
             }
+          },
+          "412": {
+            "description": "The ruleset named in the Tektolo-Ruleset header is not the one in force, and the call did not ask to be answered under it (Tektolo-Ruleset-Mode: serve) or that version can't be served (the body's reason says why). Nothing was computed or charged; the body names both versions."
           },
           "422": {
             "description": "Validation Error",
@@ -353,15 +599,53 @@
         "summary": "Security deposit rules for a state (and city)",
         "description": "The security deposit rules for one US state, with a covered city's overlay: return deadline and what starts it, itemization and documentation duties, allowed deductions and depreciation, interest, penalty, deposit cap and recent changes, with citations.\nWhen to use: Someone asks what a state's (or a covered city's) security deposit rules are without a specific move-out to settle, or which states are covered.\nNot for: To settle a specific deposit (use deposit_settlement_settle, which applies the rules to the dates and deductions). Other landlord-tenant topics (evictions, rent control, notice periods) are not covered.\nDeterministic: the same input returns the same result_hash. Capability deposit-settlement v0.1.0 (experimental).",
         "operationId": "deposit_settlement_rules",
+        "parameters": [
+          {
+            "name": "Tektolo-Ruleset",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Optional. The ruleset version you built against, as results carry it in provenance.ruleset_version (e.g. 'sd-2026.11.14'), or its sha256: hash. If the rules have changed since, the call fails (nothing computed, nothing charged) and says what is in force now, so you upgrade on your own schedule. Leave it out to answer under the current rules.",
+              "title": "Tektolo-Ruleset"
+            },
+            "description": "Optional. The ruleset version you built against, as results carry it in provenance.ruleset_version (e.g. 'sd-2026.11.14'), or its sha256: hash. If the rules have changed since, the call fails (nothing computed, nothing charged) and says what is in force now, so you upgrade on your own schedule. Leave it out to answer under the current rules."
+          },
+          {
+            "name": "Tektolo-Ruleset-Mode",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Optional, with Tektolo-Ruleset. 'serve' asks us to answer under the ruleset version you named even when the rules have changed since, from that version's signed bundle. The answer says so (run.served_from_bundle and the Tektolo-Ruleset-Served header). We refuse (412, with a reason) a version older than 12 months, one a later correction or law change replaced for your state, or one we have no bundle for. Leave it out to be refused whenever the rules have changed.",
+              "title": "Tektolo-Ruleset-Mode"
+            },
+            "description": "Optional, with Tektolo-Ruleset. 'serve' asks us to answer under the ruleset version you named even when the rules have changed since, from that version's signed bundle. The answer says so (run.served_from_bundle and the Tektolo-Ruleset-Served header). We refuse (412, with a reason) a version older than 12 months, one a later correction or law change replaced for your state, or one we have no bundle for. Leave it out to be refused whenever the rules have changed."
+          }
+        ],
         "requestBody": {
+          "required": true,
           "content": {
             "application/json": {
               "schema": {
                 "$ref": "#/components/schemas/RulesRequest"
               }
             }
-          },
-          "required": true
+          }
         },
         "responses": {
           "200": {
@@ -373,6 +657,9 @@
                 }
               }
             }
+          },
+          "412": {
+            "description": "The ruleset named in the Tektolo-Ruleset header is not the one in force, and the call did not ask to be answered under it (Tektolo-Ruleset-Mode: serve) or that version can't be served (the body's reason says why). Nothing was computed or charged; the body names both versions."
           },
           "422": {
             "description": "Validation Error",
@@ -393,17 +680,55 @@
           "property-turnover"
         ],
         "summary": "Quick turnover estimate (start here)",
-        "description": "The easiest way to estimate a US rental turnover: a ZIP, bedrooms, bathrooms and a list of plain-English issues in, a priced make-ready estimate out (same engine and result as property_turnover_scope, short summary by default).\nWhen to use: Start here when the user describes a move-out or turnover in words (\"carpet stained in both bedrooms, oven filthy\") and wants a cost estimate or what to tell vendors. Use property_turnover_scope instead for rate cards, owner decisions, measured quantities or per-finding control.\nNot for: Diagnosing hazards (they come back as refer-outs to a licensed professional); legal advice on deposits; remodel bids; properties outside the US.\nTip: If the ZIP is missing or not exactly 5 digits, ask the user; never guess or pad it.\nTip: Relay refer_outs first, then the totals; say the numbers are estimates, not quotes.\nDeterministic: the same input returns the same result_hash. Capability property-turnover v0.11.0 (experimental).",
+        "description": "The easiest way to estimate a US rental turnover: a ZIP, bedrooms, bathrooms and a list of plain-English issues in, a priced make-ready estimate out (same engine and result as property_turnover_scope, short summary by default).\nWhen to use: Start here when the user describes a move-out or turnover in words (\"carpet stained in both bedrooms, oven filthy\") and wants a cost estimate or what to tell vendors. Use property_turnover_scope instead for rate cards, owner decisions, measured quantities or per-finding control.\nNot for: Diagnosing hazards (they come back as refer-outs to a licensed professional); legal advice on deposits; remodel bids; properties outside the US.\nTip: If the ZIP is missing or not exactly 5 digits, ask the user; never guess or pad it.\nTip: Relay refer_outs first, then the totals; say the numbers are estimates, not quotes.\nTip: From photos, list only what is visible, with its room (\"stained carpet in bedroom 2\"). Hedge doubtful ones (\"possible water stain?\") and ask the user about what photos cannot show: working appliances, odors, pests, sizes. Never state that a tenant caused damage because of a photo.\nDeterministic: the same input returns the same result_hash. Capability property-turnover v0.11.0 (experimental).",
         "operationId": "property_turnover_quick_estimate",
+        "parameters": [
+          {
+            "name": "Tektolo-Ruleset",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Optional. The ruleset version you built against, as results carry it in provenance.ruleset_version (e.g. 'sd-2026.11.14'), or its sha256: hash. If the rules have changed since, the call fails (nothing computed, nothing charged) and says what is in force now, so you upgrade on your own schedule. Leave it out to answer under the current rules.",
+              "title": "Tektolo-Ruleset"
+            },
+            "description": "Optional. The ruleset version you built against, as results carry it in provenance.ruleset_version (e.g. 'sd-2026.11.14'), or its sha256: hash. If the rules have changed since, the call fails (nothing computed, nothing charged) and says what is in force now, so you upgrade on your own schedule. Leave it out to answer under the current rules."
+          },
+          {
+            "name": "Tektolo-Ruleset-Mode",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Optional, with Tektolo-Ruleset. 'serve' asks us to answer under the ruleset version you named even when the rules have changed since, from that version's signed bundle. The answer says so (run.served_from_bundle and the Tektolo-Ruleset-Served header). We refuse (412, with a reason) a version older than 12 months, one a later correction or law change replaced for your state, or one we have no bundle for. Leave it out to be refused whenever the rules have changed.",
+              "title": "Tektolo-Ruleset-Mode"
+            },
+            "description": "Optional, with Tektolo-Ruleset. 'serve' asks us to answer under the ruleset version you named even when the rules have changed since, from that version's signed bundle. The answer says so (run.served_from_bundle and the Tektolo-Ruleset-Served header). We refuse (412, with a reason) a version older than 12 months, one a later correction or law change replaced for your state, or one we have no bundle for. Leave it out to be refused whenever the rules have changed."
+          }
+        ],
         "requestBody": {
+          "required": true,
           "content": {
             "application/json": {
               "schema": {
                 "$ref": "#/components/schemas/QuickEstimateRequest"
               }
             }
-          },
-          "required": true
+          }
         },
         "responses": {
           "200": {
@@ -415,6 +740,9 @@
                 }
               }
             }
+          },
+          "412": {
+            "description": "The ruleset named in the Tektolo-Ruleset header is not the one in force, and the call did not ask to be answered under it (Tektolo-Ruleset-Mode: serve) or that version can't be served (the body's reason says why). Nothing was computed or charged; the body names both versions."
           },
           "422": {
             "description": "Validation Error",
@@ -435,17 +763,55 @@
           "property-turnover"
         ],
         "summary": "Scope a property turnover",
-        "description": "Turn move-out / turnover inspection findings for a US rental unit into a priced make-ready scope: standardized tasks by trade, regional low/expected/high costs, must/should/could priorities, vendor scopes, refer-outs to licensed professionals, and every assumption stated.\nWhen to use: Turnover findings for a US rental unit when you need control: rooms, measured quantities, the manager's own prices (rate_card) or owner approve/decline decisions. For a plain-English estimate, property_turnover_quick_estimate is easier.\nNot for: Diagnosing hazards (they come back as refer-outs to a licensed professional); legal advice on deposits; remodel bids; properties outside the US.\nTip: If the ZIP is missing or not exactly 5 digits, ask the user; never guess or pad it.\nTip: Describe each finding in plain words (description). Only send a code returned by property_turnover_issue_codes; unmatched findings come back as manual-quote lines with suggested codes.\nTip: Give measured quantities when you have them (e.g. 120 sq_ft); otherwise typical sizes are assumed and listed in assumptions.\nTip: Send property.floor_coverings when you know whether there is carpet, and unit_type single_family for houses; both change the baseline scope.\nTip: Relay the summary, refer_outs, assumptions and unknowns to the user; costs are estimate ranges, not quotes.\nTip: Use detail=summary unless the user asks for every line item (summary already lists every line tied to a finding).\nTip: Rate card examples - {\"trade\": \"handyman\", \"unit_price\": 65, \"uom\": \"hour\"} or {\"task_id\": \"carpet.clean\", \"unit_price\": 0.2, \"uom\": \"sq_ft\"}; check rate_card_applied and rate_card_ignored before saying a rate was used.\nTip: For the Excel workbook or owner estimate, give the user links.web_tool_prefilled (opens the free web tool with these findings) or POST the same arguments to links.downloads; do not build a spreadsheet yourself.\nDeterministic: the same input returns the same result_hash. Capability property-turnover v0.11.0 (experimental).",
+        "description": "Turn move-out / turnover inspection findings for a US rental unit into a priced make-ready scope: standardized tasks by trade, regional low/expected/high costs, must/should/could priorities, vendor scopes, refer-outs to licensed professionals, and every assumption stated.\nWhen to use: Turnover findings for a US rental unit when you need control: rooms, measured quantities, the manager's own prices (rate_card) or owner approve/decline decisions. For a plain-English estimate, property_turnover_quick_estimate is easier.\nNot for: Diagnosing hazards (they come back as refer-outs to a licensed professional); legal advice on deposits; remodel bids; properties outside the US.\nTip: If the ZIP is missing or not exactly 5 digits, ask the user; never guess or pad it.\nTip: From photos, describe only what is visible, with its room (location); an issue code only if one clearly fits. Hedge doubtful ones (\"possible\", \"?\") and ask the user about what photos cannot show: working appliances, odors, pests, sizes. Never state that a tenant caused damage because of a photo; responsibility stays a hint from the engine. Send no faces, names or addresses. A photo of a written checklist or report is different, so transcribe it as written.\nTip: Describe each finding in plain words (description). Only send a code returned by property_turnover_issue_codes; unmatched findings come back as manual-quote lines with suggested codes.\nTip: Give measured quantities when you have them (e.g. 120 sq_ft); otherwise typical sizes are assumed and listed in assumptions.\nTip: Send property.floor_coverings when you know whether there is carpet, and unit_type single_family for houses; both change the baseline scope.\nTip: Relay the summary, refer_outs, assumptions and unknowns to the user; costs are estimate ranges, not quotes.\nTip: Use detail=summary unless the user asks for every line item (summary already lists every line tied to a finding).\nTip: Rate card examples - {\"trade\": \"handyman\", \"unit_price\": 65, \"uom\": \"hour\"} or {\"task_id\": \"carpet.clean\", \"unit_price\": 0.2, \"uom\": \"sq_ft\"}; check rate_card_applied and rate_card_ignored before saying a rate was used.\nTip: For the Excel workbook or owner estimate, give the user links.web_tool_prefilled (opens the free web tool with these findings) or POST the same arguments to links.downloads; do not build a spreadsheet yourself.\nDeterministic: the same input returns the same result_hash. Capability property-turnover v0.11.0 (experimental).",
         "operationId": "property_turnover_scope",
+        "parameters": [
+          {
+            "name": "Tektolo-Ruleset",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Optional. The ruleset version you built against, as results carry it in provenance.ruleset_version (e.g. 'sd-2026.11.14'), or its sha256: hash. If the rules have changed since, the call fails (nothing computed, nothing charged) and says what is in force now, so you upgrade on your own schedule. Leave it out to answer under the current rules.",
+              "title": "Tektolo-Ruleset"
+            },
+            "description": "Optional. The ruleset version you built against, as results carry it in provenance.ruleset_version (e.g. 'sd-2026.11.14'), or its sha256: hash. If the rules have changed since, the call fails (nothing computed, nothing charged) and says what is in force now, so you upgrade on your own schedule. Leave it out to answer under the current rules."
+          },
+          {
+            "name": "Tektolo-Ruleset-Mode",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Optional, with Tektolo-Ruleset. 'serve' asks us to answer under the ruleset version you named even when the rules have changed since, from that version's signed bundle. The answer says so (run.served_from_bundle and the Tektolo-Ruleset-Served header). We refuse (412, with a reason) a version older than 12 months, one a later correction or law change replaced for your state, or one we have no bundle for. Leave it out to be refused whenever the rules have changed.",
+              "title": "Tektolo-Ruleset-Mode"
+            },
+            "description": "Optional, with Tektolo-Ruleset. 'serve' asks us to answer under the ruleset version you named even when the rules have changed since, from that version's signed bundle. The answer says so (run.served_from_bundle and the Tektolo-Ruleset-Served header). We refuse (412, with a reason) a version older than 12 months, one a later correction or law change replaced for your state, or one we have no bundle for. Leave it out to be refused whenever the rules have changed."
+          }
+        ],
         "requestBody": {
+          "required": true,
           "content": {
             "application/json": {
               "schema": {
                 "$ref": "#/components/schemas/ScopeRequest"
               }
             }
-          },
-          "required": true
+          }
         },
         "responses": {
           "200": {
@@ -457,6 +823,9 @@
                 }
               }
             }
+          },
+          "412": {
+            "description": "The ruleset named in the Tektolo-Ruleset header is not the one in force, and the call did not ask to be answered under it (Tektolo-Ruleset-Mode: serve) or that version can't be served (the body's reason says why). Nothing was computed or charged; the body names both versions."
           },
           "422": {
             "description": "Validation Error",
@@ -479,15 +848,53 @@
         "summary": "Scope a property turnover (rendered as xlsx)",
         "description": "Same body as the operation. Runs it, then renders the result as application/vnd.openxmlformats-officedocument.spreadsheetml.sheet. The artifact itself is not stored. Rate limited more tightly than the JSON endpoint.",
         "operationId": "property_turnover_scope_render_xlsx",
+        "parameters": [
+          {
+            "name": "Tektolo-Ruleset",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Optional. The ruleset version you built against, as results carry it in provenance.ruleset_version (e.g. 'sd-2026.11.14'), or its sha256: hash. If the rules have changed since, the call fails (nothing computed, nothing charged) and says what is in force now, so you upgrade on your own schedule. Leave it out to answer under the current rules.",
+              "title": "Tektolo-Ruleset"
+            },
+            "description": "Optional. The ruleset version you built against, as results carry it in provenance.ruleset_version (e.g. 'sd-2026.11.14'), or its sha256: hash. If the rules have changed since, the call fails (nothing computed, nothing charged) and says what is in force now, so you upgrade on your own schedule. Leave it out to answer under the current rules."
+          },
+          {
+            "name": "Tektolo-Ruleset-Mode",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Optional, with Tektolo-Ruleset. 'serve' asks us to answer under the ruleset version you named even when the rules have changed since, from that version's signed bundle. The answer says so (run.served_from_bundle and the Tektolo-Ruleset-Served header). We refuse (412, with a reason) a version older than 12 months, one a later correction or law change replaced for your state, or one we have no bundle for. Leave it out to be refused whenever the rules have changed.",
+              "title": "Tektolo-Ruleset-Mode"
+            },
+            "description": "Optional, with Tektolo-Ruleset. 'serve' asks us to answer under the ruleset version you named even when the rules have changed since, from that version's signed bundle. The answer says so (run.served_from_bundle and the Tektolo-Ruleset-Served header). We refuse (412, with a reason) a version older than 12 months, one a later correction or law change replaced for your state, or one we have no bundle for. Leave it out to be refused whenever the rules have changed."
+          }
+        ],
         "requestBody": {
+          "required": true,
           "content": {
             "application/json": {
               "schema": {
                 "$ref": "#/components/schemas/ScopeRequest"
               }
             }
-          },
-          "required": true
+          }
         },
         "responses": {
           "200": {
@@ -499,6 +906,9 @@
                 }
               }
             }
+          },
+          "412": {
+            "description": "The ruleset named in the Tektolo-Ruleset header is not the one in force, and the call did not ask to be answered under it (Tektolo-Ruleset-Mode: serve) or that version can't be served (the body's reason says why). Nothing was computed or charged; the body names both versions."
           },
           "422": {
             "description": "Validation Error",
@@ -521,15 +931,53 @@
         "summary": "Scope a property turnover (rendered as html)",
         "description": "Same body as the operation. Runs it, then renders the result as text/html; charset=utf-8. The artifact itself is not stored. Rate limited more tightly than the JSON endpoint.",
         "operationId": "property_turnover_scope_render_html",
+        "parameters": [
+          {
+            "name": "Tektolo-Ruleset",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Optional. The ruleset version you built against, as results carry it in provenance.ruleset_version (e.g. 'sd-2026.11.14'), or its sha256: hash. If the rules have changed since, the call fails (nothing computed, nothing charged) and says what is in force now, so you upgrade on your own schedule. Leave it out to answer under the current rules.",
+              "title": "Tektolo-Ruleset"
+            },
+            "description": "Optional. The ruleset version you built against, as results carry it in provenance.ruleset_version (e.g. 'sd-2026.11.14'), or its sha256: hash. If the rules have changed since, the call fails (nothing computed, nothing charged) and says what is in force now, so you upgrade on your own schedule. Leave it out to answer under the current rules."
+          },
+          {
+            "name": "Tektolo-Ruleset-Mode",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Optional, with Tektolo-Ruleset. 'serve' asks us to answer under the ruleset version you named even when the rules have changed since, from that version's signed bundle. The answer says so (run.served_from_bundle and the Tektolo-Ruleset-Served header). We refuse (412, with a reason) a version older than 12 months, one a later correction or law change replaced for your state, or one we have no bundle for. Leave it out to be refused whenever the rules have changed.",
+              "title": "Tektolo-Ruleset-Mode"
+            },
+            "description": "Optional, with Tektolo-Ruleset. 'serve' asks us to answer under the ruleset version you named even when the rules have changed since, from that version's signed bundle. The answer says so (run.served_from_bundle and the Tektolo-Ruleset-Served header). We refuse (412, with a reason) a version older than 12 months, one a later correction or law change replaced for your state, or one we have no bundle for. Leave it out to be refused whenever the rules have changed."
+          }
+        ],
         "requestBody": {
+          "required": true,
           "content": {
             "application/json": {
               "schema": {
                 "$ref": "#/components/schemas/ScopeRequest"
               }
             }
-          },
-          "required": true
+          }
         },
         "responses": {
           "200": {
@@ -541,6 +989,9 @@
                 }
               }
             }
+          },
+          "412": {
+            "description": "The ruleset named in the Tektolo-Ruleset header is not the one in force, and the call did not ask to be answered under it (Tektolo-Ruleset-Mode: serve) or that version can't be served (the body's reason says why). Nothing was computed or charged; the body names both versions."
           },
           "422": {
             "description": "Validation Error",
@@ -563,15 +1014,53 @@
         "summary": "Scope a property turnover (rendered as csv)",
         "description": "Same body as the operation. Runs it, then renders the result as text/csv; charset=utf-8. The artifact itself is not stored. Rate limited more tightly than the JSON endpoint.",
         "operationId": "property_turnover_scope_render_csv",
+        "parameters": [
+          {
+            "name": "Tektolo-Ruleset",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Optional. The ruleset version you built against, as results carry it in provenance.ruleset_version (e.g. 'sd-2026.11.14'), or its sha256: hash. If the rules have changed since, the call fails (nothing computed, nothing charged) and says what is in force now, so you upgrade on your own schedule. Leave it out to answer under the current rules.",
+              "title": "Tektolo-Ruleset"
+            },
+            "description": "Optional. The ruleset version you built against, as results carry it in provenance.ruleset_version (e.g. 'sd-2026.11.14'), or its sha256: hash. If the rules have changed since, the call fails (nothing computed, nothing charged) and says what is in force now, so you upgrade on your own schedule. Leave it out to answer under the current rules."
+          },
+          {
+            "name": "Tektolo-Ruleset-Mode",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Optional, with Tektolo-Ruleset. 'serve' asks us to answer under the ruleset version you named even when the rules have changed since, from that version's signed bundle. The answer says so (run.served_from_bundle and the Tektolo-Ruleset-Served header). We refuse (412, with a reason) a version older than 12 months, one a later correction or law change replaced for your state, or one we have no bundle for. Leave it out to be refused whenever the rules have changed.",
+              "title": "Tektolo-Ruleset-Mode"
+            },
+            "description": "Optional, with Tektolo-Ruleset. 'serve' asks us to answer under the ruleset version you named even when the rules have changed since, from that version's signed bundle. The answer says so (run.served_from_bundle and the Tektolo-Ruleset-Served header). We refuse (412, with a reason) a version older than 12 months, one a later correction or law change replaced for your state, or one we have no bundle for. Leave it out to be refused whenever the rules have changed."
+          }
+        ],
         "requestBody": {
+          "required": true,
           "content": {
             "application/json": {
               "schema": {
                 "$ref": "#/components/schemas/ScopeRequest"
               }
             }
-          },
-          "required": true
+          }
         },
         "responses": {
           "200": {
@@ -583,6 +1072,9 @@
                 }
               }
             }
+          },
+          "412": {
+            "description": "The ruleset named in the Tektolo-Ruleset header is not the one in force, and the call did not ask to be answered under it (Tektolo-Ruleset-Mode: serve) or that version can't be served (the body's reason says why). Nothing was computed or charged; the body names both versions."
           },
           "422": {
             "description": "Validation Error",
@@ -605,15 +1097,53 @@
         "summary": "Scope a property turnover (rendered as vendor_csv)",
         "description": "Same body as the operation. Runs it, then renders the result as application/zip. The artifact itself is not stored. Rate limited more tightly than the JSON endpoint.",
         "operationId": "property_turnover_scope_render_vendor_csv",
+        "parameters": [
+          {
+            "name": "Tektolo-Ruleset",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Optional. The ruleset version you built against, as results carry it in provenance.ruleset_version (e.g. 'sd-2026.11.14'), or its sha256: hash. If the rules have changed since, the call fails (nothing computed, nothing charged) and says what is in force now, so you upgrade on your own schedule. Leave it out to answer under the current rules.",
+              "title": "Tektolo-Ruleset"
+            },
+            "description": "Optional. The ruleset version you built against, as results carry it in provenance.ruleset_version (e.g. 'sd-2026.11.14'), or its sha256: hash. If the rules have changed since, the call fails (nothing computed, nothing charged) and says what is in force now, so you upgrade on your own schedule. Leave it out to answer under the current rules."
+          },
+          {
+            "name": "Tektolo-Ruleset-Mode",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Optional, with Tektolo-Ruleset. 'serve' asks us to answer under the ruleset version you named even when the rules have changed since, from that version's signed bundle. The answer says so (run.served_from_bundle and the Tektolo-Ruleset-Served header). We refuse (412, with a reason) a version older than 12 months, one a later correction or law change replaced for your state, or one we have no bundle for. Leave it out to be refused whenever the rules have changed.",
+              "title": "Tektolo-Ruleset-Mode"
+            },
+            "description": "Optional, with Tektolo-Ruleset. 'serve' asks us to answer under the ruleset version you named even when the rules have changed since, from that version's signed bundle. The answer says so (run.served_from_bundle and the Tektolo-Ruleset-Served header). We refuse (412, with a reason) a version older than 12 months, one a later correction or law change replaced for your state, or one we have no bundle for. Leave it out to be refused whenever the rules have changed."
+          }
+        ],
         "requestBody": {
+          "required": true,
           "content": {
             "application/json": {
               "schema": {
                 "$ref": "#/components/schemas/ScopeRequest"
               }
             }
-          },
-          "required": true
+          }
         },
         "responses": {
           "200": {
@@ -625,6 +1155,92 @@
                 }
               }
             }
+          },
+          "412": {
+            "description": "The ruleset named in the Tektolo-Ruleset header is not the one in force, and the call did not ask to be answered under it (Tektolo-Ruleset-Mode: serve) or that version can't be served (the body's reason says why). Nothing was computed or charged; the body names both versions."
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/property-turnover/scope/render/bids_html": {
+      "post": {
+        "tags": [
+          "property-turnover"
+        ],
+        "summary": "Scope a property turnover (rendered as bids_html)",
+        "description": "Same body as the operation. Runs it, then renders the result as text/html; charset=utf-8. The artifact itself is not stored. Rate limited more tightly than the JSON endpoint.",
+        "operationId": "property_turnover_scope_render_bids_html",
+        "parameters": [
+          {
+            "name": "Tektolo-Ruleset",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Optional. The ruleset version you built against, as results carry it in provenance.ruleset_version (e.g. 'sd-2026.11.14'), or its sha256: hash. If the rules have changed since, the call fails (nothing computed, nothing charged) and says what is in force now, so you upgrade on your own schedule. Leave it out to answer under the current rules.",
+              "title": "Tektolo-Ruleset"
+            },
+            "description": "Optional. The ruleset version you built against, as results carry it in provenance.ruleset_version (e.g. 'sd-2026.11.14'), or its sha256: hash. If the rules have changed since, the call fails (nothing computed, nothing charged) and says what is in force now, so you upgrade on your own schedule. Leave it out to answer under the current rules."
+          },
+          {
+            "name": "Tektolo-Ruleset-Mode",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Optional, with Tektolo-Ruleset. 'serve' asks us to answer under the ruleset version you named even when the rules have changed since, from that version's signed bundle. The answer says so (run.served_from_bundle and the Tektolo-Ruleset-Served header). We refuse (412, with a reason) a version older than 12 months, one a later correction or law change replaced for your state, or one we have no bundle for. Leave it out to be refused whenever the rules have changed.",
+              "title": "Tektolo-Ruleset-Mode"
+            },
+            "description": "Optional, with Tektolo-Ruleset. 'serve' asks us to answer under the ruleset version you named even when the rules have changed since, from that version's signed bundle. The answer says so (run.served_from_bundle and the Tektolo-Ruleset-Served header). We refuse (412, with a reason) a version older than 12 months, one a later correction or law change replaced for your state, or one we have no bundle for. Leave it out to be refused whenever the rules have changed."
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ScopeRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "text/html; charset=utf-8": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "412": {
+            "description": "The ruleset named in the Tektolo-Ruleset header is not the one in force, and the call did not ask to be answered under it (Tektolo-Ruleset-Mode: serve) or that version can't be served (the body's reason says why). Nothing was computed or charged; the body names both versions."
           },
           "422": {
             "description": "Validation Error",
@@ -647,15 +1263,53 @@
         "summary": "Look up turnover issue codes",
         "description": "Search the standard taxonomy of rental-unit turnover issues (component.issue codes) by keyword or area.\nWhen to use: Only while preparing findings for a turnover cost estimate, to find the standard issue code for something observed (e.g. \"pet stain on carpet\"). Never needed to answer a question; call with no arguments to list the taxonomy areas and the first codes.\nNot for: Legal or security-deposit questions; anything outside rental turnover and make-ready work. Not needed before quick_estimate or scope: a plain description works there.\nTip: Call with no arguments to list the taxonomy areas (in `areas`) and the first codes.\nTip: Codes are optional for scoping; a plain description also works.\nDeterministic: the same input returns the same result_hash. Capability property-turnover v0.11.0 (experimental).",
         "operationId": "property_turnover_issue_codes",
+        "parameters": [
+          {
+            "name": "Tektolo-Ruleset",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Optional. The ruleset version you built against, as results carry it in provenance.ruleset_version (e.g. 'sd-2026.11.14'), or its sha256: hash. If the rules have changed since, the call fails (nothing computed, nothing charged) and says what is in force now, so you upgrade on your own schedule. Leave it out to answer under the current rules.",
+              "title": "Tektolo-Ruleset"
+            },
+            "description": "Optional. The ruleset version you built against, as results carry it in provenance.ruleset_version (e.g. 'sd-2026.11.14'), or its sha256: hash. If the rules have changed since, the call fails (nothing computed, nothing charged) and says what is in force now, so you upgrade on your own schedule. Leave it out to answer under the current rules."
+          },
+          {
+            "name": "Tektolo-Ruleset-Mode",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Optional, with Tektolo-Ruleset. 'serve' asks us to answer under the ruleset version you named even when the rules have changed since, from that version's signed bundle. The answer says so (run.served_from_bundle and the Tektolo-Ruleset-Served header). We refuse (412, with a reason) a version older than 12 months, one a later correction or law change replaced for your state, or one we have no bundle for. Leave it out to be refused whenever the rules have changed.",
+              "title": "Tektolo-Ruleset-Mode"
+            },
+            "description": "Optional, with Tektolo-Ruleset. 'serve' asks us to answer under the ruleset version you named even when the rules have changed since, from that version's signed bundle. The answer says so (run.served_from_bundle and the Tektolo-Ruleset-Served header). We refuse (412, with a reason) a version older than 12 months, one a later correction or law change replaced for your state, or one we have no bundle for. Leave it out to be refused whenever the rules have changed."
+          }
+        ],
         "requestBody": {
+          "required": true,
           "content": {
             "application/json": {
               "schema": {
                 "$ref": "#/components/schemas/IssueCodesRequest"
               }
             }
-          },
-          "required": true
+          }
         },
         "responses": {
           "200": {
@@ -667,6 +1321,9 @@
                 }
               }
             }
+          },
+          "412": {
+            "description": "The ruleset named in the Tektolo-Ruleset header is not the one in force, and the call did not ask to be answered under it (Tektolo-Ruleset-Mode: serve) or that version can't be served (the body's reason says why). Nothing was computed or charged; the body names both versions."
           },
           "422": {
             "description": "Validation Error",
@@ -716,6 +1373,9 @@
           "422": {
             "description": "Invalid input. Checked before payment; never charged."
           },
+          "412": {
+            "description": "The ruleset named in the Tektolo-Ruleset header is not the one in force, and the call did not ask to be answered under it (Tektolo-Ruleset-Mode: serve) or that version can't be served (the body's reason says why). Nothing was computed or charged; the body names both versions."
+          },
           "429": {
             "description": "Rate limited (per payer wallet or per client). Never charged."
           },
@@ -759,6 +1419,9 @@
           },
           "422": {
             "description": "Invalid input. Checked before payment; never charged."
+          },
+          "412": {
+            "description": "The ruleset named in the Tektolo-Ruleset header is not the one in force, and the call did not ask to be answered under it (Tektolo-Ruleset-Mode: serve) or that version can't be served (the body's reason says why). Nothing was computed or charged; the body names both versions."
           },
           "429": {
             "description": "Rate limited (per payer wallet or per client). Never charged."
@@ -804,6 +1467,9 @@
           "422": {
             "description": "Invalid input. Checked before payment; never charged."
           },
+          "412": {
+            "description": "The ruleset named in the Tektolo-Ruleset header is not the one in force, and the call did not ask to be answered under it (Tektolo-Ruleset-Mode: serve) or that version can't be served (the body's reason says why). Nothing was computed or charged; the body names both versions."
+          },
           "429": {
             "description": "Rate limited (per payer wallet or per client). Never charged."
           },
@@ -847,6 +1513,9 @@
           },
           "422": {
             "description": "Invalid input. Checked before payment; never charged."
+          },
+          "412": {
+            "description": "The ruleset named in the Tektolo-Ruleset header is not the one in force, and the call did not ask to be answered under it (Tektolo-Ruleset-Mode: serve) or that version can't be served (the body's reason says why). Nothing was computed or charged; the body names both versions."
           },
           "429": {
             "description": "Rate limited (per payer wallet or per client). Never charged."
@@ -892,6 +1561,9 @@
           "422": {
             "description": "Invalid input. Checked before payment; never charged."
           },
+          "412": {
+            "description": "The ruleset named in the Tektolo-Ruleset header is not the one in force, and the call did not ask to be answered under it (Tektolo-Ruleset-Mode: serve) or that version can't be served (the body's reason says why). Nothing was computed or charged; the body names both versions."
+          },
           "429": {
             "description": "Rate limited (per payer wallet or per client). Never charged."
           },
@@ -935,6 +1607,9 @@
           },
           "422": {
             "description": "Invalid input. Checked before payment; never charged."
+          },
+          "412": {
+            "description": "The ruleset named in the Tektolo-Ruleset header is not the one in force, and the call did not ask to be answered under it (Tektolo-Ruleset-Mode: serve) or that version can't be served (the body's reason says why). Nothing was computed or charged; the body names both versions."
           },
           "429": {
             "description": "Rate limited (per payer wallet or per client). Never charged."
@@ -980,6 +1655,9 @@
           "422": {
             "description": "Invalid input. Checked before payment; never charged."
           },
+          "412": {
+            "description": "The ruleset named in the Tektolo-Ruleset header is not the one in force, and the call did not ask to be answered under it (Tektolo-Ruleset-Mode: serve) or that version can't be served (the body's reason says why). Nothing was computed or charged; the body names both versions."
+          },
           "429": {
             "description": "Rate limited (per payer wallet or per client). Never charged."
           },
@@ -1023,6 +1701,9 @@
           },
           "422": {
             "description": "Invalid input. Checked before payment; never charged."
+          },
+          "412": {
+            "description": "The ruleset named in the Tektolo-Ruleset header is not the one in force, and the call did not ask to be answered under it (Tektolo-Ruleset-Mode: serve) or that version can't be served (the body's reason says why). Nothing was computed or charged; the body names both versions."
           },
           "429": {
             "description": "Rate limited (per payer wallet or per client). Never charged."
@@ -1068,6 +1749,9 @@
           "422": {
             "description": "Invalid input. Checked before payment; never charged."
           },
+          "412": {
+            "description": "The ruleset named in the Tektolo-Ruleset header is not the one in force, and the call did not ask to be answered under it (Tektolo-Ruleset-Mode: serve) or that version can't be served (the body's reason says why). Nothing was computed or charged; the body names both versions."
+          },
           "429": {
             "description": "Rate limited (per payer wallet or per client). Never charged."
           },
@@ -1111,6 +1795,9 @@
           },
           "422": {
             "description": "Invalid input. Checked before payment; never charged."
+          },
+          "412": {
+            "description": "The ruleset named in the Tektolo-Ruleset header is not the one in force, and the call did not ask to be answered under it (Tektolo-Ruleset-Mode: serve) or that version can't be served (the body's reason says why). Nothing was computed or charged; the body names both versions."
           },
           "429": {
             "description": "Rate limited (per payer wallet or per client). Never charged."
@@ -1156,6 +1843,9 @@
           "422": {
             "description": "Invalid input. Checked before payment; never charged."
           },
+          "412": {
+            "description": "The ruleset named in the Tektolo-Ruleset header is not the one in force, and the call did not ask to be answered under it (Tektolo-Ruleset-Mode: serve) or that version can't be served (the body's reason says why). Nothing was computed or charged; the body names both versions."
+          },
           "429": {
             "description": "Rate limited (per payer wallet or per client). Never charged."
           },
@@ -1199,6 +1889,56 @@
           },
           "422": {
             "description": "Invalid input. Checked before payment; never charged."
+          },
+          "412": {
+            "description": "The ruleset named in the Tektolo-Ruleset header is not the one in force, and the call did not ask to be answered under it (Tektolo-Ruleset-Mode: serve) or that version can't be served (the body's reason says why). Nothing was computed or charged; the body names both versions."
+          },
+          "429": {
+            "description": "Rate limited (per payer wallet or per client). Never charged."
+          },
+          "503": {
+            "description": "Payment facilitator unreachable. Never charged."
+          }
+        }
+      }
+    },
+    "/v1/x402/property-turnover/scope/render/bids_html": {
+      "post": {
+        "tags": [
+          "x402"
+        ],
+        "summary": "Scope a property turnover (rendered as bids_html, paid)",
+        "description": "Paid lane (x402 v2, exact scheme, USDC on Base Sepolia testnet, $0.05 per call). Same body as POST /v1/property-turnover/scope/render/bids_html, which stays free within its rate limits. Unpaid requests get HTTP 402 with PAYMENT-REQUIRED; only successful results are charged. Not available over MCP. The PAYMENT-RESPONSE and x-payment-* headers carry the transaction.",
+        "operationId": "x402_property_turnover_scope_render_bids_html",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ScopeRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "text/html; charset=utf-8": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "402": {
+            "description": "Payment required (x402 v2). The PAYMENT-REQUIRED header carries the base64 payment requirements; retry with a PAYMENT-SIGNATURE header. Also returned for an invalid payment or a failed settlement (nothing charged)."
+          },
+          "422": {
+            "description": "Invalid input. Checked before payment; never charged."
+          },
+          "412": {
+            "description": "The ruleset named in the Tektolo-Ruleset header is not the one in force, and the call did not ask to be answered under it (Tektolo-Ruleset-Mode: serve) or that version can't be served (the body's reason says why). Nothing was computed or charged; the body names both versions."
           },
           "429": {
             "description": "Rate limited (per payer wallet or per client). Never charged."
@@ -1246,6 +1986,296 @@
           },
           "503": {
             "description": "Not saved (storage unavailable); nothing was kept, try again"
+          }
+        }
+      }
+    },
+    "/v1/rules/history": {
+      "get": {
+        "tags": [
+          "rules history"
+        ],
+        "summary": "Every value a rule has had",
+        "description": "Each distinct value of the rule (or of every rule under the prefix), oldest first,\nwith the ruleset version that brought it, the commit and the dates it held\n(``known_until`` null means it still holds), and that version's changelog summary.",
+        "operationId": "rule_history_v1_rules_history_get",
+        "parameters": [
+          {
+            "name": "rule",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 3,
+              "maxLength": 200,
+              "description": "A rule ID (deposit-settlement/states/CA#return) or a prefix of one (deposit-settlement/states/CA covers every rule area of California's row).",
+              "title": "Rule"
+            },
+            "description": "A rule ID (deposit-settlement/states/CA#return) or a prefix of one (deposit-settlement/states/CA covers every rule area of California's row)."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/rules/changes": {
+      "get": {
+        "tags": [
+          "rules history"
+        ],
+        "summary": "What changed since a date",
+        "description": "Rules added, changed or removed on or after ``since``, one item per ruleset version,\noldest first. The first version indexed is the starting point, not a change.",
+        "operationId": "rule_changes_v1_rules_changes_get",
+        "parameters": [
+          {
+            "name": "since",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+              "description": "The first day to include (YYYY-MM-DD).",
+              "title": "Since"
+            },
+            "description": "The first day to include (YYYY-MM-DD)."
+          },
+          {
+            "name": "state",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "pattern": "^[A-Za-z]{2}$"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "A two-letter state code. Rules that apply in every state are included and marked all_states.",
+              "title": "State"
+            },
+            "description": "A two-letter state code. Rules that apply in every state are included and marked all_states."
+          },
+          {
+            "name": "capability",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "maxLength": 80
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "A ruleset id (deposit-settlement) or capability.",
+              "title": "Capability"
+            },
+            "description": "A ruleset id (deposit-settlement) or capability."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/rules/cites": {
+      "get": {
+        "tags": [
+          "rules history"
+        ],
+        "summary": "Every rule citing a source",
+        "description": "The rules that cite a statute or other source, as the rules stand now.",
+        "operationId": "rule_cites_v1_rules_cites_get",
+        "parameters": [
+          {
+            "name": "source",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 3,
+              "maxLength": 200,
+              "description": "A source id (ca.civ.1950.5) or a fragment of its id or URL (1950.5, leginfo.legislature.ca.gov).",
+              "title": "Source"
+            },
+            "description": "A source id (ca.civ.1950.5) or a fragment of its id or URL (1950.5, leginfo.legislature.ca.gov)."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/rules/as-of": {
+      "get": {
+        "tags": [
+          "rules history"
+        ],
+        "summary": "What we said on a date about the law on another",
+        "description": "The ruleset we served at ``known`` and the rule's value in it; with ``valid``, also\nthe dated version of the rule in force that day (from the rule's amendment history).\n``ruleset`` is null when nothing indexed was served at ``known``.",
+        "operationId": "rule_as_of_v1_rules_as_of_get",
+        "parameters": [
+          {
+            "name": "rule",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 3,
+              "maxLength": 200,
+              "description": "A rule ID (deposit-settlement/states/CA#return) or a prefix of one (deposit-settlement/states/CA covers every rule area of California's row).",
+              "title": "Rule"
+            },
+            "description": "A rule ID (deposit-settlement/states/CA#return) or a prefix of one (deposit-settlement/states/CA covers every rule area of California's row)."
+          },
+          {
+            "name": "known",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "maxLength": 40,
+              "description": "When we answered: a date (the end of that day, UTC) or an ISO time.",
+              "title": "Known"
+            },
+            "description": "When we answered: a date (the end of that day, UTC) or an ISO time."
+          },
+          {
+            "name": "valid",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "The day the law applied to (YYYY-MM-DD).",
+              "title": "Valid"
+            },
+            "description": "The day the law applied to (YYYY-MM-DD)."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/verify": {
+      "post": {
+        "tags": [
+          "verify"
+        ],
+        "summary": "Check a verify code or a signed result",
+        "description": "Check a verify code (from a document or a ``/verify/<code>`` link) or an API result's\n``signature.jws``. Says whether Tektolo issued it, which tool, ruleset and engine it\nused, when, and whether that ruleset is still current. With ``text``, also whether a\nsummary is word for word the one its code was issued for. Nothing is stored.",
+        "operationId": "verify_api_v1_verify_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/VerifyRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/VerifyResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
           }
         }
       }
@@ -1431,6 +2461,17 @@
               }
             ],
             "title": "Note"
+          },
+          "listed_if": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Listed If"
           }
         },
         "additionalProperties": false,
@@ -1734,18 +2775,6 @@
             "title": "Unless No Notice",
             "default": false
           },
-          "effective_on": {
-            "anyOf": [
-              {
-                "type": "string",
-                "format": "date"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Effective On"
-          },
           "note": {
             "anyOf": [
               {
@@ -1785,7 +2814,101 @@
           "source"
         ],
         "title": "CleaningRule",
-        "description": "How the statute treats a cleaning charge (a line's ``cleaning_kind``: ``beyond_wear``,\n``routine`` or unknown).\n\n``basis``: ``named`` when the deposit statute names cleaning as a purpose (to return the unit\nto its move-in cleanliness, reasonable cleaning): unknown kind is 'yes' with the limit noted;\n``damage`` when it does not, but a unit left dirtier than normal use is recoverable as damage\nbeyond normal wear, a breach of the tenant's duty to keep it clean, or a lease charge: unknown\nkind is 'depends'. ``routine`` (cleaning after ordinary use): ``barred`` ('no': it is normal\nwear) or ``lease`` ('depends': only if the lease provides it and the statute lets lease charges\ncome out of the deposit) or ``reasonable`` ('depends': the statute allows reasonable cleaning\ncosts with no wear limit, Mississippi, Nevada, Rhode Island, Utah). ``condition``: a precondition (Montana's written notice and 24 hours\nto clean), checked against ``documentation.cleaning_notice`` (unknown: 'depends'; no: 'no',\nunless ``unless_no_notice`` and the tenant gave no notice of leaving). ``effective_on``: the\nversion for deductions made on or after this date (Colorado HB25-1249: ordinary uncleanliness\nis normal wear from 2026-01-01); the latest in force wins."
+        "description": "How the statute treats a cleaning charge (a line's ``cleaning_kind``: ``beyond_wear``,\n``routine`` or unknown).\n\n``basis``: ``named`` when the deposit statute names cleaning as a purpose (to return the unit\nto its move-in cleanliness, reasonable cleaning): unknown kind is 'yes' with the limit noted;\n``damage`` when it does not, but a unit left dirtier than normal use is recoverable as damage\nbeyond normal wear, a breach of the tenant's duty to keep it clean, or a lease charge: unknown\nkind is 'depends'. ``routine`` (cleaning after ordinary use): ``barred`` ('no': it is normal\nwear) or ``lease`` ('depends': only if the lease provides it and the statute lets lease charges\ncome out of the deposit) or ``reasonable`` ('depends': the statute allows reasonable cleaning\ncosts with no wear limit, Mississippi, Nevada, Rhode Island, Utah). ``condition``: a precondition (Montana's written notice and 24 hours\nto clean), checked against ``documentation.cleaning_notice`` (unknown: 'depends'; no: 'no',\nunless ``unless_no_notice`` and the tenant gave no notice of leaving). A change in the law is a\nnew step of ``DeductionRules.cleaning``, judged on the day the landlord deducts (Colorado\nHB25-1249: ordinary uncleanliness is normal wear from 2026-01-01)."
+      },
+      "CleaningVersion": {
+        "properties": {
+          "basis": {
+            "type": "string",
+            "enum": [
+              "named",
+              "damage"
+            ],
+            "title": "Basis"
+          },
+          "routine": {
+            "type": "string",
+            "enum": [
+              "barred",
+              "lease",
+              "reasonable"
+            ],
+            "title": "Routine",
+            "default": "barred"
+          },
+          "routine_signed_provision": {
+            "type": "boolean",
+            "title": "Routine Signed Provision",
+            "default": false
+          },
+          "condition": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Condition"
+          },
+          "unless_no_notice": {
+            "type": "boolean",
+            "title": "Unless No Notice",
+            "default": false
+          },
+          "note": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Note"
+          },
+          "section": {
+            "type": "string",
+            "title": "Section"
+          },
+          "quote": {
+            "type": "string",
+            "maxLength": 600,
+            "title": "Quote"
+          },
+          "verbatim": {
+            "type": "boolean",
+            "title": "Verbatim",
+            "default": true
+          },
+          "source": {
+            "type": "string",
+            "title": "Source"
+          },
+          "effective_on": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Effective On"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "basis",
+          "section",
+          "quote",
+          "source"
+        ],
+        "title": "CleaningVersion",
+        "description": "A cleaning rule as the ``rules`` result shows it: one dated step of\n``DeductionRules.cleaning`` with its first day (``effective_on``; None: always), the shape\nthe result had before the rule became a ``Series`` (TEKTOLO-516)."
       },
       "Constraints": {
         "properties": {
@@ -1967,6 +3090,19 @@
             "title": "Interest Due By",
             "description": "Last day to pay the interest owed, when the rule gives it its own date earlier than the deposit's (San Francisco Admin. Code 49.2(c): two weeks after the tenant vacated; Connecticut 47a-21(i): 21 days after the termination)."
           },
+          "reverted_after": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Reverted After",
+            "description": "status reverted: the last day the tenant could act (a written demand, Oklahoma 41 O.S. 115(B); a mailing address, Iowa 562A.12(4)); the deposit reverted to the landlord after it. Omitted otherwise."
+          },
           "start_event": {
             "type": "string",
             "title": "Start Event",
@@ -2095,7 +3231,7 @@
           "send": {
             "type": "string",
             "title": "Send",
-            "description": "The input that decides it."
+            "description": "The input that decides it; empty when no input states the fact."
           }
         },
         "type": "object",
@@ -2198,7 +3334,7 @@
               }
             ],
             "title": "Description",
-            "description": "Your own short note (e.g. 'bedroom carpet, pet stains'). Never stored, hashed or returned; the statement uses the category."
+            "description": "What was damaged or owed and the repair or charge (e.g. 'bedroom carpet: pet stains, two areas patched'). Printed under the line on the itemized statement you download (HTML or PDF); never stored, logged or hashed, and not in the result."
           },
           "amount_usd": {
             "anyOf": [
@@ -2300,6 +3436,18 @@
             ],
             "title": "Has Photos",
             "description": "You have photos of this damage."
+          },
+          "good_faith_estimate": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Good Faith Estimate",
+            "description": "The amount is a good-faith estimate: the repair cannot reasonably be finished within the return period, or the vendor's bills have not arrived (California 1950.5(h)(3)). The receipts then follow within 14 days of the repair or the documents."
           },
           "utility_kind": {
             "anyOf": [
@@ -2734,11 +3882,10 @@
           },
           "cleaning": {
             "items": {
-              "$ref": "#/components/schemas/CleaningRule"
+              "$ref": "#/components/schemas/CleaningVersion"
             },
             "type": "array",
-            "title": "Cleaning",
-            "default": []
+            "title": "Cleaning"
           }
         },
         "additionalProperties": false,
@@ -3137,6 +4284,16 @@
             "type": "string",
             "title": "Result Hash"
           },
+          "signature": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ResultSignature"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
           "result": {
             "$ref": "#/components/schemas/RulesResult"
           }
@@ -3168,6 +4325,16 @@
           "result_hash": {
             "type": "string",
             "title": "Result Hash"
+          },
+          "signature": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ResultSignature"
+              },
+              {
+                "type": "null"
+              }
+            ]
           },
           "result": {
             "$ref": "#/components/schemas/SettleResult"
@@ -3204,6 +4371,16 @@
           "result_hash": {
             "type": "string",
             "title": "Result Hash"
+          },
+          "signature": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ResultSignature"
+              },
+              {
+                "type": "null"
+              }
+            ]
           },
           "result": {
             "$ref": "#/components/schemas/SettleResult"
@@ -3332,6 +4509,37 @@
           "applied"
         ],
         "title": "Depreciation"
+      },
+      "DescribeEach": {
+        "properties": {
+          "section": {
+            "type": "string",
+            "title": "Section"
+          },
+          "quote": {
+            "type": "string",
+            "maxLength": 400,
+            "title": "Quote"
+          },
+          "source": {
+            "type": "string",
+            "title": "Source"
+          },
+          "rent_only_exempt": {
+            "type": "boolean",
+            "title": "Rent Only Exempt",
+            "default": false
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "section",
+          "quote",
+          "source"
+        ],
+        "title": "DescribeEach",
+        "description": "The statute asks the itemized statement to describe each deducted item, not only to name a\ncategory (TEKTOLO-409): Texas 92.104(c) \"a written description and itemized list of all\ndeductions\", Wisconsin ATCP 134.06(3)(a) \"describe each item\", Georgia 44-7-34(a) \"the exact\nreasons\", Washington 59.18.280(1)(a) \"a full and specific statement of the basis\",\nNew Hampshire 540-A:7, I \"with particularity\", Massachusetts 15B(4)(iii) \"in precise\ndetail\". The letter prints each line's description (the caller's own words, never stored)\nand leaves a blank to fill in where none was given; a manager note names the duty."
       },
       "Documentation": {
         "properties": {
@@ -3511,6 +4719,31 @@
           "citation"
         ],
         "title": "DocumentationDuty"
+      },
+      "EngineCheck": {
+        "properties": {
+          "version": {
+            "type": "string",
+            "title": "Version"
+          },
+          "current_version": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Current Version"
+          }
+        },
+        "type": "object",
+        "required": [
+          "version",
+          "current_version"
+        ],
+        "title": "EngineCheck"
       },
       "EstimateContext": {
         "properties": {
@@ -4981,8 +6214,7 @@
               "$ref": "#/components/schemas/RateWindow"
             },
             "type": "array",
-            "title": "Rate Schedule",
-            "default": []
+            "title": "Rate Schedule"
           },
           "method": {
             "type": "string",
@@ -5522,6 +6754,16 @@
               }
             ]
           },
+          "describe_each": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/DescribeEach"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
           "refund_with_list": {
             "type": "boolean",
             "title": "Refund With List",
@@ -6013,6 +7255,17 @@
               }
             ],
             "title": "Note"
+          },
+          "unnotified_section": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Unnotified Section"
           }
         },
         "additionalProperties": false,
@@ -6967,6 +8220,16 @@
             "type": "string",
             "title": "Result Hash"
           },
+          "signature": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ResultSignature"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
           "result": {
             "$ref": "#/components/schemas/IssueCodesResult"
           }
@@ -6998,6 +8261,16 @@
           "result_hash": {
             "type": "string",
             "title": "Result Hash"
+          },
+          "signature": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ResultSignature"
+              },
+              {
+                "type": "null"
+              }
+            ]
           },
           "result": {
             "$ref": "#/components/schemas/ScopeResult"
@@ -7035,6 +8308,16 @@
             "type": "string",
             "title": "Result Hash"
           },
+          "signature": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ResultSignature"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
           "result": {
             "$ref": "#/components/schemas/ScopeResult"
           }
@@ -7066,6 +8349,16 @@
           "result_hash": {
             "type": "string",
             "title": "Result Hash"
+          },
+          "signature": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ResultSignature"
+              },
+              {
+                "type": "null"
+              }
+            ]
           },
           "result": {
             "$ref": "#/components/schemas/ScopeResult"
@@ -7102,6 +8395,16 @@
           "result_hash": {
             "type": "string",
             "title": "Result Hash"
+          },
+          "signature": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ResultSignature"
+              },
+              {
+                "type": "null"
+              }
+            ]
           },
           "result": {
             "$ref": "#/components/schemas/ScopeResult"
@@ -7448,7 +8751,7 @@
           "rate_value"
         ],
         "title": "RateWindow",
-        "description": "A published rate for a period (San Francisco's March-February year, a Berkeley move-out\nmonth, a Connecticut calendar year)."
+        "description": "A published rate for a period (San Francisco's March-February year, a Berkeley move-out\nmonth, a Connecticut calendar year), as the ``rules`` result shows one step of\n``InterestRule.rate_schedule``: the shape the result had before the schedule became a\n``Series`` (TEKTOLO-516)."
       },
       "Receipts": {
         "properties": {
@@ -7508,6 +8811,28 @@
               }
             ],
             "title": "Gate Note"
+          },
+          "estimate_section": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Estimate Section"
+          },
+          "estimate_note": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Estimate Note"
           }
         },
         "additionalProperties": false,
@@ -7679,6 +9004,110 @@
         ],
         "title": "Responsibility"
       },
+      "ResultSignature": {
+        "properties": {
+          "jws": {
+            "type": "string",
+            "title": "Jws",
+            "description": "Compact JWS (RFC 7515), alg EdDSA (Ed25519, RFC 8037), typ tektolo-provenance+jws. Check it against the keys at /.well-known/tektolo-signing-keys.json on the site you called, never against a key a document points to."
+          },
+          "payload": {
+            "$ref": "#/components/schemas/ResultSignaturePayload",
+            "description": "The JWS payload, decoded, for reading."
+          },
+          "verify_code": {
+            "type": "string",
+            "title": "Verify Code",
+            "description": "A short code that proves the result came from Tektolo without carrying its figures. Safe to print on a document; the payload above is not meant to be shared."
+          },
+          "verify_url": {
+            "type": "string",
+            "title": "Verify Url",
+            "description": "Where anyone can check the code."
+          }
+        },
+        "type": "object",
+        "required": [
+          "jws",
+          "payload",
+          "verify_code",
+          "verify_url"
+        ],
+        "title": "ResultSignature",
+        "description": "Tektolo's signature over where this result came from (docs/verify.md)."
+      },
+      "ResultSignaturePayload": {
+        "properties": {
+          "v": {
+            "type": "integer",
+            "title": "V",
+            "description": "Payload format version (1)."
+          },
+          "kid": {
+            "type": "string",
+            "title": "Kid",
+            "description": "Id of the key that signed it (see the signing keys file)."
+          },
+          "capability": {
+            "type": "string",
+            "title": "Capability"
+          },
+          "operation": {
+            "type": "string",
+            "title": "Operation"
+          },
+          "ruleset_version": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Ruleset Version"
+          },
+          "ruleset_hash": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Ruleset Hash"
+          },
+          "engine_version": {
+            "type": "string",
+            "title": "Engine Version"
+          },
+          "result_hash": {
+            "type": "string",
+            "title": "Result Hash",
+            "description": "The envelope's result_hash."
+          },
+          "issued_at": {
+            "type": "string",
+            "title": "Issued At",
+            "description": "When the result was computed (UTC, RFC 3339)."
+          }
+        },
+        "type": "object",
+        "required": [
+          "v",
+          "kid",
+          "capability",
+          "operation",
+          "ruleset_version",
+          "ruleset_hash",
+          "engine_version",
+          "result_hash",
+          "issued_at"
+        ],
+        "title": "ResultSignaturePayload",
+        "description": "The signed statement (the JWS payload, decoded). Canonical JSON: sorted keys, compact."
+      },
       "ReturnRule": {
         "properties": {
           "days": {
@@ -7755,6 +9184,11 @@
               }
             ],
             "title": "Start Note"
+          },
+          "demand_in_writing": {
+            "type": "boolean",
+            "title": "Demand In Writing",
+            "default": false
           },
           "alternatives": {
             "items": {
@@ -7968,6 +9402,19 @@
             ],
             "title": "City",
             "description": "Optional city for its overlay (e.g. 'Chicago')."
+          },
+          "as_of": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "As Of",
+            "description": "Optional date (YYYY-MM-DD): show the law in force on that day, for a past move-out the day the tenancy ended. Omitted: the current law."
           }
         },
         "additionalProperties": false,
@@ -8078,6 +9525,63 @@
           "provenance"
         ],
         "title": "RulesResult"
+      },
+      "RulesetCheck": {
+        "properties": {
+          "version": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Version"
+          },
+          "hash_prefix": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Hash Prefix",
+            "description": "The first 16 hex digits of the ruleset hash."
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "current",
+              "superseded",
+              "unknown",
+              "none"
+            ],
+            "title": "Status"
+          },
+          "current_version": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Current Version",
+            "description": "The ruleset this site uses now."
+          }
+        },
+        "type": "object",
+        "required": [
+          "version",
+          "hash_prefix",
+          "status",
+          "current_version"
+        ],
+        "title": "RulesetCheck"
       },
       "RunInfo": {
         "properties": {
@@ -8777,7 +10281,7 @@
               }
             ],
             "title": "Demand Received On",
-            "description": "Day you received the tenant's written demand for the deposit (YYYY-MM-DD). Arizona, Kansas, Oklahoma, South Carolina and Mississippi start the clock on it."
+            "description": "Day you received the tenant's demand for the deposit (YYYY-MM-DD; written in Oklahoma, by first-class mail in Maryland 8-203(h)). Arizona, Kansas, Oklahoma, South Carolina and Mississippi start the clock on it."
           },
           "new_tenant_moved_in_on": {
             "anyOf": [
@@ -9965,10 +11469,11 @@
               "not_yet_due",
               "overdue",
               "not_started",
-              "none_in_statute"
+              "none_in_statute",
+              "reverted"
             ],
             "title": "Status",
-            "description": "on_time / late (done, by or after due_by); not_yet_due / overdue (not done as of as_of); not_started (the start event is missing); none_in_statute."
+            "description": "on_time / late (done, by or after due_by); not_yet_due / overdue (not done as of as_of); not_started (the start event is missing); none_in_statute; reverted (the deposit reverted to the landlord: no deadline runs; note says why)."
           },
           "days_late": {
             "anyOf": [
@@ -10242,6 +11747,253 @@
         ],
         "title": "Vendor"
       },
+      "VerifyRequest": {
+        "properties": {
+          "code": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 712
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Code",
+            "description": "A verify code, or a whole verify link (…/verify/<code>)."
+          },
+          "text": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 20000
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Text",
+            "description": "Optional, for a summary's code: the summary's text, to check it was not changed. Compared in memory and not stored."
+          },
+          "jws": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 4096
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Jws",
+            "description": "Instead of a code: an API result's signature.jws, to check its signature."
+          }
+        },
+        "type": "object",
+        "title": "VerifyRequest"
+      },
+      "VerifyResponse": {
+        "properties": {
+          "signing": {
+            "type": "string",
+            "enum": [
+              "on",
+              "off"
+            ],
+            "title": "Signing"
+          },
+          "verified": {
+            "type": "boolean",
+            "title": "Verified",
+            "description": "True only when Tektolo's signature checks out."
+          },
+          "reason": {
+            "type": "string",
+            "title": "Reason",
+            "description": "Empty when verified; else malformed, unsupported, unknown_key, bad_signature or signing_off."
+          },
+          "message": {
+            "type": "string",
+            "title": "Message"
+          },
+          "kid": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Kid"
+          },
+          "issued_on": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Issued On",
+            "description": "The day it was issued (UTC)."
+          },
+          "issued_at": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Issued At",
+            "description": "JWS only: the exact time."
+          },
+          "capability": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Capability"
+          },
+          "capability_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Capability Name"
+          },
+          "tool_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Tool Name",
+            "description": "The web tool's name when a web tool issued it."
+          },
+          "operation": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Operation"
+          },
+          "document": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Document",
+            "description": "What the code was printed on."
+          },
+          "ruleset": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/RulesetCheck"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "engine": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/EngineCheck"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "result_hash": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Result Hash",
+            "description": "JWS only."
+          },
+          "covers": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "result",
+                  "text"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Covers",
+            "description": "What the code's keyed digest covers: one result, or a summary's text."
+          },
+          "text_check": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "not_asked",
+                  "matches",
+                  "differs",
+                  "not_available"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Text Check"
+          },
+          "text_message": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Text Message"
+          }
+        },
+        "type": "object",
+        "required": [
+          "signing",
+          "verified",
+          "reason",
+          "message"
+        ],
+        "title": "VerifyResponse"
+      },
       "tektolo_deposit_settlement__models__Note": {
         "properties": {
           "code": {
@@ -10287,6 +12039,19 @@
             },
             "type": "array",
             "title": "Sources"
+          },
+          "rules_as_of": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Rules As Of",
+            "description": "The rules are as of this day: the earliest date on which a source behind this answer was read (the accessed date of each source in sources; each citation gives its own). A change in the law after it is not reflected unless a later ruleset version says so: every version and what it changed is listed at /changelog, with an Atom feed per state. Null when no state's rules apply (a state not covered)."
           }
         },
         "type": "object",

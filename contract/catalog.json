@@ -10,6 +10,7 @@
     "connect_your_ai": "https://tektolo.com/connect-your-ai",
     "tools": "https://tektolo.com/tools/",
     "reference": "https://tektolo.com/reference/",
+    "open_data": "https://tektolo.com/data/",
     "developers": "https://tektolo.com/capabilities/",
     "contact": "https://tektolo.com/contact",
     "pricing": "https://tektolo.com/pricing",
@@ -64,7 +65,7 @@
       "id": "rental-property",
       "name": "Rental property",
       "description": "Free tools for the move-out: what the turn costs, what to return from the deposit, and whether a deposit came back on time.",
-      "audience_line": "For landlords, property managers, tenants and the AI agents working for them.",
+      "audience_line": "For small landlords, property managers, tenants and the AI agents working for them.",
       "hub": "https://tektolo.com/tools/rental-property/",
       "mcp": "https://tektolo.com/mcp/rental-property",
       "capabilities": [
@@ -81,6 +82,30 @@
           ]
         }
       ]
+    }
+  ],
+  "open_data": [
+    {
+      "id": "deposit-rules",
+      "name": "Security deposit rules by US state and city",
+      "capability": "deposit-settlement",
+      "description": "The security deposit rules for all 50 US states and the District of Columbia, plus 9 city ordinances, as open data under CC BY 4.0: the deadline to return a deposit and what starts it, the itemized statement and documentation duties, the deductions each statute allows, interest, penalties, forfeiture and deposit caps. Every row cites the statute or ordinance, quotes the text and links to the official source with the date it was last read. Generated from the ruleset the Tektolo deposit settlement tool runs on.",
+      "page": "https://tektolo.com/data/deposit-rules/",
+      "version": "sd-2026.11.20",
+      "ruleset_hash": "sha256:4d2df5171e876ddc04b0a2b1a11c2792dcee800bcf29ddafb365924d060721dc",
+      "date_modified": "2026-10-15",
+      "license": {
+        "id": "CC-BY-4.0",
+        "url": "https://creativecommons.org/licenses/by/4.0/"
+      },
+      "citation": "Tektolo. Security deposit rules by US state and city, version sd-2026.11.20. https://tektolo.com/data/deposit-rules/. Licensed under CC BY 4.0.",
+      "rows": 60,
+      "files": {
+        "csv": "https://tektolo.com/data/deposit-rules/latest/deposit-rules.csv",
+        "json": "https://tektolo.com/data/deposit-rules/latest/deposit-rules.json",
+        "datapackage": "https://tektolo.com/data/deposit-rules/latest/datapackage.json"
+      },
+      "archived_versions": []
     }
   ],
   "audiences": [
@@ -170,7 +195,9 @@
         "cost to paint and clean a rental",
         "carpet replacement cost",
         "punch list from inspection notes",
-        "rental repair cost by ZIP code"
+        "rental repair cost by ZIP code",
+        "turnover tool for a few apartments I own",
+        "apartment turnover cost estimate"
       ],
       "determinism": "strict",
       "coverage": {
@@ -209,10 +236,11 @@
             "when_not_to_use": "Diagnosing hazards (they come back as refer-outs to a licensed professional); legal advice on deposits; remodel bids; properties outside the US.",
             "tips": [
               "If the ZIP is missing or not exactly 5 digits, ask the user; never guess or pad it.",
-              "Relay refer_outs first, then the totals; say the numbers are estimates, not quotes."
+              "Relay refer_outs first, then the totals; say the numbers are estimates, not quotes.",
+              "From photos, list only what is visible, with its room (\"stained carpet in bedroom 2\"). Hedge doubtful ones (\"possible water stain?\") and ask the user about what photos cannot show: working appliances, odors, pests, sizes. Never state that a tenant caused damage because of a photo."
             ],
             "example": "{\"zip\": \"43215\", \"bedrooms\": 2, \"bathrooms\": 1, \"issues\": [\"stained carpet in both bedrooms\", \"nail holes everywhere\", \"oven is filthy\"]}",
-            "mcp_description": "Estimates what it costs to turn over a US rental unit after move-out; the first tool for a turnover estimate. Inputs: a 5-digit ZIP, bedrooms, bathrooms and the issues in plain English (e.g. \"stained carpet in both bedrooms\"); optional unit type, size, year built. Returns a priced make-ready estimate: repair tasks by trade with low/expected/high costs for the ZIP's labor market, must/should/could priorities, refer-outs to licensed professionals, assumptions, and links to the web tool and downloads. Same engine as property_turnover_scope. Not for: diagnosing hazards, legal advice on deposits, remodel bids, properties outside the US."
+            "mcp_description": "Estimates what it costs to turn over a US rental unit after move-out; the first tool for a turnover estimate. Inputs: a 5-digit ZIP, bedrooms, bathrooms and the issues in plain English (e.g. \"stained carpet in both bedrooms\"), which may come from the user's photos; optional unit type, size, year built. Returns a priced make-ready estimate: repair tasks by trade with low/expected/high costs for the ZIP's labor market, must/should/could priorities, refer-outs to licensed professionals, assumptions, and links to the web tool and downloads. Same engine as property_turnover_scope. Not for: diagnosing hazards, legal advice on deposits, remodel bids, properties outside the US."
           },
           "examples": [
             {
@@ -297,6 +325,11 @@
               "rest": "https://tektolo.com/v1/property-turnover/scope/render/vendor_csv",
               "method": "POST",
               "media_type": "application/zip"
+            },
+            "bids_html": {
+              "rest": "https://tektolo.com/v1/property-turnover/scope/render/bids_html",
+              "method": "POST",
+              "media_type": "text/html; charset=utf-8"
             }
           },
           "requires_key": false,
@@ -313,6 +346,7 @@
             "when_not_to_use": "Diagnosing hazards (they come back as refer-outs to a licensed professional); legal advice on deposits; remodel bids; properties outside the US.",
             "tips": [
               "If the ZIP is missing or not exactly 5 digits, ask the user; never guess or pad it.",
+              "From photos, describe only what is visible, with its room (location); an issue code only if one clearly fits. Hedge doubtful ones (\"possible\", \"?\") and ask the user about what photos cannot show: working appliances, odors, pests, sizes. Never state that a tenant caused damage because of a photo; responsibility stays a hint from the engine. Send no faces, names or addresses. A photo of a written checklist or report is different, so transcribe it as written.",
               "Describe each finding in plain words (description). Only send a code returned by property_turnover_issue_codes; unmatched findings come back as manual-quote lines with suggested codes.",
               "Give measured quantities when you have them (e.g. 120 sq_ft); otherwise typical sizes are assumed and listed in assumptions.",
               "Send property.floor_coverings when you know whether there is carpet, and unit_type single_family for houses; both change the baseline scope.",
@@ -829,6 +863,11 @@
                 "method": "POST",
                 "url": "https://tektolo.com/v1/x402/property-turnover/scope/render/vendor_csv",
                 "price_usd": "0.05"
+              },
+              "bids_html": {
+                "method": "POST",
+                "url": "https://tektolo.com/v1/x402/property-turnover/scope/render/bids_html",
+                "price_usd": "0.05"
               }
             },
             "headers": {
@@ -883,8 +922,8 @@
         "Responsibility labels (wear vs damage) are hints, not legal determinations; deposit rules vary by state."
       ],
       "ruleset": {
-        "version": "pt-2026.10.11",
-        "hash": "sha256:7f72b12003b18b9f7cd69ecc7081392cad6d004a21ebc1612215c558dc1ebe2e",
+        "version": "pt-2026.10.12",
+        "hash": "sha256:88d90af65ebf752f3a3a5ce40436399d60649d4f5c96385f2e2965214ceef163",
         "sources": [
           {
             "id": "hud.nspire.index",
@@ -2160,7 +2199,9 @@
         "how much can I deduct from a deposit",
         "charge a tenant for damage",
         "security deposit law by state",
-        "move-out deposit letter"
+        "move-out deposit letter",
+        "security deposit deduction calculator",
+        "how much can I charge a tenant for carpet or paint"
       ],
       "determinism": "strict",
       "coverage": {
@@ -2485,7 +2526,7 @@
       "privacy": {
         "retention_days": 0,
         "trains_models": false,
-        "personal_data": "Inputs are a state, a city, amounts, dates and deduction categories; no tenant name, address or unit number is asked for. Deduction descriptions are never stored, logged, hashed or returned. Requests are not stored and no per-settlement record is kept. Each call leaves only the standard usage log line (capability, status, duration, hashes, a daily-rotating anonymous fingerprint)."
+        "personal_data": "Inputs are a state, a city, amounts, dates and deduction categories; no tenant name, address or unit number is asked for. Deduction descriptions are never stored, logged or hashed; they are printed only on the letter you download. Requests are not stored and no per-settlement record is kept. Each call leaves only the standard usage log line (capability, status, duration, hashes, a daily-rotating anonymous fingerprint)."
       },
       "limitations": [
         "Computes and cites the published rule; it is not legal advice. Check the statute, your lease and local ordinances before you sign the statement.",
@@ -2496,8 +2537,8 @@
         "Some rule text is summarised rather than quoted; each citation says which."
       ],
       "ruleset": {
-        "version": "sd-2026.11.14",
-        "hash": "sha256:bb8821a7e2fac7086a70d5abb9556a39f5eb22e4c89e6586424f5af097eee0b5",
+        "version": "sd-2026.11.20",
+        "hash": "sha256:4d2df5171e876ddc04b0a2b1a11c2792dcee800bcf29ddafb365924d060721dc",
         "sources": [
           {
             "id": "al.code-35-9a-201",
@@ -2743,19 +2784,19 @@
             "id": "il.ilcs-765-710",
             "title": "Security Deposit Return Act, 765 ILCS 710",
             "publisher": "Illinois General Assembly",
-            "url": "https://www.ilga.gov/legislation/ilcs/ilcs3.asp?ActID=2202&ChapterID=62"
+            "url": "https://www.ilga.gov/Legislation/ILCS/Articles?ActID=2202&ChapterID=62"
           },
           {
             "id": "il.ilcs-765-715",
             "title": "Security Deposit Interest Act, 765 ILCS 715",
             "publisher": "Illinois General Assembly",
-            "url": "https://www.ilga.gov/legislation/ilcs/ilcs3.asp?ActID=2203&ChapterID=62"
+            "url": "https://www.ilga.gov/Legislation/ILCS/Articles?ActID=2203&ChapterID=62"
           },
           {
             "id": "il.pa-103-0224",
             "title": "Illinois Public Act 103-0224",
             "publisher": "Illinois General Assembly",
-            "url": "https://www.ilga.gov/legislation/publicacts/fulltext.asp?Name=103-0224"
+            "url": "https://www.ilga.gov/Legislation/PublicActs/View/103-0224"
           },
           {
             "id": "in.code-32-31-3-12",

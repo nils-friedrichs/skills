@@ -74,7 +74,10 @@ legal advice, and the manager signs the statement.
    `item_installed_on` or `item_age_years` (one, not both), and `useful_life_years` when known;
    set `caused_by_tenant: false` for normal wear (damage and cleaning lines only). Cleaning:
    `cleaning_kind` (`beyond_wear`, `routine`, `unknown`). Late fees: `late_payments`. Carpet cleaning is `cleaning` (or `work_kind: cleaning`); `work_kind: repair` is never depreciated. Rent after a re-rental: `rent_through` on the rent line, and `new_tenant_moved_in_on` / `new_tenant_rent_usd` (rent for the new tenant's days is not recoverable twice).
-   `description` is for the user only: it is never stored or returned.
+   `description`: what was damaged or owed and the repair or charge. It prints under the
+   line on the itemized statement download (HTML or PDF) and is never stored, logged or
+   hashed, or put in the result. TX, WI, GA, WA, NH and MA require each deducted item to
+   be described, so pass one per deduction there.
 4. `documentation`: what the manager has (`itemized_statement`, `receipts`,
    `photos_move_in`, `photos_move_out`, `photos_after_repair`, `cleaning_notice`: Montana);
    leave out what is unknown. Unknown or misspelled fields are rejected, not ignored.
