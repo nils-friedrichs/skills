@@ -87,8 +87,8 @@
         },
         {
           "id": "property-turnover",
-          "contract_version": "0.11.0",
-          "ruleset_hash": "sha256:88d90af65ebf752f3a3a5ce40436399d60649d4f5c96385f2e2965214ceef163",
+          "contract_version": "0.14.0",
+          "ruleset_hash": "sha256:fd72faf08fb167363a410285cbaadde6577e6f8e6cb613de39efb55c3094424c",
           "domain": "rental-property",
           "audiences": [
             "landlord_pm",

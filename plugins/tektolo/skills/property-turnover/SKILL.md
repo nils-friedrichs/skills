@@ -5,10 +5,17 @@ description: Turn rental-unit move-out or turnover inspection findings (reports,
 
 # Property turnover estimate
 
-Tektolo runs a deterministic, source-cited engine. You turn what the user has (an
+Tektolo prices with a deterministic, source-cited engine. You turn what the user has (an
 inspection report, photos, notes) into **findings**. The engine returns standardized tasks
 by trade, regional low / expected / high costs, priorities, vendor scopes, refer-outs, and
-every assumption it made. The same input always gives the same result (`result_hash`).
+every assumption it made. The rules always decide; an AI model (gpt-6-luna on Microsoft Azure
+OpenAI) may only read the user's words into findings, and you always see what it read.
+`quick_estimate` reads words the matcher cannot place with the AI model. `scope` reads with
+the matcher alone unless you send `read: "ai"`. An answer that used an AI reading is a draft
+(`review.status: "draft"`) and carries `reading`: every finding the rules answered, in the
+shape `scope` accepts. The same findings under the same ruleset give the same result
+(`result_hash`), but a reading can differ from one run to the next, so show the user the
+findings the AI read before you quote a number.
 
 ## When to use
 
@@ -54,8 +61,15 @@ every assumption it made. The same input always gives the same result (`result_h
 2. **findings**: one per observed condition.
    - Use `code` when you know it (e.g. `walls.nail_holes`, `carpet.pet_urine`),
      otherwise a short plain `description` ("dog urine stains in bedroom carpet").
-     Unmatched findings come back as manual-quote lines with `suggested_codes`. Resend
-     with a code.
+     Words the matcher cannot place come back as a manual-quote line with
+     `suggested_codes`; resend with a code. With `read: "ai"` they go to the AI reader
+     first: a finding it reads comes back with `resolution: "ai"` and `needs_review: true`,
+     its lines are flagged, and the answer is a draft. A finding sent with a code never goes
+     to the AI model.
+   - To confirm what the AI read, send the findings from `reading.findings` back to `scope`
+     (keep each finding's `extraction`, fix any the user corrects) with `confirmed: true` on
+     each one the user checked. The answer is then `verified`, and the result still shows
+     those findings as read by AI.
    - `location.area` (bedroom, bathroom, kitchen, living_room, ..., whole_unit) and an
      optional `label` ("Bedroom 2").
    - `extent`: `spot` | `partial` | `full` when you can tell.
@@ -127,6 +141,12 @@ Tektolo does not look at photos. You do, then you send findings and the engine p
   its `responsibility_by_finding` before discussing tenant charges.
 - List `unknowns` and the important `assumptions` (e.g. assumed room sizes, national
   prices used), so the user can correct them and re-run.
+- When `review.status` is `draft`, show the user what was read (`reading.findings`: the
+  words, the item and the room) before you quote a number, and ask them to confirm or correct
+  it. For a verified answer, send the confirmed findings to `scope` with `confirmed: true`.
+- Name every finding with `needs_review`: the AI reader read it from the user's words, so
+  ask the user to confirm it. A `review.note` means the reader was not available (daily limit
+  or an error) and the text was read by the matcher alone.
 - Group the work by `trade_scopes` when the user wants to brief vendors. Offer the
   workbook or vendor CSV downloads.
 - If the user needs an audit trail, keep the `result_hash` and `run.ruleset_version`. Over MCP

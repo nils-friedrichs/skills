@@ -1,6 +1,6 @@
 # Tektolo
 
-> Reliable tools for real-world operations work. Each tool is a tested engine with cited rules; use it from the web, the API, or your AI assistant. Every result is deterministic, carries its assumptions and sources, and is available over REST and MCP.
+> Reliable tools for real-world operations work. Each tool is a tested engine with cited rules; use it from the web, the API, or your AI assistant. Every result is computed by rules from structured inputs, carries its assumptions and sources, and is available over REST and MCP. Where a tool reads free text, an AI model may turn it into findings; the result marks those findings for review, and the AI never sets a number. The same structured input under the same ruleset always gives the same result.
 
 Tools are grouped by domain (the world a tool operates in); each lists its audiences and, when it is part of one, its workflow step. All tools: https://tektolo.com/tools/
 

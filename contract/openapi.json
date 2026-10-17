@@ -2,7 +2,7 @@
   "openapi": "3.1.0",
   "info": {
     "title": "Tektolo Capabilities API",
-    "summary": "Deterministic, source-cited capabilities for humans, developers and agents.",
+    "summary": "Source-cited capabilities for humans, developers and agents: the same findings under the same ruleset always give the same answer.",
     "version": "0.1.0"
   },
   "paths": {
@@ -680,7 +680,7 @@
           "property-turnover"
         ],
         "summary": "Quick turnover estimate (start here)",
-        "description": "The easiest way to estimate a US rental turnover: a ZIP, bedrooms, bathrooms and a list of plain-English issues in, a priced make-ready estimate out (same engine and result as property_turnover_scope, short summary by default).\nWhen to use: Start here when the user describes a move-out or turnover in words (\"carpet stained in both bedrooms, oven filthy\") and wants a cost estimate or what to tell vendors. Use property_turnover_scope instead for rate cards, owner decisions, measured quantities or per-finding control.\nNot for: Diagnosing hazards (they come back as refer-outs to a licensed professional); legal advice on deposits; remodel bids; properties outside the US.\nTip: If the ZIP is missing or not exactly 5 digits, ask the user; never guess or pad it.\nTip: Relay refer_outs first, then the totals; say the numbers are estimates, not quotes.\nTip: From photos, list only what is visible, with its room (\"stained carpet in bedroom 2\"). Hedge doubtful ones (\"possible water stain?\") and ask the user about what photos cannot show: working appliances, odors, pests, sizes. Never state that a tenant caused damage because of a photo.\nDeterministic: the same input returns the same result_hash. Capability property-turnover v0.11.0 (experimental).",
+        "description": "The easiest way to estimate a US rental turnover: a ZIP, bedrooms, bathrooms and a list of plain-English issues in, a priced make-ready estimate out (same engine and result as property_turnover_scope, short summary by default).\nWhen to use: Start here when the user describes a move-out or turnover in words (\"carpet stained in both bedrooms, oven filthy\") and wants a cost estimate or what to tell vendors. Use property_turnover_scope instead for rate cards, owner decisions, measured quantities or per-finding control.\nNot for: Diagnosing hazards (they come back as refer-outs to a licensed professional); legal advice on deposits; remodel bids; properties outside the US.\nTip: If the ZIP is missing or not exactly 5 digits, ask the user; never guess or pad it.\nTip: Relay refer_outs first, then the totals; say the numbers are estimates, not quotes.\nTip: When review.status is draft, show the user what was read (reading.findings) before you quote a number, and ask them to confirm or correct it. For a verified answer, send the confirmed findings to property_turnover_scope with confirmed true on each. A review.note means the AI reader was unavailable and the text was read by the matcher alone.\nTip: From photos, list only what is visible, with its room (\"stained carpet in bedroom 2\"). Hedge doubtful ones (\"possible water stain?\") and ask the user about what photos cannot show: working appliances, odors, pests, sizes. Never state that a tenant caused damage because of a photo.\nThe same findings under the same ruleset return the same result_hash. An AI model may read notes into findings, marked for review (review, reading); it never sets a number. Capability property-turnover v0.14.0 (experimental).",
         "operationId": "property_turnover_quick_estimate",
         "parameters": [
           {
@@ -763,7 +763,7 @@
           "property-turnover"
         ],
         "summary": "Scope a property turnover",
-        "description": "Turn move-out / turnover inspection findings for a US rental unit into a priced make-ready scope: standardized tasks by trade, regional low/expected/high costs, must/should/could priorities, vendor scopes, refer-outs to licensed professionals, and every assumption stated.\nWhen to use: Turnover findings for a US rental unit when you need control: rooms, measured quantities, the manager's own prices (rate_card) or owner approve/decline decisions. For a plain-English estimate, property_turnover_quick_estimate is easier.\nNot for: Diagnosing hazards (they come back as refer-outs to a licensed professional); legal advice on deposits; remodel bids; properties outside the US.\nTip: If the ZIP is missing or not exactly 5 digits, ask the user; never guess or pad it.\nTip: From photos, describe only what is visible, with its room (location); an issue code only if one clearly fits. Hedge doubtful ones (\"possible\", \"?\") and ask the user about what photos cannot show: working appliances, odors, pests, sizes. Never state that a tenant caused damage because of a photo; responsibility stays a hint from the engine. Send no faces, names or addresses. A photo of a written checklist or report is different, so transcribe it as written.\nTip: Describe each finding in plain words (description). Only send a code returned by property_turnover_issue_codes; unmatched findings come back as manual-quote lines with suggested codes.\nTip: Give measured quantities when you have them (e.g. 120 sq_ft); otherwise typical sizes are assumed and listed in assumptions.\nTip: Send property.floor_coverings when you know whether there is carpet, and unit_type single_family for houses; both change the baseline scope.\nTip: Relay the summary, refer_outs, assumptions and unknowns to the user; costs are estimate ranges, not quotes.\nTip: Use detail=summary unless the user asks for every line item (summary already lists every line tied to a finding).\nTip: Rate card examples - {\"trade\": \"handyman\", \"unit_price\": 65, \"uom\": \"hour\"} or {\"task_id\": \"carpet.clean\", \"unit_price\": 0.2, \"uom\": \"sq_ft\"}; check rate_card_applied and rate_card_ignored before saying a rate was used.\nTip: For the Excel workbook or owner estimate, give the user links.web_tool_prefilled (opens the free web tool with these findings) or POST the same arguments to links.downloads; do not build a spreadsheet yourself.\nDeterministic: the same input returns the same result_hash. Capability property-turnover v0.11.0 (experimental).",
+        "description": "Turn move-out / turnover inspection findings for a US rental unit into a priced make-ready scope: standardized tasks by trade, regional low/expected/high costs, must/should/could priorities, vendor scopes, refer-outs to licensed professionals, and every assumption stated.\nWhen to use: Turnover findings for a US rental unit when you need control: rooms, measured quantities, the manager's own prices (rate_card) or owner approve/decline decisions. For a plain-English estimate, property_turnover_quick_estimate is easier.\nNot for: Diagnosing hazards (they come back as refer-outs to a licensed professional); legal advice on deposits; remodel bids; properties outside the US.\nTip: If the ZIP is missing or not exactly 5 digits, ask the user; never guess or pad it.\nTip: From photos, describe only what is visible, with its room (location); an issue code only if one clearly fits. Hedge doubtful ones (\"possible\", \"?\") and ask the user about what photos cannot show: working appliances, odors, pests, sizes. Never state that a tenant caused damage because of a photo; responsibility stays a hint from the engine. Send no faces, names or addresses. A photo of a written checklist or report is different, so transcribe it as written.\nTip: Describe each finding in plain words (description). Only send a code returned by property_turnover_issue_codes. Words the matcher cannot place come back as a manual-quote line with suggested codes. With read set to ai, an AI model reads them first: the answer is a draft and reading.findings lists what it read.\nTip: To confirm an AI reading, send the findings from reading.findings (keep each one's extraction, correct any the user changes) with confirmed true on each one the user checked. The answer is then verified and still shows which findings were read by AI.\nTip: Give measured quantities when you have them (e.g. 120 sq_ft); otherwise typical sizes are assumed and listed in assumptions.\nTip: Send property.floor_coverings when you know whether there is carpet, and unit_type single_family for houses; both change the baseline scope.\nTip: Relay the summary, refer_outs, assumptions and unknowns to the user; costs are estimate ranges, not quotes.\nTip: Use detail=summary unless the user asks for every line item (summary already lists every line tied to a finding).\nTip: Rate card examples - {\"trade\": \"handyman\", \"unit_price\": 65, \"uom\": \"hour\"} or {\"task_id\": \"carpet.clean\", \"unit_price\": 0.2, \"uom\": \"sq_ft\"}; check rate_card_applied and rate_card_ignored before saying a rate was used.\nTip: For the Excel workbook or owner estimate, give the user links.web_tool_prefilled (opens the free web tool with these findings) or POST the same arguments to links.downloads; do not build a spreadsheet yourself.\nThe same findings under the same ruleset return the same result_hash. An AI model may read notes into findings, marked for review (review, reading); it never sets a number. Capability property-turnover v0.14.0 (experimental).",
         "operationId": "property_turnover_scope",
         "parameters": [
           {
@@ -1261,7 +1261,7 @@
           "property-turnover"
         ],
         "summary": "Look up turnover issue codes",
-        "description": "Search the standard taxonomy of rental-unit turnover issues (component.issue codes) by keyword or area.\nWhen to use: Only while preparing findings for a turnover cost estimate, to find the standard issue code for something observed (e.g. \"pet stain on carpet\"). Never needed to answer a question; call with no arguments to list the taxonomy areas and the first codes.\nNot for: Legal or security-deposit questions; anything outside rental turnover and make-ready work. Not needed before quick_estimate or scope: a plain description works there.\nTip: Call with no arguments to list the taxonomy areas (in `areas`) and the first codes.\nTip: Codes are optional for scoping; a plain description also works.\nDeterministic: the same input returns the same result_hash. Capability property-turnover v0.11.0 (experimental).",
+        "description": "Search the standard taxonomy of rental-unit turnover issues (component.issue codes) by keyword or area.\nWhen to use: Only while preparing findings for a turnover cost estimate, to find the standard issue code for something observed (e.g. \"pet stain on carpet\"). Never needed to answer a question; call with no arguments to list the taxonomy areas and the first codes.\nNot for: Legal or security-deposit questions; anything outside rental turnover and make-ready work. Not needed before quick_estimate or scope: a plain description works there.\nTip: Call with no arguments to list the taxonomy areas (in `areas`) and the first codes.\nTip: Codes are optional for scoping; a plain description also works.\nDeterministic: the same input returns the same result_hash. Capability property-turnover v0.14.0 (experimental).",
         "operationId": "property_turnover_issue_codes",
         "parameters": [
           {
@@ -4278,11 +4278,39 @@
           },
           "input_hash": {
             "type": "string",
-            "title": "Input Hash"
+            "title": "Input Hash",
+            "description": "Hash of the question the rules answered: the request, or when free text was read by AI, the request with the read findings (reading.findings) in its place."
+          },
+          "request_hash": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Request Hash",
+            "description": "Hash of the request as sent; equal to input_hash when nothing was read by AI."
           },
           "result_hash": {
             "type": "string",
             "title": "Result Hash"
+          },
+          "review": {
+            "$ref": "#/components/schemas/Review",
+            "description": "draft while an AI-read finding is unconfirmed (show reading.findings first)."
+          },
+          "reading": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/Reading"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "What was read by AI for this answer: every finding the rules answered, in the shape scope accepts. Confirm them and send them to scope with confirmed: true."
           },
           "signature": {
             "anyOf": [
@@ -4320,11 +4348,39 @@
           },
           "input_hash": {
             "type": "string",
-            "title": "Input Hash"
+            "title": "Input Hash",
+            "description": "Hash of the question the rules answered: the request, or when free text was read by AI, the request with the read findings (reading.findings) in its place."
+          },
+          "request_hash": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Request Hash",
+            "description": "Hash of the request as sent; equal to input_hash when nothing was read by AI."
           },
           "result_hash": {
             "type": "string",
             "title": "Result Hash"
+          },
+          "review": {
+            "$ref": "#/components/schemas/Review",
+            "description": "draft while an AI-read finding is unconfirmed (show reading.findings first)."
+          },
+          "reading": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/Reading"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "What was read by AI for this answer: every finding the rules answered, in the shape scope accepts. Confirm them and send them to scope with confirmed: true."
           },
           "signature": {
             "anyOf": [
@@ -4366,11 +4422,39 @@
           },
           "input_hash": {
             "type": "string",
-            "title": "Input Hash"
+            "title": "Input Hash",
+            "description": "Hash of the question the rules answered: the request, or when free text was read by AI, the request with the read findings (reading.findings) in its place."
+          },
+          "request_hash": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Request Hash",
+            "description": "Hash of the request as sent; equal to input_hash when nothing was read by AI."
           },
           "result_hash": {
             "type": "string",
             "title": "Result Hash"
+          },
+          "review": {
+            "$ref": "#/components/schemas/Review",
+            "description": "draft while an AI-read finding is unconfirmed (show reading.findings first)."
+          },
+          "reading": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/Reading"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "What was read by AI for this answer: every finding the rules answered, in the shape scope accepts. Confirm them and send them to scope with confirmed: true."
           },
           "signature": {
             "anyOf": [
@@ -4980,6 +5064,19 @@
             "title": "Page",
             "description": "'ai_document' only: the page of the upload it was read from (1-based)."
           },
+          "quote": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 300
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Quote",
+            "description": "'ai_document' only: the row's words as printed on that page, contact details masked. Evidence for checking the finding; it never changes the price."
+          },
           "review": {
             "anyOf": [
               {
@@ -5346,7 +5443,19 @@
                 "type": "null"
               }
             ],
-            "description": "Leave out. Set by the web tool for findings its AI reader produced from free text; they come back as resolution 'ai' with needs_review."
+            "description": "Set by Tektolo's AI reader on findings it read from free text or a document (reading.findings of an earlier answer); keep it when you send such a finding back. They come back as resolution 'ai' with needs_review unless confirmed."
+          },
+          "confirmed": {
+            "type": "boolean",
+            "title": "Confirmed",
+            "description": "true: the person checked this AI-read finding (one with extraction) and it says what they meant. It keeps resolution 'ai' but no longer needs review, and the answer is verified once every AI-read finding is confirmed.",
+            "default": false
+          },
+          "signature_like": {
+            "type": "boolean",
+            "title": "Signature Like",
+            "description": "Set by Tektolo's notes reader (reading.findings, the web tool's rows): the words came right after a sign-off and read like a name or signature ('Thanks!' / 'Rotten Egg Smell'), kept only because they name a safety item. A safety item in them is raised unconfirmed (check first). Keep it when you send such a finding back, so every way of sending the same words gives the same answer.",
+            "default": false
           }
         },
         "additionalProperties": false,
@@ -5370,7 +5479,7 @@
               "not_billed"
             ],
             "title": "Resolution",
-            "description": "exact: a taxonomy code was given. alias: the description matched an alias. ai: an AI reader chose the code from free text (see confidence, model; needs_review). unmapped: nothing matched (a manual-quote line). not_billed: the description says there is no work ('no mold', 'faucet not leaking', 'fixed by tenant'); no lines, no refer-out; the issue it names is in suggestions and the reason in not_billed_reason."
+            "description": "exact: a taxonomy code was given. alias: the description matched an alias. ai: an AI reader chose the code from free text (see confidence, model; needs_review). unmapped: nothing matched (a manual-quote line). not_billed: the description says there is no work ('no mold', 'faucet not leaking', 'fixed by tenant'), or names no condition at all (a heading, a date, a signature, a year built); no lines, no refer-out; the issue it names is in suggestions and the reason in not_billed_reason."
           },
           "not_billed_reason": {
             "anyOf": [
@@ -5379,7 +5488,8 @@
                 "enum": [
                   "none",
                   "ok",
-                  "done"
+                  "done",
+                  "no_condition"
                 ]
               },
               {
@@ -5387,7 +5497,7 @@
               }
             ],
             "title": "Not Billed Reason",
-            "description": "resolution 'not_billed' only. none: says there is none ('no mold', 'mold: none'); ok: says it works or is fine; done: says it was already fixed or done."
+            "description": "resolution 'not_billed' only. none: says there is none ('no mold', 'mold: none'); ok: says it works or is fine; done: says it was already fixed or done; no_condition: names no condition, only a heading, small talk, a signature or the year built ('Unit 4B - Move-out inspection', 'Built 1972'), see match_note (contract 0.13.0, additive)."
           },
           "code": {
             "anyOf": [
@@ -5518,6 +5628,12 @@
             ],
             "title": "Model",
             "description": "resolution 'ai' only: the model used."
+          },
+          "confirmed": {
+            "type": "boolean",
+            "title": "Confirmed",
+            "description": "Read by AI and confirmed by the person (sent with confirmed: true).",
+            "default": false
           }
         },
         "type": "object",
@@ -8214,11 +8330,39 @@
           },
           "input_hash": {
             "type": "string",
-            "title": "Input Hash"
+            "title": "Input Hash",
+            "description": "Hash of the question the rules answered: the request, or when free text was read by AI, the request with the read findings (reading.findings) in its place."
+          },
+          "request_hash": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Request Hash",
+            "description": "Hash of the request as sent; equal to input_hash when nothing was read by AI."
           },
           "result_hash": {
             "type": "string",
             "title": "Result Hash"
+          },
+          "review": {
+            "$ref": "#/components/schemas/Review",
+            "description": "draft while an AI-read finding is unconfirmed (show reading.findings first)."
+          },
+          "reading": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/Reading"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "What was read by AI for this answer: every finding the rules answered, in the shape scope accepts. Confirm them and send them to scope with confirmed: true."
           },
           "signature": {
             "anyOf": [
@@ -8256,11 +8400,39 @@
           },
           "input_hash": {
             "type": "string",
-            "title": "Input Hash"
+            "title": "Input Hash",
+            "description": "Hash of the question the rules answered: the request, or when free text was read by AI, the request with the read findings (reading.findings) in its place."
+          },
+          "request_hash": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Request Hash",
+            "description": "Hash of the request as sent; equal to input_hash when nothing was read by AI."
           },
           "result_hash": {
             "type": "string",
             "title": "Result Hash"
+          },
+          "review": {
+            "$ref": "#/components/schemas/Review",
+            "description": "draft while an AI-read finding is unconfirmed (show reading.findings first)."
+          },
+          "reading": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/Reading"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "What was read by AI for this answer: every finding the rules answered, in the shape scope accepts. Confirm them and send them to scope with confirmed: true."
           },
           "signature": {
             "anyOf": [
@@ -8302,11 +8474,39 @@
           },
           "input_hash": {
             "type": "string",
-            "title": "Input Hash"
+            "title": "Input Hash",
+            "description": "Hash of the question the rules answered: the request, or when free text was read by AI, the request with the read findings (reading.findings) in its place."
+          },
+          "request_hash": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Request Hash",
+            "description": "Hash of the request as sent; equal to input_hash when nothing was read by AI."
           },
           "result_hash": {
             "type": "string",
             "title": "Result Hash"
+          },
+          "review": {
+            "$ref": "#/components/schemas/Review",
+            "description": "draft while an AI-read finding is unconfirmed (show reading.findings first)."
+          },
+          "reading": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/Reading"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "What was read by AI for this answer: every finding the rules answered, in the shape scope accepts. Confirm them and send them to scope with confirmed: true."
           },
           "signature": {
             "anyOf": [
@@ -8344,11 +8544,39 @@
           },
           "input_hash": {
             "type": "string",
-            "title": "Input Hash"
+            "title": "Input Hash",
+            "description": "Hash of the question the rules answered: the request, or when free text was read by AI, the request with the read findings (reading.findings) in its place."
+          },
+          "request_hash": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Request Hash",
+            "description": "Hash of the request as sent; equal to input_hash when nothing was read by AI."
           },
           "result_hash": {
             "type": "string",
             "title": "Result Hash"
+          },
+          "review": {
+            "$ref": "#/components/schemas/Review",
+            "description": "draft while an AI-read finding is unconfirmed (show reading.findings first)."
+          },
+          "reading": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/Reading"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "What was read by AI for this answer: every finding the rules answered, in the shape scope accepts. Confirm them and send them to scope with confirmed: true."
           },
           "signature": {
             "anyOf": [
@@ -8390,11 +8618,39 @@
           },
           "input_hash": {
             "type": "string",
-            "title": "Input Hash"
+            "title": "Input Hash",
+            "description": "Hash of the question the rules answered: the request, or when free text was read by AI, the request with the read findings (reading.findings) in its place."
+          },
+          "request_hash": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Request Hash",
+            "description": "Hash of the request as sent; equal to input_hash when nothing was read by AI."
           },
           "result_hash": {
             "type": "string",
             "title": "Result Hash"
+          },
+          "review": {
+            "$ref": "#/components/schemas/Review",
+            "description": "draft while an AI-read finding is unconfirmed (show reading.findings first)."
+          },
+          "reading": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/Reading"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "What was read by AI for this answer: every finding the rules answered, in the shape scope accepts. Confirm them and send them to scope with confirmed: true."
           },
           "signature": {
             "anyOf": [
@@ -8566,6 +8822,12 @@
             "title": "Detail",
             "description": "summary (default, small) or full (every line).",
             "default": "summary"
+          },
+          "retain": {
+            "type": "boolean",
+            "title": "Retain",
+            "description": "Optional (contract 0.5.1). false: keep none of this request's text, so the AI reader's answer for the issues is not stored either. By default the text is kept with contact details and access codes removed, to improve matching; the estimate is the same either way.",
+            "default": true
           }
         },
         "additionalProperties": false,
@@ -8752,6 +9014,143 @@
         ],
         "title": "RateWindow",
         "description": "A published rate for a period (San Francisco's March-February year, a Berkeley move-out\nmonth, a Connecticut calendar year), as the ``rules`` result shows one step of\n``InterestRule.rate_schedule``: the shape the result had before the schedule became a\n``Series`` (TEKTOLO-516)."
+      },
+      "Reading": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "title": "Id",
+            "description": "rd_ and 24 hex characters; the same reading has the same id."
+          },
+          "kind": {
+            "type": "string",
+            "enum": [
+              "notes",
+              "document"
+            ],
+            "title": "Kind"
+          },
+          "model": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Model",
+            "description": "The model that read it."
+          },
+          "prompt_version": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Prompt Version"
+          },
+          "counts": {
+            "$ref": "#/components/schemas/ReadingCounts"
+          },
+          "findings": {
+            "items": {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            "type": "array",
+            "title": "Findings",
+            "description": "Every finding the rules answered, in the shape the rules operation accepts."
+          },
+          "notes": {
+            "items": {
+              "$ref": "#/components/schemas/ReadingNote"
+            },
+            "type": "array",
+            "title": "Notes",
+            "description": "What the reading noticed while reading the text."
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "kind",
+          "counts",
+          "findings"
+        ],
+        "title": "Reading",
+        "description": "The findings software read from free text or a document for this answer. Send\n``findings`` (edited if need be, each one checked marked ``confirmed: true``) to the rules\noperation to get a verified answer."
+      },
+      "ReadingCounts": {
+        "properties": {
+          "total": {
+            "type": "integer",
+            "title": "Total",
+            "description": "Findings in the reading."
+          },
+          "ai": {
+            "type": "integer",
+            "title": "Ai",
+            "description": "Findings the AI model read (they carry extraction)."
+          },
+          "parser": {
+            "type": "integer",
+            "title": "Parser",
+            "description": "Findings the deterministic parser and matcher placed, or sent coded."
+          },
+          "unmatched": {
+            "type": "integer",
+            "title": "Unmatched",
+            "description": "Findings nothing could match (manual-quote lines)."
+          }
+        },
+        "type": "object",
+        "required": [
+          "total",
+          "ai",
+          "parser",
+          "unmatched"
+        ],
+        "title": "ReadingCounts"
+      },
+      "ReadingNote": {
+        "properties": {
+          "kind": {
+            "type": "string",
+            "enum": [
+              "warning",
+              "assumption"
+            ],
+            "title": "Kind"
+          },
+          "code": {
+            "type": "string",
+            "title": "Code"
+          },
+          "message": {
+            "type": "string",
+            "title": "Message"
+          },
+          "finding_ids": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Finding Ids",
+            "default": []
+          }
+        },
+        "type": "object",
+        "required": [
+          "kind",
+          "code",
+          "message"
+        ],
+        "title": "ReadingNote",
+        "description": "Something the reading noticed (a range, a room read from the words, a year built)."
       },
       "Receipts": {
         "properties": {
@@ -9381,6 +9780,53 @@
         "title": "Returned",
         "description": "What the landlord has returned so far: lets the result say whether the refund and the\nitemized statement came on time (``timeliness``)."
       },
+      "Review": {
+        "properties": {
+          "status": {
+            "type": "string",
+            "enum": [
+              "draft",
+              "verified"
+            ],
+            "title": "Status",
+            "description": "draft: some findings were read by AI and nobody has confirmed them; show the person reading.findings before quoting a number. verified: no finding rests on an unconfirmed AI reading.",
+            "default": "verified"
+          },
+          "ai_read": {
+            "type": "integer",
+            "title": "Ai Read",
+            "description": "Findings in this answer read by AI and not yet confirmed.",
+            "default": 0
+          },
+          "reading_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Reading Id",
+            "description": "The reading's id, when one was made."
+          },
+          "note": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Note",
+            "description": "Set when an AI reading was asked for but not made (capped or unavailable)."
+          }
+        },
+        "type": "object",
+        "title": "Review",
+        "description": "How far the answer can be relied on."
+      },
       "RulesRequest": {
         "properties": {
           "state": {
@@ -9950,6 +10396,16 @@
             "maxItems": 500,
             "title": "Decisions",
             "description": "Approve, decline or defer lines or findings from an earlier scope."
+          },
+          "read": {
+            "type": "string",
+            "enum": [
+              "parser",
+              "ai"
+            ],
+            "title": "Read",
+            "description": "parser (default): descriptions are read by the deterministic parser and matcher only; what they cannot place comes back as a manual-quote line with suggested codes. ai: what the parser cannot place is then read by an AI model; the answer is a draft (review.status) and echoes the reading, whose findings you confirm and send back for a verified answer (contract 0.12.0).",
+            "default": "parser"
           },
           "retain": {
             "type": "boolean",
