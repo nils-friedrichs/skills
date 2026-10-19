@@ -2279,6 +2279,108 @@
           }
         }
       }
+    },
+    "/v1/property-turnover/read_document": {
+      "post": {
+        "tags": [
+          "property-turnover"
+        ],
+        "summary": "Read a document into findings (no estimate)",
+        "description": "Reads a move-out inspection report (PDF, Word, Excel, PowerPoint or CSV) or up to 5 photos of paper pages, 5 pages at most, and returns what it read as findings: a `reading`, never an estimate. Check each finding against its evidence (page and quote), then send `reading.findings` unchanged to `POST /v1/property-turnover/scope`, which prices them by our own rules. Rows not turned into findings are listed in `set_aside` with the reason.\n\n**Key required.** Send a connector key (`Authorization: Bearer <key>`; free from `POST /v1/keys`). The web tool's page token is not accepted here. One document counts as one call of the key's daily free allowance, and a key can read 3 documents a day (UTC). Not on the x402 paid lane.\n\n**Body.** `multipart/form-data` with the field `files` (one file, or up to 5 photos), or `application/json` `{\"files\": [{\"name\": \"report.pdf\", \"content_base64\": \"...\"}]}`. 15 MB a file, 25 MB an upload. Files with macros, scripts, embedded files or a password are refused.\n\n**Privacy.** Upload a report (PDF, Word, Excel, CSV) or up to 5 photos, 5 pages at most. Pages are read by Microsoft Azure OpenAI. Please redact tenant names and signatures. Our server opens the file in an isolated converter, which turns each page into a plain image and drops everything else in the file. The page images are sent to Microsoft Azure OpenAI (run by Microsoft for us inside its US data zone) to copy out the findings and the unit facts; it is told not to copy names, addresses, phone numbers or signatures, and we remove any that slip through. Findings our own matcher cannot match to a standard repair item are then sent as text, with contact details removed, to the same model. Nothing from the file is stored: the file, the page images and the text read from them are held in memory only while the request is processed. For up to a day we keep the answer for a page in memory, found by a one-way hash of the page image, so the same page gets the same answer. Prices are always worked out by our own rules, never by the AI model. How we handle uploads: /privacy#document-upload.",
+        "operationId": "property_turnover_read_document",
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "properties": {
+                  "files": {
+                    "items": {
+                      "type": "string",
+                      "format": "binary"
+                    },
+                    "type": "array",
+                    "maxItems": 5,
+                    "description": "One document, or up to 5 photos."
+                  }
+                },
+                "type": "object",
+                "required": [
+                  "files"
+                ]
+              }
+            },
+            "application/json": {
+              "schema": {
+                "properties": {
+                  "files": {
+                    "items": {
+                      "properties": {
+                        "name": {
+                          "type": "string",
+                          "maxLength": 255,
+                          "description": "The file name, with its extension."
+                        },
+                        "content_base64": {
+                          "type": "string",
+                          "contentEncoding": "base64",
+                          "description": "The file's bytes, standard base64."
+                        }
+                      },
+                      "additionalProperties": false,
+                      "type": "object",
+                      "required": [
+                        "name",
+                        "content_base64"
+                      ]
+                    },
+                    "type": "array",
+                    "maxItems": 5
+                  }
+                },
+                "additionalProperties": false,
+                "type": "object",
+                "required": [
+                  "files"
+                ]
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReadDocumentResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "No connector key (`key_required`), or an invalid one."
+          },
+          "408": {
+            "description": "The upload was too slow (`slow_upload`)."
+          },
+          "413": {
+            "description": "Over 25 MB an upload or 15 MB a file (`too_large`)."
+          },
+          "415": {
+            "description": "Not multipart/form-data or JSON (`unsupported_media_type`)."
+          },
+          "422": {
+            "description": "A file we do not read (`rejected`, with `code`)."
+          },
+          "429": {
+            "description": "This key's documents or free calls for today (`cap_address`, `free_tier_exhausted`), or the day's page budget (`cap_global`)."
+          },
+          "503": {
+            "description": "Reading is not available right now (`unavailable`, `busy`)."
+          }
+        }
+      }
     }
   },
   "components": {
@@ -4625,6 +4727,155 @@
         "title": "DescribeEach",
         "description": "The statute asks the itemized statement to describe each deducted item, not only to name a\ncategory (TEKTOLO-409): Texas 92.104(c) \"a written description and itemized list of all\ndeductions\", Wisconsin ATCP 134.06(3)(a) \"describe each item\", Georgia 44-7-34(a) \"the exact\nreasons\", Washington 59.18.280(1)(a) \"a full and specific statement of the basis\",\nNew Hampshire 540-A:7, I \"with particularity\", Massachusetts 15B(4)(iii) \"in precise\ndetail\". The letter prints each line's description (the caller's own words, never stored)\nand leaves a blank to fill in where none was given; a manager note names the duty."
       },
+      "DocumentCounts": {
+        "properties": {
+          "total": {
+            "type": "integer",
+            "title": "Total",
+            "description": "Findings in the reading."
+          },
+          "ai": {
+            "type": "integer",
+            "title": "Ai",
+            "description": "Findings the AI model read (they carry extraction)."
+          },
+          "parser": {
+            "type": "integer",
+            "title": "Parser",
+            "description": "Findings the deterministic parser and matcher placed, or sent coded."
+          },
+          "unmatched": {
+            "type": "integer",
+            "title": "Unmatched",
+            "description": "Findings nothing could match (manual-quote lines)."
+          },
+          "set_aside": {
+            "type": "integer",
+            "minimum": 0.0,
+            "title": "Set Aside",
+            "description": "Rows read but not turned into findings."
+          }
+        },
+        "type": "object",
+        "required": [
+          "total",
+          "ai",
+          "parser",
+          "unmatched",
+          "set_aside"
+        ],
+        "title": "DocumentCounts"
+      },
+      "DocumentReading": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "title": "Id",
+            "description": "rd_ and 24 hex characters; the same reading has the same id."
+          },
+          "kind": {
+            "type": "string",
+            "enum": [
+              "notes",
+              "document"
+            ],
+            "title": "Kind"
+          },
+          "model": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Model",
+            "description": "The model that read it."
+          },
+          "prompt_version": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Prompt Version"
+          },
+          "counts": {
+            "$ref": "#/components/schemas/DocumentCounts"
+          },
+          "findings": {
+            "items": {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            "type": "array",
+            "title": "Findings",
+            "description": "Every finding the rules answered, in the shape the rules operation accepts."
+          },
+          "notes": {
+            "items": {
+              "$ref": "#/components/schemas/ReadingNote"
+            },
+            "type": "array",
+            "title": "Notes",
+            "description": "What the reading noticed while reading the text."
+          },
+          "schema_version": {
+            "type": "string",
+            "title": "Schema Version",
+            "description": "The page schema the model filled."
+          },
+          "pages": {
+            "type": "integer",
+            "minimum": 1.0,
+            "title": "Pages",
+            "description": "Pages read."
+          },
+          "evidence": {
+            "items": {
+              "$ref": "#/components/schemas/Evidence"
+            },
+            "type": "array",
+            "title": "Evidence"
+          },
+          "set_aside": {
+            "items": {
+              "$ref": "#/components/schemas/SetAside"
+            },
+            "type": "array",
+            "title": "Set Aside",
+            "description": "Every row read but not turned into a finding, and why."
+          },
+          "unit": {
+            "anyOf": [
+              {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Unit",
+            "description": "Unit facts printed on the pages (zip, bedrooms, bathrooms, sq_ft, year_built), each {value, confidence, page} or null."
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "kind",
+          "counts",
+          "findings",
+          "schema_version",
+          "pages"
+        ],
+        "title": "DocumentReading",
+        "description": "A document read for the API (``kind: \"document\"``): the shared reading\n(``tektolo_core.Reading``: id, model, prompt version, counts, scope-ready findings, notes)\nplus what only a document has. Never a price: the caller checks the findings and sends\nthem to scope (with ``confirmed: true`` on the ones checked)."
+      },
       "Documentation": {
         "properties": {
           "itemized_statement": {
@@ -4913,6 +5164,67 @@
         "type": "object",
         "title": "EstimateContext",
         "description": "Identifiers of the estimate being rated. Hashes, versions, region and total only.\n\nEvery field has a strict format (security review M1): they end up in the feedback digest,\nso nothing here may carry free text."
+      },
+      "Evidence": {
+        "properties": {
+          "finding": {
+            "type": "string",
+            "title": "Finding",
+            "description": "The finding's id (its page and quote are in its extraction)."
+          },
+          "row": {
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Row",
+            "description": "The row as read: room, item, condition, comment, count."
+          },
+          "match": {
+            "anyOf": [
+              {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Match",
+            "description": "The standard item the matcher placed it on, if any."
+          },
+          "needs_review": {
+            "type": "boolean",
+            "title": "Needs Review",
+            "default": true
+          },
+          "flags": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Flags",
+            "description": "Why to check it, as codes."
+          },
+          "hints": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Hints"
+          },
+          "refer_outs": {
+            "items": {
+              "$ref": "#/components/schemas/ReferOutHint"
+            },
+            "type": "array",
+            "title": "Refer Outs"
+          }
+        },
+        "type": "object",
+        "required": [
+          "finding"
+        ],
+        "title": "Evidence",
+        "description": "Why one finding needs a check, beside it (scope's ``Finding`` takes no extra keys; its\npage and quote are in its ``extraction``): send ``findings`` to scope, keep this to check\nthem."
       },
       "ExcessRemedy": {
         "properties": {
@@ -9015,6 +9327,52 @@
         "title": "RateWindow",
         "description": "A published rate for a period (San Francisco's March-February year, a Berkeley move-out\nmonth, a Connecticut calendar year), as the ``rules`` result shows one step of\n``InterestRule.rate_schedule``: the shape the result had before the schedule became a\n``Series`` (TEKTOLO-516)."
       },
+      "ReadDocumentResponse": {
+        "properties": {
+          "reading": {
+            "$ref": "#/components/schemas/DocumentReading"
+          },
+          "status": {
+            "type": "string",
+            "title": "Status",
+            "description": "ok, partial (some pages unread) or nothing_found."
+          },
+          "message": {
+            "type": "string",
+            "title": "Message"
+          },
+          "documents_left": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Documents Left",
+            "description": "Documents this key may still read today; null where the cap is off."
+          },
+          "next": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "type": "object",
+            "title": "Next",
+            "description": "Where the checked findings go: scope."
+          }
+        },
+        "type": "object",
+        "required": [
+          "reading",
+          "status",
+          "message",
+          "documents_left",
+          "next"
+        ],
+        "title": "ReadDocumentResponse",
+        "description": "The API's answer to a document: a reading, never an estimate."
+      },
       "Reading": {
         "properties": {
           "id": {
@@ -9240,6 +9598,30 @@
           "required"
         ],
         "title": "Receipts"
+      },
+      "ReferOutHint": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "title": "Id"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "professional": {
+            "type": "string",
+            "title": "Professional"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "name",
+          "professional"
+        ],
+        "title": "ReferOutHint",
+        "description": "A possible safety item named in a finding's words or matched item. A hint only: scope\ndecides, and lists the refer-out in its answer."
       },
       "ReferOutNote": {
         "properties": {
@@ -10568,6 +10950,37 @@
         ],
         "title": "ScopeResult",
         "description": "Field order puts the answer first (summary, disclaimer, totals, refer-outs, vendor\nscopes), because agents and truncating clients read from the top."
+      },
+      "SetAside": {
+        "properties": {
+          "reason": {
+            "type": "string",
+            "title": "Reason",
+            "description": "Why the row was not turned into a finding, as a code."
+          },
+          "row": {
+            "type": "string",
+            "title": "Row",
+            "description": "The row as read, contact details masked."
+          },
+          "page": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Page"
+          }
+        },
+        "type": "object",
+        "required": [
+          "reason",
+          "row"
+        ],
+        "title": "SetAside"
       },
       "SettleRequest": {
         "properties": {
