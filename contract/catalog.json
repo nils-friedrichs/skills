@@ -91,14 +91,14 @@
       "capability": "deposit-settlement",
       "description": "The security deposit rules for all 50 US states and the District of Columbia, plus 9 city ordinances, as open data under CC BY 4.0: the deadline to return a deposit and what starts it, the itemized statement and documentation duties, the deductions each statute allows, interest, penalties, forfeiture and deposit caps. Every row cites the statute or ordinance, quotes the text and links to the official source with the date it was last read. Generated from the ruleset the Tektolo deposit settlement tool runs on.",
       "page": "https://tektolo.com/data/deposit-rules/",
-      "version": "sd-2026.11.20",
-      "ruleset_hash": "sha256:4d2df5171e876ddc04b0a2b1a11c2792dcee800bcf29ddafb365924d060721dc",
-      "date_modified": "2026-10-15",
+      "version": "sd-2026.12.20",
+      "ruleset_hash": "sha256:04c1290855dc681f17b0e09b01cee2e898142b74a83b71035f5e3e85fedeaff4",
+      "date_modified": "2026-10-20",
       "license": {
         "id": "CC-BY-4.0",
         "url": "https://creativecommons.org/licenses/by/4.0/"
       },
-      "citation": "Tektolo. Security deposit rules by US state and city, version sd-2026.11.20. https://tektolo.com/data/deposit-rules/. Licensed under CC BY 4.0.",
+      "citation": "Tektolo. Security deposit rules by US state and city, version sd-2026.12.20. https://tektolo.com/data/deposit-rules/. Licensed under CC BY 4.0.",
       "rows": 60,
       "files": {
         "csv": "https://tektolo.com/data/deposit-rules/latest/deposit-rules.csv",
@@ -162,7 +162,7 @@
     {
       "id": "property-turnover",
       "name": "Property turnover estimate",
-      "version": "0.14.0",
+      "version": "1.0.0",
       "status": "experimental",
       "summary": "Turn move-out inspection findings into a priced, vendor-ready make-ready scope.",
       "outcome": "A vendor-ready turnover scope and owner estimate in minutes, with every number traced to a source or a stated assumption.",
@@ -237,11 +237,11 @@
             "tips": [
               "If the ZIP is missing or not exactly 5 digits, ask the user; never guess or pad it.",
               "Relay refer_outs first, then the totals; say the numbers are estimates, not quotes.",
-              "When review.status is draft, show the user what was read (reading.findings) before you quote a number, and ask them to confirm or correct it. For a verified answer, send the confirmed findings to property_turnover_scope with confirmed true on each. A review.note means the AI reader was unavailable and the text was read by the matcher alone.",
+              "When review.status is draft, show the user what was read (reading.findings) before you quote a number, and ask them to confirm or correct it. For a verified answer, send the confirmed findings to property_turnover_scope with confirmed true on each. A review.note says what was not read and why; with the AI reader unavailable only exact item names are priced.",
               "From photos, list only what is visible, with its room (\"stained carpet in bedroom 2\"). Hedge doubtful ones (\"possible water stain?\") and ask the user about what photos cannot show: working appliances, odors, pests, sizes. Never state that a tenant caused damage because of a photo."
             ],
             "example": "{\"zip\": \"43215\", \"bedrooms\": 2, \"bathrooms\": 1, \"issues\": [\"stained carpet in both bedrooms\", \"nail holes everywhere\", \"oven is filthy\"]}",
-            "mcp_description": "Estimates what it costs to turn over a US rental unit after move-out; the first tool for a turnover estimate. Inputs: a 5-digit ZIP, bedrooms, bathrooms and the issues in plain English (e.g. \"stained carpet in both bedrooms\"), which may come from the user's photos; optional unit type, size, year built. Returns a priced make-ready estimate: repair tasks by trade with low/expected/high costs for the ZIP, priorities, refer-outs to licensed professionals, assumptions and links. Issues the matcher cannot place are read by an AI model; the answer is then a draft that lists what was read (reading). Not for: diagnosing hazards, legal advice on deposits, remodel bids, properties outside the US."
+            "mcp_description": "Estimates what it costs to turn over a US rental unit after move-out; the first tool for a turnover estimate. Inputs: a 5-digit ZIP, bedrooms, bathrooms and the issues in plain English (e.g. \"stained carpet in both bedrooms\"), which may come from the user's photos; optional unit type, size, year built. Returns a priced make-ready estimate: repair tasks by trade with low/expected/high costs for the ZIP, priorities, refer-outs to licensed professionals, assumptions and links. An AI model reads the issues; the answer is a draft listing what it read (reading), and words it cannot place bill nothing. Not for: diagnosing hazards, legal advice on deposits, remodel bids, properties outside the US."
           },
           "examples": [
             {
@@ -347,8 +347,8 @@
             "when_not_to_use": "Diagnosing hazards (they come back as refer-outs to a licensed professional); legal advice on deposits; remodel bids; properties outside the US.",
             "tips": [
               "If the ZIP is missing or not exactly 5 digits, ask the user; never guess or pad it.",
-              "From photos, describe only what is visible, with its room (location); an issue code only if one clearly fits. Hedge doubtful ones (\"possible\", \"?\") and ask the user about what photos cannot show: working appliances, odors, pests, sizes. Never state that a tenant caused damage because of a photo; responsibility stays a hint from the engine. Send no faces, names or addresses. A photo of a written checklist or report is different, so transcribe it as written.",
-              "Describe each finding in plain words (description). Only send a code returned by property_turnover_issue_codes. Words the matcher cannot place come back as a manual-quote line with suggested codes. With read set to ai, an AI model reads them first: the answer is a draft and reading.findings lists what it read.",
+              "From photos, describe only what is visible, with its room; an issue code only if one clearly fits, else general.manual_quote with your words in source_text. Hedge doubtful ones (\"possible\", \"?\") and ask the user about what photos cannot show: working appliances, odors, pests, sizes. Never state that a tenant caused damage because of a photo; responsibility stays a hint from the engine. Send no faces, names or addresses. A photo of a written checklist or report is different, so transcribe it as written.",
+              "Send a code on every finding, from property_turnover_issue_codes (search with q, read not_when), with the original words in source_text; general.manual_quote when no code fits. One code per condition; rooms as sets with counts ({\"area\": \"bedroom\", \"count\": 3}); status done, ok or none from the words; only evidence (a test result) clears a hazard. An unknown code is refused with the closest codes. A finding with no code is deprecated: until the date in deprecation it is a manual quote (not priced) whose words are still scanned for safety checks; read is ignored. For free text, use property_turnover_quick_estimate.",
               "To confirm an AI reading, send the findings from reading.findings (keep each one's extraction, correct any the user changes) with confirmed true on each one the user checked. The answer is then verified and still shows which findings were read by AI.",
               "Give measured quantities when you have them (e.g. 120 sq_ft); otherwise typical sizes are assumed and listed in assumptions.",
               "Send property.floor_coverings when you know whether there is carpet, and unit_type single_family for houses; both change the baseline scope.",
@@ -357,8 +357,8 @@
               "Rate card examples - {\"trade\": \"handyman\", \"unit_price\": 65, \"uom\": \"hour\"} or {\"task_id\": \"carpet.clean\", \"unit_price\": 0.2, \"uom\": \"sq_ft\"}; check rate_card_applied and rate_card_ignored before saying a rate was used.",
               "For the Excel workbook or owner estimate, give the user links.web_tool_prefilled (opens the free web tool with these findings) or POST the same arguments to links.downloads; do not build a spreadsheet yourself."
             ],
-            "example": "{\"property\": {\"zip\": \"43215\", \"bedrooms\": 2, \"bathrooms\": 1}, \"findings\": [{\"location\": \"Bedroom 2\", \"description\": \"pet urine in carpet\"}, {\"description\": \"3 blinds broken\", \"quantity\": {\"value\": 3, \"uom\": \"each\"}}]}",
-            "mcp_description": "Turns move-out inspection findings for a US rental unit into a priced make-ready scope. For a first estimate use property_turnover_quick_estimate; use this one for rate cards, owner decisions, measured quantities or confirmed findings. Inputs: property (ZIP, bedrooms, bathrooms, optional details) and findings (description or issue code, location, extent, quantity); optional rate_card, decisions, detail, read. Returns tasks by trade, low/expected/high costs, priorities, vendor scopes, refer-outs, assumptions, unknowns and download links. Text is read by the matcher alone unless read=ai. Not for: diagnosing hazards, legal advice on deposits, remodel bids, properties outside the US."
+            "example": "{\"property\": {\"zip\": \"43215\", \"bedrooms\": 2, \"bathrooms\": 1}, \"findings\": [{\"code\": \"carpet.pet_urine\", \"rooms\": \"Bedroom 2\", \"source_text\": \"pet urine in BR2 carpet\"}, {\"code\": \"blinds.bent_missing\", \"quantity\": {\"value\": 3, \"uom\": \"each\"}}]}",
+            "mcp_description": "Turns move-out inspection findings for a US rental unit into a priced make-ready scope. For a first estimate use property_turnover_quick_estimate (plain words). Inputs: property (ZIP, bedrooms, bathrooms, optional details) and findings, each an issue code from property_turnover_issue_codes with rooms, status, quantity and the original words (source_text); optional rate_card, decisions, detail. Returns tasks by trade, low/expected/high costs, priorities, vendor scopes, refer-outs, assumptions, unknowns and download links. Not for: diagnosing hazards, legal advice on deposits, remodel bids, properties outside the US."
           },
           "examples": [
             {
@@ -769,59 +769,96 @@
                 "findings": [
                   {
                     "id": "f1",
-                    "location": {
+                    "code": "carpet.soiled",
+                    "rooms": {
                       "area": "living_room",
-                      "label": "Main room"
+                      "labels": [
+                        "Main room"
+                      ]
                     },
-                    "description": "carpet is dirty with a few stains near the window"
+                    "source_text": "carpet is dirty"
                   },
                   {
                     "id": "f2",
-                    "location": {
+                    "code": "carpet.stained",
+                    "rooms": {
                       "area": "living_room",
-                      "label": "Main room"
+                      "labels": [
+                        "Main room"
+                      ]
                     },
-                    "description": "a few nail holes in the walls from pictures"
+                    "source_text": "carpet stains near the window"
                   },
                   {
                     "id": "f3",
-                    "location": {
-                      "area": "bathroom",
-                      "label": "Bathroom"
+                    "code": "walls.nail_holes",
+                    "rooms": {
+                      "area": "living_room",
+                      "labels": [
+                        "Main room"
+                      ]
                     },
-                    "description": "bathroom fan is loud and barely works"
+                    "source_text": "a few nail holes in the walls from pictures"
                   },
                   {
                     "id": "f4",
-                    "location": {
-                      "area": "whole_unit",
-                      "label": "Whole unit"
+                    "code": "exhaust_fan.inoperable",
+                    "rooms": {
+                      "area": "bathroom",
+                      "labels": [
+                        "Bathroom"
+                      ]
                     },
-                    "description": "smoke detector is chirping"
+                    "source_text": "bathroom fan is loud and barely works"
                   },
                   {
                     "id": "f5",
-                    "location": {
-                      "area": "kitchen",
-                      "label": "Kitchen"
-                    },
-                    "description": "fridge smells and needs cleaning"
+                    "code": "safety.smoke_alarm_expired",
+                    "source_text": "smoke detector is chirping"
                   },
                   {
                     "id": "f6",
-                    "location": {
+                    "code": "refrigerator.dirty",
+                    "rooms": {
                       "area": "kitchen",
-                      "label": "Kitchen"
+                      "labels": [
+                        "Kitchen"
+                      ]
                     },
-                    "description": "dishwasher not draining"
+                    "source_text": "fridge smells"
                   },
                   {
                     "id": "f7",
-                    "location": {
-                      "area": "living_room",
-                      "label": "Main room"
+                    "code": "clean.general",
+                    "rooms": {
+                      "area": "kitchen",
+                      "labels": [
+                        "Kitchen"
+                      ]
                     },
-                    "description": "tenant left a sticky residue along the window sills"
+                    "source_text": "needs cleaning"
+                  },
+                  {
+                    "id": "f8",
+                    "code": "dishwasher.inoperable",
+                    "rooms": {
+                      "area": "kitchen",
+                      "labels": [
+                        "Kitchen"
+                      ]
+                    },
+                    "source_text": "dishwasher not draining"
+                  },
+                  {
+                    "id": "f9",
+                    "code": "adhesive.residue",
+                    "rooms": {
+                      "area": "living_room",
+                      "labels": [
+                        "Main room"
+                      ]
+                    },
+                    "source_text": "tenant left a sticky residue along the window sills"
                   }
                 ]
               }
@@ -884,7 +921,7 @@
           "id": "issue_codes",
           "title": "Look up turnover issue codes",
           "kind": "deterministic",
-          "summary": "Search the standard taxonomy of rental-unit turnover issues (component.issue codes) by keyword or area.",
+          "summary": "The issue-code catalog for rental-unit turnover (group.issue codes such as carpet.pet_urine): list every code, or search by words for full detail.",
           "rest": {
             "method": "POST",
             "url": "https://tektolo.com/v1/property-turnover/issue_codes"
@@ -901,14 +938,15 @@
             "note": "Free lookup; not counted toward the daily free tier."
           },
           "agent": {
-            "when_to_use": "Only while preparing findings for a turnover cost estimate, to find the standard issue code for something observed (e.g. \"pet stain on carpet\"). Never needed to answer a question; call with no arguments to list the taxonomy areas and the first codes.",
-            "when_not_to_use": "Legal or security-deposit questions; anything outside rental turnover and make-ready work. Not needed before quick_estimate or scope: a plain description works there.",
+            "when_to_use": "While preparing findings for a turnover cost estimate, to map each observed condition to one code before sending it to scope. Search with q for the detail (description, aliases, when not to use it, examples); call with no arguments for the short list of every code. Never needed to answer a question.",
+            "when_not_to_use": "Legal or security-deposit questions; anything outside rental turnover and make-ready work. Not needed before quick_estimate, which reads plain words.",
             "tips": [
-              "Call with no arguments to list the taxonomy areas (in `areas`) and the first codes.",
-              "Codes are optional for scoping; a plain description also works."
+              "Map each observed condition to one code; search with q when unsure, and read not_when.",
+              "When no code fits, send general.manual_quote and keep the original words.",
+              "Call with no arguments for the short list of every code and the groups."
             ],
-            "example": "{} lists the areas and the first codes; {\"query\": \"pet stain carpet\"} searches; {\"area\": \"flooring\", \"limit\": 50} lists one area.",
-            "mcp_description": "Searches the standard taxonomy of rental-unit turnover issues (component.issue codes such as carpet.pet_urine). Inputs, all optional: query (keywords), area (e.g. flooring), limit (default 8). With no arguments it lists the taxonomy areas and the first codes. Returns matching codes with names and areas, and the total match count. Codes are optional: the turnover estimate tools also accept plain descriptions. Not for: cost estimates, legal or security-deposit questions, work other than rental turnover."
+            "example": "{} lists every code in short form; {\"q\": \"pet stain carpet\"} searches with full detail; {\"group\": \"flooring\"} lists one group.",
+            "mcp_description": "The issue-code catalog for rental-unit turnover findings (group.issue codes such as carpet.pet_urine). Inputs, all optional: q (search words or a code), group (e.g. flooring), limit, include_aliases; query and area are older names for q and group. With no arguments it returns every code in short form (code, name, group, default extent, refer-out). With q it returns the best matches with description, aliases, not_when, rooms and examples. Returns the codes, the match count, every group, and general.manual_quote, the code for a condition no other code fits. Not for: cost estimates, legal or security-deposit questions, work other than rental turnover."
           },
           "examples": []
         }
@@ -916,16 +954,17 @@
       "privacy": {
         "retention_days": 730,
         "trains_models": false,
-        "personal_data": "Inputs need a ZIP code, not an address. Request bodies and free-text notes are never logged or stored. Each estimate leaves one anonymized record: first 3 digits of the ZIP, size and age in coarse buckets, issue codes, totals and a daily-rotating anonymous client fingerprint; no notes, labels, names, vendors, rate-card prices, IP address or user agent. Descriptions of issues the taxonomy could not match are kept with digits, emails and links removed. These records are deleted 730 days after they are written and are not used to train models. Optional feedback (a rating, a note, an email only if typed) is stored separately, with a few estimate identifiers (hashes, versions, region, total) but never the request or notes. The web tool's optional AI reader (\"Describe the unit in your own words\") sends the parts of that text our matcher cannot place to Microsoft Azure OpenAI (gpt-6-luna, US data zone) and keeps its answer in memory only, for up to 24 hours; Microsoft does not use it to train models."
+        "personal_data": "Inputs need a ZIP code, not an address. Request bodies and free-text notes are never logged or stored. Each estimate leaves one anonymized record: first 3 digits of the ZIP, size and age in coarse buckets, issue codes, totals and a daily-rotating anonymous client fingerprint; no notes, labels, names, vendors, rate-card prices, IP address or user agent. Descriptions of issues the taxonomy could not match are kept with digits, emails and links removed. These records are deleted 730 days after they are written and are not used to train models. Optional feedback (a rating, a note, an email only if typed) is stored separately, with a few estimate identifiers (hashes, versions, region, total) but never the request or notes. The web tool's optional AI reader (\"Describe the unit in your own words\") sends that text, with the unit's size and the walk date, to Microsoft Azure OpenAI (gpt-6-luna, US data zone) and keeps its answer in memory only, for up to 24 hours; Microsoft does not use it to train models."
       },
       "limitations": [
         "Estimate ranges, not quotes. Prices vary by vendor, market and condition.",
         "Does not diagnose structural, electrical, gas, mold, asbestos or lead hazards; those are referred to licensed professionals.",
-        "Responsibility labels (wear vs damage) are hints, not legal determinations; deposit rules vary by state."
+        "Responsibility labels (wear vs damage) are hints, not legal determinations; deposit rules vary by state.",
+        "This is not legal advice. Check the linked sources before you rely on it. You decide, sign and send."
       ],
       "ruleset": {
-        "version": "pt-2026.10.30",
-        "hash": "sha256:fd72faf08fb167363a410285cbaadde6577e6f8e6cb613de39efb55c3094424c",
+        "version": "pt-2026.11.17",
+        "hash": "sha256:5594d448d1377223b0be60f0b25412966e522372035eff085d38b90f20561690",
         "sources": [
           {
             "id": "hud.nspire.index",
@@ -1280,6 +1319,36 @@
             "title": "40 CFR 745.82, 745.83, 745.85, 745.103 (EPA Renovation, Repair and Painting rule)",
             "publisher": "eCFR via Cornell LII",
             "url": "https://www.law.cornell.edu/cfr/text/40/745.83"
+          },
+          {
+            "id": "ecfr.40-745-103",
+            "title": "40 CFR 745.103 Definitions (target housing, housing for the elderly, 0-bedroom dwelling)",
+            "publisher": "Office of the Federal Register and Government Publishing Office (eCFR)",
+            "url": "https://www.ecfr.gov/current/title-40/section-745.103"
+          },
+          {
+            "id": "ecfr.40-745-82",
+            "title": "40 CFR 745.82 Applicability (EPA Renovation, Repair and Painting rule)",
+            "publisher": "Office of the Federal Register and Government Publishing Office (eCFR)",
+            "url": "https://www.ecfr.gov/current/title-40/section-745.82"
+          },
+          {
+            "id": "ecfr.40-745-83",
+            "title": "40 CFR 745.83 Definitions (minor repair and maintenance, child-occupied facility)",
+            "publisher": "Office of the Federal Register and Government Publishing Office (eCFR)",
+            "url": "https://www.ecfr.gov/current/title-40/section-745.83"
+          },
+          {
+            "id": "ecfr.24-35-115",
+            "title": "24 CFR 35.115 Exemptions (HUD Lead Safe Housing Rule)",
+            "publisher": "Office of the Federal Register and Government Publishing Office (eCFR)",
+            "url": "https://www.ecfr.gov/current/title-24/section-35.115"
+          },
+          {
+            "id": "ecfr.24-35-1350",
+            "title": "24 CFR 35.1350 Safe work practices (HUD Lead Safe Housing Rule)",
+            "publisher": "Office of the Federal Register and Government Publishing Office (eCFR)",
+            "url": "https://www.ecfr.gov/current/title-24/section-35.1350"
           },
           {
             "id": "epa.rrp-program",
@@ -2271,12 +2340,13 @@
               "Send as_of (today's date) for a repeatable answer; it defaults to today in UTC.",
               "Give item_installed_on or item_age_years for carpet, paint, blinds and appliances; without them the tenancy length is assumed.",
               "Mark normal wear with caused_by_tenant false; it is never deductible.",
-              "Relay deadline.return_by and its status, totals.refund_due_usd, penalty_exposure and the citations; say it is not legal advice.",
+              "Relay deadline.return_by and its status, totals.refund_due_usd, penalty_exposure and the citations with their links (citations[].url); relay the result's disclaimer word for word.",
               "Offer statement.text as the draft itemized statement (no names or addresses); in the copy for the tenant keep only the statement.notes whose audience is tenant.",
               "For a printable statement to sign and send (HTML or PDF) or the deductions ledger (CSV), POST the same arguments as JSON to links.downloads; do not build the file yourself.",
               "For a tenant (arguments with returned), links.downloads tenant_pdf or tenant_html is a neutral summary of the facts and the rule to send to the landlord; give the user that, not the landlord's statement.",
               "Relay warnings, assumptions and unknowns (for example the Texas forwarding address).",
               "Send the start-event dates a state needs when known (forwarding_address_received_on, demand_received_on, new_tenant_moved_in_on, claim_notice_sent_on in Florida); without them the clock is not_started.",
+              "Send the state-only facts the unknowns name (owner_is_natural_person in Georgia, county and deposit_in_separate_account in Tennessee, renter_notice_served_on in Utah, landlord_filed_action_on in Michigan).",
               "deadline.status none_in_statute means no statutory deadline; deadline.extended_to is the statute's weekend roll-forward, but advise acting by return_by."
             ],
             "example": "{\"state\": \"CA\", \"deposit_usd\": \"2000\", \"monthly_rent_usd\": \"2000\", \"move_in_on\": \"2023-06-01\", \"vacated_on\": \"2026-09-30\", \"deductions\": [{\"category\": \"cleaning\", \"amount_usd\": \"150\"}, {\"category\": \"carpet\", \"amount_usd\": \"1200\", \"item_age_years\": 5}], \"as_of\": \"2026-10-09\"}",
@@ -2531,7 +2601,7 @@
         "personal_data": "Inputs are a state, a city, amounts, dates and deduction categories; no tenant name, address or unit number is asked for. Deduction descriptions are never stored, logged or hashed; they are printed only on the letter you download. Requests are not stored and no per-settlement record is kept. Each call leaves only the standard usage log line (capability, status, duration, hashes, a daily-rotating anonymous fingerprint)."
       },
       "limitations": [
-        "Computes and cites the published rule; it is not legal advice. Check the statute, your lease and local ordinances before you sign the statement.",
+        "This is not legal advice. Check the linked sources before you rely on it. You decide, sign and send.",
         "Covers the 50 states and DC and nine city overlays; other local ordinances are not applied (the result warns).",
         "Several state rows were read on a mirror (FindLaw, public.law) rather than the official code site, and some quotes are summaries; each citation says which.",
         "Useful lives come from HUD's chart and industry tables (carpet 8 years, 10 in California and Colorado; paint 3, 2 in California with the DRE guide's step table; blinds 3; appliances 10). Send your own with useful_life_years.",
@@ -2539,8 +2609,8 @@
         "Some rule text is summarised rather than quoted; each citation says which."
       ],
       "ruleset": {
-        "version": "sd-2026.11.20",
-        "hash": "sha256:4d2df5171e876ddc04b0a2b1a11c2792dcee800bcf29ddafb365924d060721dc",
+        "version": "sd-2026.12.20",
+        "hash": "sha256:04c1290855dc681f17b0e09b01cee2e898142b74a83b71035f5e3e85fedeaff4",
         "sources": [
           {
             "id": "al.code-35-9a-201",
@@ -2775,6 +2845,12 @@
             "title": "Idaho Code 6-320 Action for damages by tenant",
             "publisher": "Idaho Legislature",
             "url": "https://legislature.idaho.gov/statutesrules/idstat/Title6/T6CH3/SECT6-320/"
+          },
+          {
+            "id": "id.code-6-317",
+            "title": "Idaho Code 6-317 Treble damages",
+            "publisher": "Idaho Legislature",
+            "url": "https://legislature.idaho.gov/statutesrules/idstat/Title6/T6CH3/SECT6-317/"
           },
           {
             "id": "id.code-6-324",

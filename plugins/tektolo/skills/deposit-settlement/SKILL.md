@@ -10,8 +10,8 @@ states and DC) and a covered city's ordinance (Chicago, San Francisco, Berkeley,
 Seattle, Portland, Minneapolis, Saint Paul). You give it the state, dates, deposit and the deductions the manager
 intends to take. It returns the deadline, an assessment of each deduction, interest, the refund,
 penalty exposure if the return is late or wrongful, and a draft itemized statement. The same
-input always gives the same result (`result_hash`). It computes and cites the rule; it is not
-legal advice, and the manager signs the statement.
+input always gives the same result (`result_hash`). It computes and cites the rule, and the manager
+signs the statement.
 
 ## When to use
 
@@ -66,7 +66,12 @@ legal advice, and the manager signs the statement.
    `tenant_gave_forwarding_address: false` (never given: IL, PA, OH, DE, SC, NH safe harbors),
    `deposit_collected_on` / `lease_signed_or_renewed_on` / `lease_term_months` / `furnished`
    (caps: CA AB 12, GA, MD, DE, NM, KS), `rent_ordinance_covered` (Los Angeles RSO, Berkeley
-   interest), `interest_rate_percent` (the account rate where interest is the bank's).
+   interest), `interest_rate_percent` (the account rate where interest is the bank's),
+   `owner_is_natural_person` (Georgia's small-landlord exemption), `deposit_in_separate_account`
+   (Tennessee 66-28-301(c)), `county` (Tennessee: the act covers counties over 75,000 by the
+   2010 census), `renter_notice_served_on` (Utah: the owner then has five business days),
+   `landlord_filed_action_on` (Michigan: a suit for the damages within 45 days; not given, none
+   is assumed).
 3. `deductions`: one per charge, with `category` (`unpaid_rent`, `unpaid_utilities`,
    `cleaning`, `carpet`, `flooring`, `paint`, `blinds_window_coverings`, `appliance`,
    `fixture_or_hardware`, `wall_or_door_repair`, `key_or_lock`, `late_fees`,
@@ -122,7 +127,10 @@ legal advice, and the manager signs the statement.
   penalty in `penalty_exposure.additional` (Portland, Berkeley).
 - Offer `statement.text` as the draft itemized statement (no names or addresses in it).
 - Relay `warnings`, `assumptions` (for example assumed useful lives) and `unknowns` (for example
-  a missing forwarding address), and say it is not legal advice.
+  a missing forwarding address).
+- Give each citation with its link (`citations[].url`) and the rules' date
+  (`provenance.rules_as_of`), and relay the result's `disclaimer` word for word:
+  "This is not legal advice. Check the linked sources before you rely on it. You decide, sign and send."
 - If the user needs an audit trail, keep the `result_hash` and `run.ruleset_version`. Over MCP
   they come back only when you call with `audit: true` (REST always returns them).
 - If a call says the daily free limit is reached, tell the user when it resets and do not

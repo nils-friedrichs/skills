@@ -99,7 +99,7 @@
           "deposit-settlement"
         ],
         "summary": "Settle a security deposit after move-out",
-        "description": "Security deposit settlement for a US rental under the state's statute (and a covered city's ordinance): the date to return the deposit and itemized statement, each intended deduction assessed (allowed or not, prorated by useful life, documentation needed), interest owed, refund due, penalty exposure, a draft itemized statement and a citation for every rule. Covers all 50 states and DC, with city overlays for Chicago, San Francisco, Berkeley, Los Angeles, Seattle, Portland, Minneapolis and Saint Paul.\nWhen to use: A landlord or property manager is closing a move-out and asks when the deposit must be returned, what they may deduct (carpet, paint, cleaning, unpaid rent), how much interest is owed, what to put in the itemized statement, or what happens if they are late.\nNot for: Not legal advice and not a tenant demand letter. It does not price repairs (use property_turnover_quick_estimate for that), hold or account for deposits, or cover pet deposits, last-month's rent handling or non-US rentals. Where the statute sets no deadline (Kentucky, Tennessee) it says so; never present a guessed date as the rule.\nTip: Send as_of (today's date) for a repeatable answer; it defaults to today in UTC.\nTip: Give item_installed_on or item_age_years for carpet, paint, blinds and appliances; without them the tenancy length is assumed.\nTip: Mark normal wear with caused_by_tenant false; it is never deductible.\nTip: Relay deadline.return_by and its status, totals.refund_due_usd, penalty_exposure and the citations; say it is not legal advice.\nTip: Offer statement.text as the draft itemized statement (no names or addresses); in the copy for the tenant keep only the statement.notes whose audience is tenant.\nTip: For a printable statement to sign and send (HTML or PDF) or the deductions ledger (CSV), POST the same arguments as JSON to links.downloads; do not build the file yourself.\nTip: For a tenant (arguments with returned), links.downloads tenant_pdf or tenant_html is a neutral summary of the facts and the rule to send to the landlord; give the user that, not the landlord's statement.\nTip: Relay warnings, assumptions and unknowns (for example the Texas forwarding address).\nTip: Send the start-event dates a state needs when known (forwarding_address_received_on, demand_received_on, new_tenant_moved_in_on, claim_notice_sent_on in Florida); without them the clock is not_started.\nTip: deadline.status none_in_statute means no statutory deadline; deadline.extended_to is the statute's weekend roll-forward, but advise acting by return_by.\nDeterministic: the same input returns the same result_hash. Capability deposit-settlement v0.1.0 (experimental).",
+        "description": "Security deposit settlement for a US rental under the state's statute (and a covered city's ordinance): the date to return the deposit and itemized statement, each intended deduction assessed (allowed or not, prorated by useful life, documentation needed), interest owed, refund due, penalty exposure, a draft itemized statement and a citation for every rule. Covers all 50 states and DC, with city overlays for Chicago, San Francisco, Berkeley, Los Angeles, Seattle, Portland, Minneapolis and Saint Paul.\nWhen to use: A landlord or property manager is closing a move-out and asks when the deposit must be returned, what they may deduct (carpet, paint, cleaning, unpaid rent), how much interest is owed, what to put in the itemized statement, or what happens if they are late.\nNot for: Not legal advice and not a tenant demand letter. It does not price repairs (use property_turnover_quick_estimate for that), hold or account for deposits, or cover pet deposits, last-month's rent handling or non-US rentals. Where the statute sets no deadline (Kentucky, Tennessee) it says so; never present a guessed date as the rule.\nTip: Send as_of (today's date) for a repeatable answer; it defaults to today in UTC.\nTip: Give item_installed_on or item_age_years for carpet, paint, blinds and appliances; without them the tenancy length is assumed.\nTip: Mark normal wear with caused_by_tenant false; it is never deductible.\nTip: Relay deadline.return_by and its status, totals.refund_due_usd, penalty_exposure and the citations with their links (citations[].url); relay the result's disclaimer word for word.\nTip: Offer statement.text as the draft itemized statement (no names or addresses); in the copy for the tenant keep only the statement.notes whose audience is tenant.\nTip: For a printable statement to sign and send (HTML or PDF) or the deductions ledger (CSV), POST the same arguments as JSON to links.downloads; do not build the file yourself.\nTip: For a tenant (arguments with returned), links.downloads tenant_pdf or tenant_html is a neutral summary of the facts and the rule to send to the landlord; give the user that, not the landlord's statement.\nTip: Relay warnings, assumptions and unknowns (for example the Texas forwarding address).\nTip: Send the start-event dates a state needs when known (forwarding_address_received_on, demand_received_on, new_tenant_moved_in_on, claim_notice_sent_on in Florida); without them the clock is not_started.\nTip: Send the state-only facts the unknowns name (owner_is_natural_person in Georgia, county and deposit_in_separate_account in Tennessee, renter_notice_served_on in Utah, landlord_filed_action_on in Michigan).\nTip: deadline.status none_in_statute means no statutory deadline; deadline.extended_to is the statute's weekend roll-forward, but advise acting by return_by.\nDeterministic: the same input returns the same result_hash. Capability deposit-settlement v0.1.0 (experimental).",
         "operationId": "deposit_settlement_settle",
         "parameters": [
           {
@@ -680,7 +680,7 @@
           "property-turnover"
         ],
         "summary": "Quick turnover estimate (start here)",
-        "description": "The easiest way to estimate a US rental turnover: a ZIP, bedrooms, bathrooms and a list of plain-English issues in, a priced make-ready estimate out (same engine and result as property_turnover_scope, short summary by default).\nWhen to use: Start here when the user describes a move-out or turnover in words (\"carpet stained in both bedrooms, oven filthy\") and wants a cost estimate or what to tell vendors. Use property_turnover_scope instead for rate cards, owner decisions, measured quantities or per-finding control.\nNot for: Diagnosing hazards (they come back as refer-outs to a licensed professional); legal advice on deposits; remodel bids; properties outside the US.\nTip: If the ZIP is missing or not exactly 5 digits, ask the user; never guess or pad it.\nTip: Relay refer_outs first, then the totals; say the numbers are estimates, not quotes.\nTip: When review.status is draft, show the user what was read (reading.findings) before you quote a number, and ask them to confirm or correct it. For a verified answer, send the confirmed findings to property_turnover_scope with confirmed true on each. A review.note means the AI reader was unavailable and the text was read by the matcher alone.\nTip: From photos, list only what is visible, with its room (\"stained carpet in bedroom 2\"). Hedge doubtful ones (\"possible water stain?\") and ask the user about what photos cannot show: working appliances, odors, pests, sizes. Never state that a tenant caused damage because of a photo.\nThe same findings under the same ruleset return the same result_hash. An AI model may read notes into findings, marked for review (review, reading); it never sets a number. Capability property-turnover v0.14.0 (experimental).",
+        "description": "The easiest way to estimate a US rental turnover: a ZIP, bedrooms, bathrooms and a list of plain-English issues in, a priced make-ready estimate out (same engine and result as property_turnover_scope, short summary by default).\nWhen to use: Start here when the user describes a move-out or turnover in words (\"carpet stained in both bedrooms, oven filthy\") and wants a cost estimate or what to tell vendors. Use property_turnover_scope instead for rate cards, owner decisions, measured quantities or per-finding control.\nNot for: Diagnosing hazards (they come back as refer-outs to a licensed professional); legal advice on deposits; remodel bids; properties outside the US.\nTip: If the ZIP is missing or not exactly 5 digits, ask the user; never guess or pad it.\nTip: Relay refer_outs first, then the totals; say the numbers are estimates, not quotes.\nTip: When review.status is draft, show the user what was read (reading.findings) before you quote a number, and ask them to confirm or correct it. For a verified answer, send the confirmed findings to property_turnover_scope with confirmed true on each. A review.note says what was not read and why; with the AI reader unavailable only exact item names are priced.\nTip: From photos, list only what is visible, with its room (\"stained carpet in bedroom 2\"). Hedge doubtful ones (\"possible water stain?\") and ask the user about what photos cannot show: working appliances, odors, pests, sizes. Never state that a tenant caused damage because of a photo.\nThe same findings under the same ruleset return the same result_hash. An AI model may read notes into findings, marked for review (review, reading); it never sets a number. Capability property-turnover v1.0.0 (experimental).",
         "operationId": "property_turnover_quick_estimate",
         "parameters": [
           {
@@ -763,7 +763,7 @@
           "property-turnover"
         ],
         "summary": "Scope a property turnover",
-        "description": "Turn move-out / turnover inspection findings for a US rental unit into a priced make-ready scope: standardized tasks by trade, regional low/expected/high costs, must/should/could priorities, vendor scopes, refer-outs to licensed professionals, and every assumption stated.\nWhen to use: Turnover findings for a US rental unit when you need control: rooms, measured quantities, the manager's own prices (rate_card) or owner approve/decline decisions. For a plain-English estimate, property_turnover_quick_estimate is easier.\nNot for: Diagnosing hazards (they come back as refer-outs to a licensed professional); legal advice on deposits; remodel bids; properties outside the US.\nTip: If the ZIP is missing or not exactly 5 digits, ask the user; never guess or pad it.\nTip: From photos, describe only what is visible, with its room (location); an issue code only if one clearly fits. Hedge doubtful ones (\"possible\", \"?\") and ask the user about what photos cannot show: working appliances, odors, pests, sizes. Never state that a tenant caused damage because of a photo; responsibility stays a hint from the engine. Send no faces, names or addresses. A photo of a written checklist or report is different, so transcribe it as written.\nTip: Describe each finding in plain words (description). Only send a code returned by property_turnover_issue_codes. Words the matcher cannot place come back as a manual-quote line with suggested codes. With read set to ai, an AI model reads them first: the answer is a draft and reading.findings lists what it read.\nTip: To confirm an AI reading, send the findings from reading.findings (keep each one's extraction, correct any the user changes) with confirmed true on each one the user checked. The answer is then verified and still shows which findings were read by AI.\nTip: Give measured quantities when you have them (e.g. 120 sq_ft); otherwise typical sizes are assumed and listed in assumptions.\nTip: Send property.floor_coverings when you know whether there is carpet, and unit_type single_family for houses; both change the baseline scope.\nTip: Relay the summary, refer_outs, assumptions and unknowns to the user; costs are estimate ranges, not quotes.\nTip: Use detail=summary unless the user asks for every line item (summary already lists every line tied to a finding).\nTip: Rate card examples - {\"trade\": \"handyman\", \"unit_price\": 65, \"uom\": \"hour\"} or {\"task_id\": \"carpet.clean\", \"unit_price\": 0.2, \"uom\": \"sq_ft\"}; check rate_card_applied and rate_card_ignored before saying a rate was used.\nTip: For the Excel workbook or owner estimate, give the user links.web_tool_prefilled (opens the free web tool with these findings) or POST the same arguments to links.downloads; do not build a spreadsheet yourself.\nThe same findings under the same ruleset return the same result_hash. An AI model may read notes into findings, marked for review (review, reading); it never sets a number. Capability property-turnover v0.14.0 (experimental).",
+        "description": "Turn move-out / turnover inspection findings for a US rental unit into a priced make-ready scope: standardized tasks by trade, regional low/expected/high costs, must/should/could priorities, vendor scopes, refer-outs to licensed professionals, and every assumption stated.\nWhen to use: Turnover findings for a US rental unit when you need control: rooms, measured quantities, the manager's own prices (rate_card) or owner approve/decline decisions. For a plain-English estimate, property_turnover_quick_estimate is easier.\nNot for: Diagnosing hazards (they come back as refer-outs to a licensed professional); legal advice on deposits; remodel bids; properties outside the US.\nTip: If the ZIP is missing or not exactly 5 digits, ask the user; never guess or pad it.\nTip: From photos, describe only what is visible, with its room; an issue code only if one clearly fits, else general.manual_quote with your words in source_text. Hedge doubtful ones (\"possible\", \"?\") and ask the user about what photos cannot show: working appliances, odors, pests, sizes. Never state that a tenant caused damage because of a photo; responsibility stays a hint from the engine. Send no faces, names or addresses. A photo of a written checklist or report is different, so transcribe it as written.\nTip: Send a code on every finding, from property_turnover_issue_codes (search with q, read not_when), with the original words in source_text; general.manual_quote when no code fits. One code per condition; rooms as sets with counts ({\"area\": \"bedroom\", \"count\": 3}); status done, ok or none from the words; only evidence (a test result) clears a hazard. An unknown code is refused with the closest codes. A finding with no code is deprecated: until the date in deprecation it is a manual quote (not priced) whose words are still scanned for safety checks; read is ignored. For free text, use property_turnover_quick_estimate.\nTip: To confirm an AI reading, send the findings from reading.findings (keep each one's extraction, correct any the user changes) with confirmed true on each one the user checked. The answer is then verified and still shows which findings were read by AI.\nTip: Give measured quantities when you have them (e.g. 120 sq_ft); otherwise typical sizes are assumed and listed in assumptions.\nTip: Send property.floor_coverings when you know whether there is carpet, and unit_type single_family for houses; both change the baseline scope.\nTip: Relay the summary, refer_outs, assumptions and unknowns to the user; costs are estimate ranges, not quotes.\nTip: Use detail=summary unless the user asks for every line item (summary already lists every line tied to a finding).\nTip: Rate card examples - {\"trade\": \"handyman\", \"unit_price\": 65, \"uom\": \"hour\"} or {\"task_id\": \"carpet.clean\", \"unit_price\": 0.2, \"uom\": \"sq_ft\"}; check rate_card_applied and rate_card_ignored before saying a rate was used.\nTip: For the Excel workbook or owner estimate, give the user links.web_tool_prefilled (opens the free web tool with these findings) or POST the same arguments to links.downloads; do not build a spreadsheet yourself.\nDeterministic: the same input returns the same result_hash. Capability property-turnover v1.0.0 (experimental).",
         "operationId": "property_turnover_scope",
         "parameters": [
           {
@@ -1261,7 +1261,7 @@
           "property-turnover"
         ],
         "summary": "Look up turnover issue codes",
-        "description": "Search the standard taxonomy of rental-unit turnover issues (component.issue codes) by keyword or area.\nWhen to use: Only while preparing findings for a turnover cost estimate, to find the standard issue code for something observed (e.g. \"pet stain on carpet\"). Never needed to answer a question; call with no arguments to list the taxonomy areas and the first codes.\nNot for: Legal or security-deposit questions; anything outside rental turnover and make-ready work. Not needed before quick_estimate or scope: a plain description works there.\nTip: Call with no arguments to list the taxonomy areas (in `areas`) and the first codes.\nTip: Codes are optional for scoping; a plain description also works.\nDeterministic: the same input returns the same result_hash. Capability property-turnover v0.14.0 (experimental).",
+        "description": "The issue-code catalog for rental-unit turnover (group.issue codes such as carpet.pet_urine): list every code, or search by words for full detail.\nWhen to use: While preparing findings for a turnover cost estimate, to map each observed condition to one code before sending it to scope. Search with q for the detail (description, aliases, when not to use it, examples); call with no arguments for the short list of every code. Never needed to answer a question.\nNot for: Legal or security-deposit questions; anything outside rental turnover and make-ready work. Not needed before quick_estimate, which reads plain words.\nTip: Map each observed condition to one code; search with q when unsure, and read not_when.\nTip: When no code fits, send general.manual_quote and keep the original words.\nTip: Call with no arguments for the short list of every code and the groups.\nDeterministic: the same input returns the same result_hash. Capability property-turnover v1.0.0 (experimental).",
         "operationId": "property_turnover_issue_codes",
         "parameters": [
           {
@@ -1311,6 +1311,185 @@
             }
           }
         },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PropertyTurnoverIssueCodesResponse"
+                }
+              }
+            }
+          },
+          "412": {
+            "description": "The ruleset named in the Tektolo-Ruleset header is not the one in force, and the call did not ask to be answered under it (Tektolo-Ruleset-Mode: serve) or that version can't be served (the body's reason says why). Nothing was computed or charged; the body names both versions."
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "property-turnover"
+        ],
+        "summary": "Look up turnover issue codes (GET)",
+        "description": "The same operation and answer as the POST route, with the inputs as query parameters.",
+        "operationId": "property_turnover_issue_codes_get",
+        "parameters": [
+          {
+            "name": "q",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Words to search for in the codes, names, aliases, descriptions and examples, e.g. 'pet stain carpet'. Hits come back with full detail. Leave out to list every code in short form.",
+              "title": "Q"
+            },
+            "description": "Words to search for in the codes, names, aliases, descriptions and examples, e.g. 'pet stain carpet'. Hits come back with full detail. Leave out to list every code in short form."
+          },
+          {
+            "name": "group",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Only codes in this group, e.g. 'flooring' or 'walls' (a part of the unit, not a room). `groups` in the answer lists them all.",
+              "title": "Group"
+            },
+            "description": "Only codes in this group, e.g. 'flooring' or 'walls' (a part of the unit, not a room). `groups` in the answer lists them all."
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Most codes to return. Default: 8 with q, every code without.",
+              "title": "Limit"
+            },
+            "description": "Most codes to return. Default: 8 with q, every code without."
+          },
+          {
+            "name": "include_aliases",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Also return aliases in the short list (search hits always carry them).",
+              "title": "Include Aliases"
+            },
+            "description": "Also return aliases in the short list (search hits always carry them)."
+          },
+          {
+            "name": "query",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Older name for q; use q.",
+              "title": "Query"
+            },
+            "description": "Older name for q; use q."
+          },
+          {
+            "name": "area",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Older name for group; use group.",
+              "title": "Area"
+            },
+            "description": "Older name for group; use group."
+          },
+          {
+            "name": "Tektolo-Ruleset",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Optional. The ruleset version you built against, as results carry it in provenance.ruleset_version (e.g. 'sd-2026.11.14'), or its sha256: hash. If the rules have changed since, the call fails (nothing computed, nothing charged) and says what is in force now, so you upgrade on your own schedule. Leave it out to answer under the current rules.",
+              "title": "Tektolo-Ruleset"
+            },
+            "description": "Optional. The ruleset version you built against, as results carry it in provenance.ruleset_version (e.g. 'sd-2026.11.14'), or its sha256: hash. If the rules have changed since, the call fails (nothing computed, nothing charged) and says what is in force now, so you upgrade on your own schedule. Leave it out to answer under the current rules."
+          },
+          {
+            "name": "Tektolo-Ruleset-Mode",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Optional, with Tektolo-Ruleset. 'serve' asks us to answer under the ruleset version you named even when the rules have changed since, from that version's signed bundle. The answer says so (run.served_from_bundle and the Tektolo-Ruleset-Served header). We refuse (412, with a reason) a version older than 12 months, one a later correction or law change replaced for your state, or one we have no bundle for. Leave it out to be refused whenever the rules have changed.",
+              "title": "Tektolo-Ruleset-Mode"
+            },
+            "description": "Optional, with Tektolo-Ruleset. 'serve' asks us to answer under the ruleset version you named even when the rules have changed since, from that version's signed bundle. The answer says so (run.served_from_bundle and the Tektolo-Ruleset-Served header). We refuse (412, with a reason) a version older than 12 months, one a later correction or law change replaced for your state, or one we have no bundle for. Leave it out to be refused whenever the rules have changed."
+          }
+        ],
         "responses": {
           "200": {
             "description": "Successful Response",
@@ -2286,7 +2465,7 @@
           "property-turnover"
         ],
         "summary": "Read a document into findings (no estimate)",
-        "description": "Reads a move-out inspection report (PDF, Word, Excel, PowerPoint or CSV) or up to 5 photos of paper pages, 5 pages at most, and returns what it read as findings: a `reading`, never an estimate. Check each finding against its evidence (page and quote), then send `reading.findings` unchanged to `POST /v1/property-turnover/scope`, which prices them by our own rules. Rows not turned into findings are listed in `set_aside` with the reason.\n\n**Key required.** Send a connector key (`Authorization: Bearer <key>`; free from `POST /v1/keys`). The web tool's page token is not accepted here. One document counts as one call of the key's daily free allowance, and a key can read 3 documents a day (UTC). Not on the x402 paid lane.\n\n**Body.** `multipart/form-data` with the field `files` (one file, or up to 5 photos), or `application/json` `{\"files\": [{\"name\": \"report.pdf\", \"content_base64\": \"...\"}]}`. 15 MB a file, 25 MB an upload. Files with macros, scripts, embedded files or a password are refused.\n\n**Privacy.** Upload a report (PDF, Word, Excel, CSV) or up to 5 photos, 5 pages at most. Pages are read by Microsoft Azure OpenAI. Please redact tenant names and signatures. Our server opens the file in an isolated converter, which turns each page into a plain image and drops everything else in the file. The page images are sent to Microsoft Azure OpenAI (run by Microsoft for us inside its US data zone) to copy out the findings and the unit facts; it is told not to copy names, addresses, phone numbers or signatures, and we remove any that slip through. Findings our own matcher cannot match to a standard repair item are then sent as text, with contact details removed, to the same model. Nothing from the file is stored: the file, the page images and the text read from them are held in memory only while the request is processed. For up to a day we keep the answer for a page in memory, found by a one-way hash of the page image, so the same page gets the same answer. Prices are always worked out by our own rules, never by the AI model. How we handle uploads: /privacy#document-upload.",
+        "description": "Reads a move-out inspection report (PDF, Word, Excel, PowerPoint or CSV) or up to 5 photos of paper pages, 5 pages at most, and returns what it read as findings: a `reading`, never an estimate. Check each finding against its evidence (page and quote), then send `reading.findings` unchanged to `POST /v1/property-turnover/scope`, which prices them by our own rules. The findings are schema v2 (`reading.schema` is `finding.v2`): each has a `code` from the issue-code catalog, `rooms`, and a `status` (`ok`, `done` or `none`) where it bills nothing. A row left out of the findings is named in `reading.notes` and counted in `counts.left_out`.\n\n**Key required.** Send a connector key (`Authorization: Bearer <key>`; free from `POST /v1/keys`). The web tool's page token is not accepted here. One document counts as one call of the key's daily free allowance, and a key can read 3 documents a day (UTC). Not on the x402 paid lane.\n\n**Body.** `multipart/form-data` with the field `files` (one file, or up to 5 photos), or `application/json` `{\"files\": [{\"name\": \"report.pdf\", \"content_base64\": \"...\"}]}`. 15 MB a file, 25 MB an upload. Files with macros, scripts, embedded files or a password are refused.\n\n**Privacy.** Upload a report (PDF, Word, Excel, CSV) or up to 5 photos, 5 pages at most. Pages are read by Microsoft Azure OpenAI. Please redact tenant names and signatures. Our server opens the file in an isolated converter, which turns each page into a plain image and drops everything else in the file. The page images are sent to Microsoft Azure OpenAI (run by Microsoft for us inside its US data zone) to copy out the findings and the unit facts; it is told not to copy names, addresses, phone numbers or signatures, and we remove any that slip through. The rows it copies are then sent as text, with contact details removed, to the same model, which codes them from the issue-code catalog. Nothing from the file is stored: the file, the page images and the text read from them are held in memory only while the request is processed. For up to a day we keep the answer for a page in memory, found by a one-way hash of the page image, so the same page gets the same answer. Prices are always worked out by our own rules, never by the AI model. How we handle uploads: /privacy#document-upload.",
         "operationId": "property_turnover_read_document",
         "requestBody": {
           "content": {
@@ -2574,6 +2753,17 @@
               }
             ],
             "title": "Listed If"
+          },
+          "listed_warning": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Listed Warning"
           }
         },
         "additionalProperties": false,
@@ -3101,6 +3291,17 @@
               }
             ],
             "title": "Note"
+          },
+          "lead": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Lead"
           }
         },
         "additionalProperties": false,
@@ -3795,6 +3996,28 @@
             ],
             "title": "Mitigation Section"
           },
+          "termination_notice_section": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Termination Notice Section"
+          },
+          "termination_notice_quote": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Termination Notice Quote"
+          },
           "contract_damages": {
             "anyOf": [
               {
@@ -3943,6 +4166,16 @@
               }
             ]
           },
+          "discovery_cutoff": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/DiscoveryCutoff"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
           "nonstandard_only": {
             "items": {
               "type": "string",
@@ -3981,6 +4214,16 @@
               }
             ],
             "title": "Nonstandard Section"
+          },
+          "lease_authorized": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/LeaseAuthorized"
+              },
+              {
+                "type": "null"
+              }
+            ]
           },
           "cleaning": {
             "items": {
@@ -4209,6 +4452,23 @@
             "title": "Counts Prepaid Rent",
             "default": false
           },
+          "advance_rent_exempt_months": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "exclusiveMinimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Advance Rent Exempt Months"
+          },
+          "or_demanded_before": {
+            "type": "boolean",
+            "title": "Or Demanded Before",
+            "default": false
+          },
           "pet_allowance_months": {
             "anyOf": [
               {
@@ -4232,6 +4492,51 @@
               }
             ],
             "title": "Prepaid Cap Months"
+          },
+          "prepaid_note": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Prepaid Note"
+          },
+          "variant_extra_months": {
+            "anyOf": [
+              {
+                "type": "string",
+                "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Variant Extra Months"
+          },
+          "variant_duty": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Variant Duty"
+          },
+          "section": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Section"
           },
           "note": {
             "anyOf": [
@@ -4414,6 +4719,21 @@
             ],
             "description": "What was read by AI for this answer: every finding the rules answered, in the shape scope accepts. Confirm them and send them to scope with confirmed: true."
           },
+          "deprecation": {
+            "anyOf": [
+              {
+                "items": {
+                  "$ref": "#/components/schemas/Deprecation"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Deprecation",
+            "description": "Parts of the request answered for now and refused after `until`, with what to send instead (e.g. findings[].description: send codes)."
+          },
           "signature": {
             "anyOf": [
               {
@@ -4483,6 +4803,21 @@
               }
             ],
             "description": "What was read by AI for this answer: every finding the rules answered, in the shape scope accepts. Confirm them and send them to scope with confirmed: true."
+          },
+          "deprecation": {
+            "anyOf": [
+              {
+                "items": {
+                  "$ref": "#/components/schemas/Deprecation"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Deprecation",
+            "description": "Parts of the request answered for now and refused after `until`, with what to send instead (e.g. findings[].description: send codes)."
           },
           "signature": {
             "anyOf": [
@@ -4558,6 +4893,21 @@
             ],
             "description": "What was read by AI for this answer: every finding the rules answered, in the shape scope accepts. Confirm them and send them to scope with confirmed: true."
           },
+          "deprecation": {
+            "anyOf": [
+              {
+                "items": {
+                  "$ref": "#/components/schemas/Deprecation"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Deprecation",
+            "description": "Parts of the request answered for now and refused after `until`, with what to send instead (e.g. findings[].description: send codes)."
+          },
           "signature": {
             "anyOf": [
               {
@@ -4580,6 +4930,34 @@
           "result"
         ],
         "title": "DepositSettlementSettleResponse"
+      },
+      "Deprecation": {
+        "properties": {
+          "field": {
+            "type": "string",
+            "title": "Field",
+            "description": "The request field, e.g. findings[].description."
+          },
+          "until": {
+            "type": "string",
+            "format": "date",
+            "title": "Until",
+            "description": "Accepted until this day; refused after it."
+          },
+          "use": {
+            "type": "string",
+            "title": "Use",
+            "description": "What to send instead."
+          }
+        },
+        "type": "object",
+        "required": [
+          "field",
+          "until",
+          "use"
+        ],
+        "title": "Deprecation",
+        "description": "A part of the request that is still answered and will stop being accepted."
       },
       "Depreciation": {
         "properties": {
@@ -4727,6 +5105,50 @@
         "title": "DescribeEach",
         "description": "The statute asks the itemized statement to describe each deducted item, not only to name a\ncategory (TEKTOLO-409): Texas 92.104(c) \"a written description and itemized list of all\ndeductions\", Wisconsin ATCP 134.06(3)(a) \"describe each item\", Georgia 44-7-34(a) \"the exact\nreasons\", Washington 59.18.280(1)(a) \"a full and specific statement of the basis\",\nNew Hampshire 540-A:7, I \"with particularity\", Massachusetts 15B(4)(iii) \"in precise\ndetail\". The letter prints each line's description (the caller's own words, never stored)\nand leaves a blank to fill in where none was given; a manager note names the duty."
       },
+      "DiscoveryCutoff": {
+        "properties": {
+          "days_after_vacate": {
+            "type": "integer",
+            "exclusiveMinimum": 0.0,
+            "title": "Days After Vacate"
+          },
+          "days_after_new_tenant": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "exclusiveMinimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Days After New Tenant"
+          },
+          "section": {
+            "type": "string",
+            "title": "Section"
+          },
+          "quote": {
+            "type": "string",
+            "maxLength": 600,
+            "title": "Quote"
+          },
+          "source": {
+            "type": "string",
+            "title": "Source"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "days_after_vacate",
+          "section",
+          "quote",
+          "source"
+        ],
+        "title": "DiscoveryCutoff",
+        "description": "Physical damage is chargeable only if the landlord discovered it before the earlier of\n``days_after_vacate`` days after the tenant vacated and ``days_after_new_tenant`` days after a\nnew tenant takes possession (Tennessee 66-28-301(g); G846-TN-05). No input states the day the\ndamage was found, so the cutoff is computed and stated, never applied to a line."
+      },
       "DocumentCounts": {
         "properties": {
           "total": {
@@ -4749,11 +5171,17 @@
             "title": "Unmatched",
             "description": "Findings nothing could match (manual-quote lines)."
           },
-          "set_aside": {
+          "not_billed": {
             "type": "integer",
             "minimum": 0.0,
-            "title": "Set Aside",
-            "description": "Rows read but not turned into findings."
+            "title": "Not Billed",
+            "description": "Findings that bill nothing: status done, ok or none (in total)."
+          },
+          "left_out": {
+            "type": "integer",
+            "minimum": 0.0,
+            "title": "Left Out",
+            "description": "Rows read but not turned into findings; each is named in notes."
           }
         },
         "type": "object",
@@ -4762,7 +5190,8 @@
           "ai",
           "parser",
           "unmatched",
-          "set_aside"
+          "not_billed",
+          "left_out"
         ],
         "title": "DocumentCounts"
       },
@@ -4824,6 +5253,13 @@
             "title": "Notes",
             "description": "What the reading noticed while reading the text."
           },
+          "schema": {
+            "type": "string",
+            "const": "finding.v2",
+            "title": "Schema",
+            "description": "The schema of findings: finding.v2. Send them to scope unchanged.",
+            "default": "finding.v2"
+          },
           "schema_version": {
             "type": "string",
             "title": "Schema Version",
@@ -4837,18 +5273,10 @@
           },
           "evidence": {
             "items": {
-              "$ref": "#/components/schemas/Evidence"
+              "$ref": "#/components/schemas/Evidence-Output"
             },
             "type": "array",
             "title": "Evidence"
-          },
-          "set_aside": {
-            "items": {
-              "$ref": "#/components/schemas/SetAside"
-            },
-            "type": "array",
-            "title": "Set Aside",
-            "description": "Every row read but not turned into a finding, and why."
           },
           "unit": {
             "anyOf": [
@@ -5002,7 +5430,8 @@
             "enum": [
               "yes",
               "no",
-              "unknown"
+              "unknown",
+              "not_yet_due"
             ],
             "title": "Met"
           },
@@ -5165,7 +5594,38 @@
         "title": "EstimateContext",
         "description": "Identifiers of the estimate being rated. Hashes, versions, region and total only.\n\nEvery field has a strict format (security review M1): they end up in the feedback digest,\nso nothing here may carry free text."
       },
-      "Evidence": {
+      "Evidence-Input": {
+        "properties": {
+          "kind": {
+            "$ref": "#/components/schemas/EvidenceKind"
+          },
+          "material": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 80
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Material",
+            "description": "What was tested, e.g. 'kitchen floor tile'."
+          },
+          "result": {
+            "$ref": "#/components/schemas/EvidenceResult"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "kind",
+          "result"
+        ],
+        "title": "Evidence",
+        "description": "A negative or working result clears: inspector any hazard; lab mold, lead, asbestos, drugs, sewage; meter moisture; self_test or checklist a device."
+      },
+      "Evidence-Output": {
         "properties": {
           "finding": {
             "type": "string",
@@ -5189,7 +5649,7 @@
               }
             ],
             "title": "Match",
-            "description": "The standard item the matcher placed it on, if any."
+            "description": "The catalog item the finding is coded as, if any."
           },
           "needs_review": {
             "type": "boolean",
@@ -5225,6 +5685,27 @@
         ],
         "title": "Evidence",
         "description": "Why one finding needs a check, beside it (scope's ``Finding`` takes no extra keys; its\npage and quote are in its ``extraction``): send ``findings`` to scope, keep this to check\nthem."
+      },
+      "EvidenceKind": {
+        "type": "string",
+        "enum": [
+          "self_test",
+          "lab",
+          "meter",
+          "checklist",
+          "inspector"
+        ],
+        "title": "EvidenceKind"
+      },
+      "EvidenceResult": {
+        "type": "string",
+        "enum": [
+          "negative",
+          "positive",
+          "working",
+          "failed"
+        ],
+        "title": "EvidenceResult"
       },
       "ExcessRemedy": {
         "properties": {
@@ -5338,14 +5819,14 @@
               "ai_document"
             ],
             "title": "Method",
-            "description": "'ai': read by a language model from free text. 'ai_document': read by a language model from a page of an uploaded document."
+            "description": "ai: free text; ai_document: an upload's page."
           },
           "model": {
             "type": "string",
             "maxLength": 80,
             "pattern": "^[A-Za-z0-9._:() -]+$",
             "title": "Model",
-            "description": "The model that read it, e.g. 'gpt-5-nano 2025-08-07'."
+            "description": "The model that read it."
           },
           "confidence": {
             "anyOf": [
@@ -5360,7 +5841,7 @@
               }
             ],
             "title": "Confidence",
-            "description": "The reader's confidence, 0 to 1."
+            "description": "0 to 1."
           },
           "page": {
             "anyOf": [
@@ -5374,7 +5855,7 @@
               }
             ],
             "title": "Page",
-            "description": "'ai_document' only: the page of the upload it was read from (1-based)."
+            "description": "ai_document: the page read."
           },
           "quote": {
             "anyOf": [
@@ -5387,7 +5868,24 @@
               }
             ],
             "title": "Quote",
-            "description": "'ai_document' only: the row's words as printed on that page, contact details masked. Evidence for checking the finding; it never changes the price."
+            "description": "ai_document: the row's words, contacts masked."
+          },
+          "cell": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "move_out",
+                  "move_in",
+                  "comment"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Cell",
+            "description": "ai_document: the cell read; move_in bills nothing, a hazard there is Possible."
           },
           "review": {
             "anyOf": [
@@ -5398,7 +5896,21 @@
                 "type": "null"
               }
             ],
-            "description": "'ai_document' only: the person's review before estimating (confirmed, accepted or edited). Leave out when the finding was not checked; it then needs review."
+            "description": "ai_document: the person's review."
+          },
+          "prompt_version": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 40,
+                "pattern": "^[A-Za-z0-9._:-]+$"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Prompt Version",
+            "description": "The reader's prompt version."
           }
         },
         "additionalProperties": false,
@@ -5409,7 +5921,7 @@
           "confidence"
         ],
         "title": "Extraction",
-        "description": "How a finding was produced, when software read it from free text (contract 0.4.0) or\nfrom an uploaded document (``ai_document`` and ``page``, additive).\n\nSet by the web tool when its AI reader (Azure OpenAI) turned a person's own words, or a page\nof their inspection report, into this finding. The engine reports such a finding as\n``resolution: \"ai\"`` with ``needs_review`` and flags its lines; it never changes how the\nfinding is priced."
+        "description": "How our AI reader read a finding; never changes the price."
       },
       "ExtractionReview": {
         "properties": {
@@ -5433,14 +5945,13 @@
                 "column_unclear",
                 "ok_unclear",
                 "unmatched",
-                "loose_match",
                 "ai_match"
               ]
             },
             "type": "array",
-            "maxItems": 9,
+            "maxItems": 8,
             "title": "Flags",
-            "description": "Why the page flagged it, if it did."
+            "description": "Why the page flagged it."
           },
           "changed": {
             "items": {
@@ -5456,7 +5967,7 @@
             "type": "array",
             "maxItems": 5,
             "title": "Changed",
-            "description": "'edited': the fields the person changed."
+            "description": "edited: the fields changed."
           }
         },
         "additionalProperties": false,
@@ -5465,7 +5976,7 @@
           "outcome"
         ],
         "title": "ExtractionReview",
-        "description": "What the person did with a finding the web tool read from an uploaded document, before\nestimating (contract 0.11.0, additive). ``confirmed``: they pressed \"Looks right\";\n``accepted``: left as read, on a row the page did not flag; ``edited``: they changed it\n(``changed`` names what). A reviewed finding keeps its ``extraction`` (where it came from)\nbut is no longer reported as needing review: the person has checked it."
+        "description": "A person's review of a finding read from a document."
       },
       "Fallback": {
         "properties": {
@@ -5680,11 +6191,11 @@
               }
             ],
             "title": "Id",
-            "description": "Your id for this finding; defaults to f1, f2, ... in order."
+            "description": "Your id; defaults to f1, f2, ... in order."
           },
           "location": {
             "$ref": "#/components/schemas/Location",
-            "description": "Object {\"area\": \"bedroom\", \"label\": \"Bedroom 2\"}, or a plain string such as \"Bedroom 2\" or \"kitchen\" (mapped to an area; other text becomes the label)."
+            "description": "{\"area\": \"bedroom\", \"label\": \"Bedroom 2\"} or \"Bedroom 2\"; older form of rooms."
           },
           "code": {
             "anyOf": [
@@ -5697,7 +6208,7 @@
               }
             ],
             "title": "Code",
-            "description": "Optional. Only a code returned by property_turnover_issue_codes (e.g. 'walls.nail_holes'); otherwise leave it out and use description."
+            "description": "From property_turnover_issue_codes; general.manual_quote if none fits. Send it on every finding."
           },
           "description": {
             "anyOf": [
@@ -5710,7 +6221,7 @@
               }
             ],
             "title": "Description",
-            "description": "Plain description if no code, e.g. 'dog urine stains in bedroom carpet'."
+            "description": "Deprecated; send code, with the words in source_text."
           },
           "extent": {
             "anyOf": [
@@ -5721,7 +6232,7 @@
                 "type": "null"
               }
             ],
-            "description": "spot | partial | full; defaults per issue."
+            "description": "Only when the words say how far; else the code's default."
           },
           "quantity": {
             "anyOf": [
@@ -5732,7 +6243,7 @@
                 "type": "null"
               }
             ],
-            "description": "Measured amount, e.g. 120 sq_ft. Derived when omitted."
+            "description": "Measured amount (120 sq_ft), only as the words give it."
           },
           "notes": {
             "anyOf": [
@@ -5744,7 +6255,8 @@
                 "type": "null"
               }
             ],
-            "title": "Notes"
+            "title": "Notes",
+            "description": "More words; never billed or coded from."
           },
           "extraction": {
             "anyOf": [
@@ -5755,25 +6267,121 @@
                 "type": "null"
               }
             ],
-            "description": "Set by Tektolo's AI reader on findings it read from free text or a document (reading.findings of an earlier answer); keep it when you send such a finding back. They come back as resolution 'ai' with needs_review unless confirmed."
+            "description": "Set by our AI reader; send it back unchanged."
           },
           "confirmed": {
             "type": "boolean",
             "title": "Confirmed",
-            "description": "true: the person checked this AI-read finding (one with extraction) and it says what they meant. It keeps resolution 'ai' but no longer needs review, and the answer is verified once every AI-read finding is confirmed.",
+            "description": "true: the person checked this AI-read finding.",
             "default": false
           },
           "signature_like": {
             "type": "boolean",
             "title": "Signature Like",
-            "description": "Set by Tektolo's notes reader (reading.findings, the web tool's rows): the words came right after a sign-off and read like a name or signature ('Thanks!' / 'Rotten Egg Smell'), kept only because they name a safety item. A safety item in them is raised unconfirmed (check first). Keep it when you send such a finding back, so every way of sending the same words gives the same answer.",
+            "description": "Set by our reader; send it back unchanged.",
             "default": false
+          },
+          "rooms": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/Rooms"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Which rooms: {\"area\": \"bedroom\", \"count\": 3} is all 3 bedrooms; labels name them."
+          },
+          "area_sq_ft": {
+            "anyOf": [
+              {
+                "type": "number",
+                "maximum": 100000.0,
+                "exclusiveMinimum": 0.0
+              },
+              {
+                "type": "string",
+                "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Area Sq Ft",
+            "description": "Measured area in sq ft; wins over a derived size."
+          },
+          "material": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 80
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Material",
+            "description": "The material as written, e.g. '9x9 vinyl tile'."
+          },
+          "year_statement": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/YearStatement"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "A year said in passing (\"built 1972\"); never sets property.year_built."
+          },
+          "status": {
+            "$ref": "#/components/schemas/FindingStatus",
+            "description": "Only needed (the default) bills; on a hazard, done/ok/none without evidence stays Possible.",
+            "default": "needed"
+          },
+          "evidence": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/Evidence-Input"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "The test behind the finding; the only thing that clears a hazard."
+          },
+          "repeat_of": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 40,
+                "pattern": "^[A-Za-z0-9_.:-]+$"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Repeat Of",
+            "description": "Id of an earlier finding this repeats in its own rooms (\"same as above\"); it bills."
+          },
+          "source_text": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 1000
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Source Text",
+            "description": "The original words. Scanned for hazards; never billed or coded from."
           }
         },
         "additionalProperties": false,
         "type": "object",
         "title": "Finding",
-        "description": "One observed condition. Give a taxonomy `code` if you know it, else a `description`."
+        "description": "One observed condition, coded from the issue-code catalog."
       },
       "FindingResolution": {
         "properties": {
@@ -5957,6 +6565,16 @@
         ],
         "title": "FindingResolution"
       },
+      "FindingStatus": {
+        "type": "string",
+        "enum": [
+          "needed",
+          "done",
+          "ok",
+          "none"
+        ],
+        "title": "FindingStatus"
+      },
       "FloorCoverings": {
         "properties": {
           "carpet_present": {
@@ -5969,7 +6587,7 @@
               }
             ],
             "title": "Carpet Present",
-            "description": "Is there wall-to-wall carpet? Omit if unknown: carpet findings then imply carpet; with no carpet findings, whole-unit carpet cleaning is left out and listed as unknown."
+            "description": "Is there wall-to-wall carpet? Omit if unknown."
           },
           "carpet_sq_ft": {
             "anyOf": [
@@ -5983,7 +6601,7 @@
               }
             ],
             "title": "Carpet Sq Ft",
-            "description": "Carpeted floor area. Omit to assume 60% of the unit floor area."
+            "description": "Carpeted area; omit to assume 60% of the floor area."
           }
         },
         "additionalProperties": false,
@@ -6000,7 +6618,10 @@
               "late_return",
               "late_statement_or_return",
               "late_claim_notice",
-              "not_in_input"
+              "late_action_or_return",
+              "not_in_input",
+              "missing_documentation",
+              "receipts_after_estimate"
             ],
             "title": "Trigger"
           },
@@ -6110,6 +6731,77 @@
             "title": "Not If Abandoned",
             "default": false
           },
+          "late_refund_note": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Late Refund Note"
+          },
+          "days": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "exclusiveMinimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Days"
+          },
+          "days_section": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Days Section"
+          },
+          "late_condition_note": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Late Condition Note"
+          },
+          "rent_only": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "exempt",
+                  "undisputed"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Rent Only"
+          },
+          "rent_only_note": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Rent Only Note"
+          },
           "short_interest_contested": {
             "type": "boolean",
             "title": "Short Interest Contested",
@@ -6137,6 +6829,97 @@
               }
             ],
             "title": "Condition"
+          },
+          "nothing_withheld_note": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Nothing Withheld Note"
+          },
+          "account_leg": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Account Leg"
+          },
+          "doc_legs": {
+            "items": {
+              "type": "string",
+              "enum": [
+                "itemized_statement",
+                "move_in_condition_statement",
+                "move_out_list"
+              ]
+            },
+            "type": "array",
+            "title": "Doc Legs",
+            "default": []
+          },
+          "cure_business_days": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "exclusiveMinimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Cure Business Days"
+          },
+          "cure_section": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Cure Section"
+          },
+          "excuse_section": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Excuse Section"
+          },
+          "excuse_note": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Excuse Note"
+          },
+          "in_full_quote": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "In Full Quote"
           },
           "section": {
             "type": "string",
@@ -6184,7 +6967,7 @@
           "trigger": {
             "type": "string",
             "title": "Trigger",
-            "description": "late_statement, late_return, late_statement_or_return, late_claim_notice or not_in_input (facts the request cannot state)."
+            "description": "late_statement, late_return, late_statement_or_return, late_claim_notice, late_action_or_return (Michigan 554.613), missing_documentation (a required receipt or photo is missing), receipts_after_estimate (paid receipts owed after an estimate not furnished in time) or not_in_input (facts the request cannot state)."
           },
           "status": {
             "type": "string",
@@ -6913,6 +7696,17 @@
             ],
             "title": "Due Section"
           },
+          "section": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Section"
+          },
           "note": {
             "anyOf": [
               {
@@ -6937,15 +7731,28 @@
           "code": {
             "type": "string",
             "title": "Code",
-            "description": "Stable code, component.issue, e.g. 'carpet.pet_urine'."
+            "description": "Stable code, group.issue, e.g. 'carpet.pet_urine'."
           },
           "name": {
             "type": "string",
             "title": "Name"
           },
-          "area": {
+          "group": {
             "type": "string",
-            "title": "Area"
+            "title": "Group",
+            "description": "The part of the unit it belongs to, for the group filter."
+          },
+          "description": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Description",
+            "description": "What the code covers, in plain words."
           },
           "aliases": {
             "items": {
@@ -6953,16 +7760,69 @@
             },
             "type": "array",
             "title": "Aliases",
-            "default": []
+            "description": "Other words for it."
+          },
+          "not_when": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Not When",
+            "description": "When not to use it, in plain words."
+          },
+          "rooms": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Rooms",
+            "description": "The rooms it is for; empty means any room."
+          },
+          "default_extent": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Default Extent",
+            "description": "spot | partial | full, used when a finding sends none."
+          },
+          "refer_out": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Refer Out",
+            "description": "The refer-out (licensed pro or compliance step) this code raises, if any."
+          },
+          "examples": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Examples",
+            "description": "Notes this code is for, as inspectors write them."
           }
         },
         "type": "object",
         "required": [
           "code",
           "name",
-          "area"
+          "group"
         ],
-        "title": "IssueCode"
+        "title": "IssueCode",
+        "description": "One catalog entry. The short list carries code, name, group, default_extent and, where\nthe code has them, refer_out and rooms; a search hit (``q``) carries every field. Fields with\nnothing to say are left out of the JSON."
       },
       "IssueCodesRequest": {
         "properties": {
@@ -6981,6 +7841,52 @@
             "title": "Client Refs",
             "description": "Your own reference ids (e.g. unit_id, job_id). Echoed back, never used."
           },
+          "q": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 200
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Q",
+            "description": "Words to search for in the codes, names, aliases, descriptions and examples, e.g. 'pet stain carpet'. Hits come back with full detail. Leave out to list every code in short form."
+          },
+          "group": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 40
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Group",
+            "description": "Only codes in this group, e.g. 'flooring' or 'walls' (a part of the unit, not a room). `groups` in the answer lists them all."
+          },
+          "limit": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "maximum": 500.0,
+                "minimum": 1.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Limit",
+            "description": "Most codes to return. Default: 8 with q, every code without."
+          },
+          "include_aliases": {
+            "type": "boolean",
+            "title": "Include Aliases",
+            "description": "Also return aliases in the short list (search hits always carry them).",
+            "default": false
+          },
           "query": {
             "anyOf": [
               {
@@ -6992,33 +7898,20 @@
               }
             ],
             "title": "Query",
-            "description": "Keywords to match against codes, names and aliases, e.g. 'pet stain carpet'."
+            "description": "Older name for q; use q."
           },
           "area": {
             "anyOf": [
               {
-                "type": "string"
+                "type": "string",
+                "maxLength": 40
               },
               {
                 "type": "null"
               }
             ],
             "title": "Area",
-            "description": "Optional taxonomy area filter, e.g. 'flooring' or 'walls' (not a room). Call with no arguments to list every area in `areas`."
-          },
-          "limit": {
-            "type": "integer",
-            "maximum": 200.0,
-            "minimum": 1.0,
-            "title": "Limit",
-            "description": "Most codes to return.",
-            "default": 8
-          },
-          "include_aliases": {
-            "type": "boolean",
-            "title": "Include Aliases",
-            "description": "Also return each code's aliases (larger result).",
-            "default": false
+            "description": "Older name for group; use group."
           }
         },
         "additionalProperties": false,
@@ -7033,7 +7926,8 @@
           },
           "total_matches": {
             "type": "integer",
-            "title": "Total Matches"
+            "title": "Total Matches",
+            "description": "Codes matching q and group, before limit."
           },
           "codes": {
             "items": {
@@ -7042,13 +7936,38 @@
             "type": "array",
             "title": "Codes"
           },
+          "groups": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Groups",
+            "description": "Every group, for the group filter."
+          },
           "areas": {
             "items": {
               "type": "string"
             },
             "type": "array",
             "title": "Areas",
-            "description": "Every taxonomy area, for the `area` filter (e.g. 'flooring', 'walls')."
+            "description": "Older name for groups (the same list)."
+          },
+          "manual_quote_code": {
+            "type": "string",
+            "title": "Manual Quote Code",
+            "description": "The code to send when no code fits; the line is quoted by hand.",
+            "default": "general.manual_quote"
+          },
+          "note": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Note"
           }
         },
         "type": "object",
@@ -7206,6 +8125,17 @@
             "type": "boolean",
             "title": "On Full Refund",
             "default": false
+          },
+          "section": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Section"
           },
           "note": {
             "anyOf": [
@@ -7388,6 +8318,122 @@
             "title": "Deposit Use",
             "default": false
           },
+          "agreements_from": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Agreements From"
+          },
+          "renewal_note": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Renewal Note"
+          },
+          "month_to_month_note": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Month To Month Note"
+          },
+          "over_cap_void": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Over Cap Void"
+          },
+          "over_cap_section": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Over Cap Section"
+          },
+          "over_cap_remedy": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Over Cap Remedy"
+          },
+          "over_cap_remedy_months": {
+            "anyOf": [
+              {
+                "type": "string",
+                "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Over Cap Remedy Months"
+          },
+          "over_cap_remedy_if": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Over Cap Remedy If"
+          },
+          "over_cap_remedy_section": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Over Cap Remedy Section"
+          },
+          "over_cap_remedy_conditional": {
+            "type": "boolean",
+            "title": "Over Cap Remedy Conditional",
+            "default": false
+          },
+          "over_cap_remedy_damages": {
+            "type": "boolean",
+            "title": "Over Cap Remedy Damages",
+            "default": false
+          },
+          "over_cap_remedy_fees": {
+            "type": "boolean",
+            "title": "Over Cap Remedy Fees",
+            "default": false
+          },
           "section": {
             "type": "string",
             "title": "Section"
@@ -7427,6 +8473,81 @@
         ],
         "title": "LateFeeRule",
         "description": "The most a late fee may be, per late payment (or per month), computed from the monthly\nrent: ``flat_usd`` and ``percent`` (of the rent, or of the rent above ``over_usd``) combined\nas the greater, the lesser or the sum; ``rent_tiers`` / ``unit_tiers`` pick the figure by\nrent or building size. ``presumption``: the figure is only a safe harbor (Texas), so a larger\nfee is 'depends'. ``conditional``: no figure can be checked (Massachusetts: nothing until 30\ndays late; Oregon's reasonable flat fee; Wisconsin's nonstandard provision): 'depends' with\nthe text. The engine allows up to the cap for one late payment unless the line says how many\n(``late_payments``); more than one cap without a count is 'depends'."
+      },
+      "LeaseAuthorized": {
+        "properties": {
+          "categories": {
+            "items": {
+              "type": "string",
+              "enum": [
+                "unpaid_rent",
+                "unpaid_utilities",
+                "cleaning",
+                "carpet",
+                "flooring",
+                "paint",
+                "blinds_window_coverings",
+                "appliance",
+                "fixture_or_hardware",
+                "wall_or_door_repair",
+                "key_or_lock",
+                "late_fees",
+                "lease_break_fee",
+                "moving_and_storage",
+                "reletting_costs",
+                "trash_and_abandoned_items",
+                "other_damage",
+                "other"
+              ]
+            },
+            "type": "array",
+            "title": "Categories",
+            "default": []
+          },
+          "replace": {
+            "type": "boolean",
+            "title": "Replace",
+            "default": false
+          },
+          "section": {
+            "type": "string",
+            "title": "Section"
+          },
+          "quote": {
+            "type": "string",
+            "maxLength": 600,
+            "title": "Quote"
+          },
+          "verbatim": {
+            "type": "boolean",
+            "title": "Verbatim",
+            "default": true
+          },
+          "source": {
+            "type": "string",
+            "title": "Source"
+          },
+          "note": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Note"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "section",
+          "quote",
+          "source"
+        ],
+        "title": "LeaseAuthorized",
+        "description": "Deductions the statute allows only when the rental agreement authorizes applying the\ndeposit to them (California 1950.5(b)(4)). ``categories``: always conditional; ``replace``:\nlines entered as ``other`` with ``work_kind: replace`` (a furnishing not returned) get the same\nnote. No input states the lease clause, so the lines are 'depends'."
       },
       "LeaseBreakRule": {
         "properties": {
@@ -7548,7 +8669,7 @@
         "additionalProperties": false,
         "type": "object",
         "title": "Location",
-        "description": "Where the finding is. Also accepted as a plain string (\"Bedroom 2\", \"kitchen\")."
+        "description": "Where; a plain string works too."
       },
       "MoveInPhotos": {
         "properties": {
@@ -7767,6 +8888,49 @@
         },
         "type": "object",
         "title": "NoteFormat"
+      },
+      "Occupants": {
+        "properties": {
+          "child_under_6": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Child Under 6",
+            "description": "A child under 6 lives there or is expected to."
+          },
+          "elderly": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Elderly",
+            "description": "Housing for the elderly (62+) or disabled; not just an older tenant."
+          },
+          "hud_assisted": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Hud Assisted"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "title": "Occupants",
+        "description": "property.occupants: lead-rule facts about the unit; leave out what is unknown."
       },
       "Outcome": {
         "properties": {
@@ -8091,6 +9255,12 @@
             "type": "boolean",
             "title": "Plus Attorney Fees"
           },
+          "fees_only_without_multiple": {
+            "type": "boolean",
+            "title": "Fees Only Without Multiple",
+            "description": "Attorney's fees go to the prevailing party except where the multiple is awarded (Idaho 6-324): the multiple with no fees, or actual damages plus fees, never both. Shown only when true.",
+            "default": false
+          },
           "estimated_min_usd": {
             "anyOf": [
               {
@@ -8286,6 +9456,11 @@
             ],
             "title": "Base High"
           },
+          "low_on_merits": {
+            "type": "boolean",
+            "title": "Low On Merits",
+            "default": false
+          },
           "late_refund_in_base": {
             "type": "boolean",
             "title": "Late Refund In Base",
@@ -8354,7 +9529,12 @@
               "any_violation",
               "without_reasonable_basis",
               "court_discretion",
-              "unpaid_annual_interest"
+              "unpaid_annual_interest",
+              "after_tenant_notice",
+              "absence_of_good_faith",
+              "no_account_and_no_listing",
+              "late_claim_notice",
+              "late_action_or_return"
             ],
             "title": "Condition"
           },
@@ -8366,6 +9546,11 @@
           "plus_attorney_fees": {
             "type": "boolean",
             "title": "Plus Attorney Fees",
+            "default": false
+          },
+          "fees_only_without_multiple": {
+            "type": "boolean",
+            "title": "Fees Only Without Multiple",
             "default": false
           },
           "forfeits_right_to_withhold_if_late": {
@@ -8383,6 +9568,17 @@
               }
             ]
           },
+          "section": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Section"
+          },
           "note": {
             "anyOf": [
               {
@@ -8393,6 +9589,29 @@
               }
             ],
             "title": "Note"
+          },
+          "note_from": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Note From"
+          },
+          "earlier_note": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Earlier Note"
           }
         },
         "additionalProperties": false,
@@ -8460,6 +9679,15 @@
             ],
             "title": "Effective On"
           },
+          "effective_by": {
+            "type": "string",
+            "enum": [
+              "move_out",
+              "notice"
+            ],
+            "title": "Effective By",
+            "default": "move_out"
+          },
           "kinds": {
             "items": {
               "type": "string",
@@ -8505,6 +9733,29 @@
               }
             ],
             "title": "Gate Note"
+          },
+          "missing_from": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Missing From"
+          },
+          "section": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Section"
           }
         },
         "additionalProperties": false,
@@ -8618,6 +9869,29 @@
           },
           "floor_coverings": {
             "$ref": "#/components/schemas/FloorCoverings"
+          },
+          "occupants": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/Occupants"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "walk_date": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Walk Date",
+            "description": "The walk-through date; dated or aged items are judged against it. Omit if unknown."
           }
         },
         "additionalProperties": false,
@@ -8675,6 +9949,21 @@
               }
             ],
             "description": "What was read by AI for this answer: every finding the rules answered, in the shape scope accepts. Confirm them and send them to scope with confirmed: true."
+          },
+          "deprecation": {
+            "anyOf": [
+              {
+                "items": {
+                  "$ref": "#/components/schemas/Deprecation"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Deprecation",
+            "description": "Parts of the request answered for now and refused after `until`, with what to send instead (e.g. findings[].description: send codes)."
           },
           "signature": {
             "anyOf": [
@@ -8745,6 +10034,21 @@
               }
             ],
             "description": "What was read by AI for this answer: every finding the rules answered, in the shape scope accepts. Confirm them and send them to scope with confirmed: true."
+          },
+          "deprecation": {
+            "anyOf": [
+              {
+                "items": {
+                  "$ref": "#/components/schemas/Deprecation"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Deprecation",
+            "description": "Parts of the request answered for now and refused after `until`, with what to send instead (e.g. findings[].description: send codes)."
           },
           "signature": {
             "anyOf": [
@@ -8820,6 +10124,21 @@
             ],
             "description": "What was read by AI for this answer: every finding the rules answered, in the shape scope accepts. Confirm them and send them to scope with confirmed: true."
           },
+          "deprecation": {
+            "anyOf": [
+              {
+                "items": {
+                  "$ref": "#/components/schemas/Deprecation"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Deprecation",
+            "description": "Parts of the request answered for now and refused after `until`, with what to send instead (e.g. findings[].description: send codes)."
+          },
           "signature": {
             "anyOf": [
               {
@@ -8889,6 +10208,21 @@
               }
             ],
             "description": "What was read by AI for this answer: every finding the rules answered, in the shape scope accepts. Confirm them and send them to scope with confirmed: true."
+          },
+          "deprecation": {
+            "anyOf": [
+              {
+                "items": {
+                  "$ref": "#/components/schemas/Deprecation"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Deprecation",
+            "description": "Parts of the request answered for now and refused after `until`, with what to send instead (e.g. findings[].description: send codes)."
           },
           "signature": {
             "anyOf": [
@@ -8963,6 +10297,21 @@
               }
             ],
             "description": "What was read by AI for this answer: every finding the rules answered, in the shape scope accepts. Confirm them and send them to scope with confirmed: true."
+          },
+          "deprecation": {
+            "anyOf": [
+              {
+                "items": {
+                  "$ref": "#/components/schemas/Deprecation"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Deprecation",
+            "description": "Parts of the request answered for now and refused after `until`, with what to send instead (e.g. findings[].description: send codes)."
           },
           "signature": {
             "anyOf": [
@@ -9068,7 +10417,7 @@
             "type": "array",
             "maxItems": 100,
             "title": "Issues",
-            "description": "What was found in plain English, e.g. ['stained carpet in both bedrooms', 'nail holes everywhere', 'oven is filthy']. Read like pasted notes: an entry may hold several conditions ('carpet stained, nail holes'; one finding each); a room before or after the condition sets the location ('Bedroom 2 carpet torn', 'mold in bathroom'); a written count sets the quantity ('3 blinds broken'); an entry saying there is no work ('no mold', 'leak fixed by tenant') is reported as not billed."
+            "description": "What was found in plain English, e.g. ['stained carpet in both bedrooms', 'nail holes everywhere', 'oven is filthy']. Read like pasted notes: an entry may hold several conditions ('carpet stained, nail holes'; one finding each); a room before or after the condition sets the location ('Bedroom 2 carpet torn', 'mold in bathroom'); a written count sets the quantity ('3 blinds broken'); an entry saying there is no work ('no mold', 'leak fixed by tenant') is reported as not billed. All the issues together may hold up to 12,000 characters; send longer notes in more than one request."
           },
           "unit_type": {
             "$ref": "#/components/schemas/UnitType",
@@ -9114,6 +10463,19 @@
             ],
             "title": "Carpet",
             "description": "Is there wall-to-wall carpet?"
+          },
+          "walk_date": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Walk Date",
+            "description": "The walk-through date; dated or aged items are judged against it. Omit if unknown."
           },
           "profile": {
             "$ref": "#/components/schemas/Profile",
@@ -9191,7 +10553,7 @@
               }
             ],
             "title": "Unit Price",
-            "description": "USD per uom. On a trade entry, uom 'hour' is an hourly labor rate (replaces the labor part of that trade's prices); another uom prices that trade's tasks in it."
+            "description": "USD per uom; on a trade entry, uom 'hour' is its labor rate."
           },
           "uom": {
             "anyOf": [
@@ -9202,7 +10564,7 @@
                 "type": "null"
               }
             ],
-            "description": "Unit your price is quoted in. Required with a trade unit_price. If it differs from a task's uom, the entry is not applied to that task (see rate_card_ignored)."
+            "description": "Required with a trade unit_price; a task in another uom ignores it."
           },
           "min_charge": {
             "anyOf": [
@@ -9242,7 +10604,7 @@
         "additionalProperties": false,
         "type": "object",
         "title": "RateCardEntry",
-        "description": "Your own price. Examples: {\"trade\": \"handyman\", \"unit_price\": 65, \"uom\": \"hour\"} (an\nhourly labor rate for that trade); {\"trade\": \"painter\", \"min_charge\": 150} (visit minimum);\n{\"task_id\": \"carpet.clean\", \"unit_price\": 0.2, \"uom\": \"sq_ft\"} (task_id from a result line).\nA task_id entry beats a trade entry; both beat the library. The result lists what was\napplied and what was ignored (rate_card_applied / rate_card_ignored)."
+        "description": "Your price for a task_id (from a result line) or a trade, e.g. {\"trade\": \"handyman\", \"unit_price\": 65, \"uom\": \"hour\"}."
       },
       "RateCardUse": {
         "properties": {
@@ -9569,6 +10931,18 @@
             ],
             "title": "Gate Note"
           },
+          "missing_from": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Missing From"
+          },
           "estimate_section": {
             "anyOf": [
               {
@@ -9590,6 +10964,29 @@
               }
             ],
             "title": "Estimate Note"
+          },
+          "estimate_days": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "exclusiveMinimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Estimate Days"
+          },
+          "section": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Section"
           }
         },
         "additionalProperties": false,
@@ -10086,6 +11483,11 @@
               }
             ],
             "title": "Determination Section"
+          },
+          "prepaid_rent_returned": {
+            "type": "boolean",
+            "title": "Prepaid Rent Returned",
+            "default": false
           }
         },
         "additionalProperties": false,
@@ -10208,6 +11610,36 @@
         "type": "object",
         "title": "Review",
         "description": "How far the answer can be relied on."
+      },
+      "Rooms": {
+        "properties": {
+          "area": {
+            "$ref": "#/components/schemas/Area",
+            "description": "Left out, from the labels, else the whole unit.",
+            "default": "whole_unit"
+          },
+          "labels": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "maxItems": 12,
+            "title": "Labels",
+            "description": "The rooms' names as written, e.g. ['Bedroom 2']."
+          },
+          "count": {
+            "type": "integer",
+            "maximum": 50.0,
+            "minimum": 1.0,
+            "title": "Count",
+            "description": "At least the number of labels; capped at the unit's count.",
+            "default": 1
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "title": "Rooms",
+        "description": "Which rooms a finding covers."
       },
       "RulesRequest": {
         "properties": {
@@ -10722,7 +12154,7 @@
             "type": "array",
             "maxItems": 200,
             "title": "Findings",
-            "description": "Move-out inspection findings, one per condition, with location and extent."
+            "description": "Move-out inspection findings, one per observed condition, coded."
           },
           "standards": {
             "$ref": "#/components/schemas/Standards",
@@ -10786,13 +12218,13 @@
               "ai"
             ],
             "title": "Read",
-            "description": "parser (default): descriptions are read by the deterministic parser and matcher only; what they cannot place comes back as a manual-quote line with suggested codes. ai: what the parser cannot place is then read by an AI model; the answer is a draft (review.status) and echoes the reading, whose findings you confirm and send back for a verified answer (contract 0.12.0).",
+            "description": "Deprecated and ignored: scope reads no free text.",
             "default": "parser"
           },
           "retain": {
             "type": "boolean",
             "title": "Retain",
-            "description": "Optional (contract 0.5.0). false: keep none of this request's text. By default the finding descriptions are kept with contact details and access codes removed, to improve matching; the estimate is the same either way.",
+            "description": "false: keep none of this request's text.",
             "default": true
           },
           "detail": {
@@ -10802,7 +12234,7 @@
               "full"
             ],
             "title": "Detail",
-            "description": "summary: totals, trade scopes, every line tied to a finding (capped at 40) plus the largest must-fix/refer-out lines, a one-line note on the routine lines left out, notes, and only findings needing attention (small). full: every line, finding and source.",
+            "description": "summary (small): totals, trade scopes, lines tied to findings. full: all.",
             "default": "full"
           }
         },
@@ -10950,37 +12382,6 @@
         ],
         "title": "ScopeResult",
         "description": "Field order puts the answer first (summary, disclaimer, totals, refer-outs, vendor\nscopes), because agents and truncating clients read from the top."
-      },
-      "SetAside": {
-        "properties": {
-          "reason": {
-            "type": "string",
-            "title": "Reason",
-            "description": "Why the row was not turned into a finding, as a code."
-          },
-          "row": {
-            "type": "string",
-            "title": "Row",
-            "description": "The row as read, contact details masked."
-          },
-          "page": {
-            "anyOf": [
-              {
-                "type": "integer"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Page"
-          }
-        },
-        "type": "object",
-        "required": [
-          "reason",
-          "row"
-        ],
-        "title": "SetAside"
       },
       "SettleRequest": {
         "properties": {
@@ -11351,6 +12752,69 @@
             "title": "Third Party Managed",
             "description": "A third party manages the unit or collects rent for a fee."
           },
+          "owner_is_natural_person": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Owner Is Natural Person",
+            "description": "Georgia only (44-7-36): the units are owned by a natural person (false: an LLC, corporation, partnership or trust owns them). The small-landlord exemption reaches only a natural person; not given, the statute is shown with the exemption as the alternative."
+          },
+          "deposit_in_separate_account": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Deposit In Separate Account",
+            "description": "Tennessee only (66-28-301(a)): the deposit was kept in a separate account used only for deposits. No account and no damage listing means none of it can be kept (66-28-301(c))."
+          },
+          "county": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 60
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "County",
+            "description": "Tennessee only: the county the unit is in (the landlord-tenant act applies only in counties over 75,000 by the 2010 census, 66-28-102(a)). Taken from the city when it lies in one county."
+          },
+          "renter_notice_served_on": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Renter Notice Served On",
+            "description": "Utah only (YYYY-MM-DD): day the renter served the 57-17-3(3) notice after the deadline passed. The owner then has five business days to comply (57-17-3(5)); without the notice there is no relief under 57-17-5."
+          },
+          "landlord_filed_action_on": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Landlord Filed Action On",
+            "description": "Michigan only (YYYY-MM-DD): day the landlord sued for the damages claimed (554.613: sue or return the balance within 45 days). Not given: no suit assumed."
+          },
           "prepaid_rent_usd": {
             "anyOf": [
               {
@@ -11367,7 +12831,7 @@
               }
             ],
             "title": "Prepaid Rent Usd",
-            "description": "Rent paid in advance beyond the first month, held besides deposit_usd. Counts toward the cap in AK, AZ, CA, CT, MD, MI and NY; earns interest in CT, MA (last month's rent), MD and Chicago; in Minneapolis it lowers the deposit cap to half a month."
+            "description": "Rent paid in advance beyond the first month, held besides deposit_usd. Counts toward the cap in AK, AZ, CA, CT, MD, MI and NY; earns interest in CT, MA (last month's rent), MD and Chicago; in Minneapolis it lowers the deposit cap to half a month. In UT its balance is returned with the deposit and counted in the refund (57-17-3(2)(b)): send only the unused part (rent already applied to a rental period is not a balance). Elsewhere the refund covers the deposit only and a warning says unused prepaid rent is owed back too."
           },
           "tenancy_type": {
             "anyOf": [
@@ -11722,6 +13186,19 @@
               }
             ],
             "title": "Url"
+          },
+          "accessed": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Accessed",
+            "description": "When the source was last read."
           }
         },
         "type": "object",
@@ -12863,6 +14340,38 @@
         ],
         "title": "VerifyResponse"
       },
+      "YearStatement": {
+        "properties": {
+          "text": {
+            "type": "string",
+            "maxLength": 200,
+            "minLength": 1,
+            "title": "Text",
+            "description": "The words, e.g. 'built in 1972'."
+          },
+          "year": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "maximum": 2100.0,
+                "minimum": 1700.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Year",
+            "description": "Left out when the words name none ('Victorian')."
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "text"
+        ],
+        "title": "YearStatement",
+        "description": "When the words say it was built."
+      },
       "tektolo_deposit_settlement__models__Note": {
         "properties": {
           "code": {
@@ -13051,6 +14560,19 @@
             },
             "type": "array",
             "title": "Sources"
+          },
+          "rules_as_of": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Rules As Of",
+            "description": "The oldest reading of the sources behind the legal items in this result (refer-outs and state mandates): the rules are as of this date. None when the result states no legal rule."
           }
         },
         "type": "object",
