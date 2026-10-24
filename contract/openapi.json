@@ -8297,6 +8297,48 @@
             "title": "Per",
             "default": "late_payment"
           },
+          "percent_of": {
+            "type": "string",
+            "enum": [
+              "rent",
+              "past_due_payment"
+            ],
+            "title": "Percent Of",
+            "default": "rent"
+          },
+          "preconditions": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Preconditions"
+          },
+          "preconditions_section": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Preconditions Section"
+          },
+          "preconditions_note": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Preconditions Note"
+          },
           "presumption": {
             "type": "boolean",
             "title": "Presumption",
@@ -8433,6 +8475,14 @@
             "type": "boolean",
             "title": "Over Cap Remedy Fees",
             "default": false
+          },
+          "over_cap_penalties": {
+            "items": {
+              "$ref": "#/components/schemas/OverCapPenalty"
+            },
+            "type": "array",
+            "title": "Over Cap Penalties",
+            "default": []
           },
           "section": {
             "type": "string",
@@ -9056,6 +9106,65 @@
         ],
         "title": "Outcome",
         "description": "The one answer every other section is worded from: what is owed to the tenant now, by\nwhen, and what is still uncertain."
+      },
+      "OverCapPenalty": {
+        "properties": {
+          "section": {
+            "type": "string",
+            "title": "Section"
+          },
+          "quote": {
+            "type": "string",
+            "maxLength": 600,
+            "title": "Quote"
+          },
+          "fixed_usd": {
+            "type": "string",
+            "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+            "title": "Fixed Usd"
+          },
+          "minimum_usd": {
+            "anyOf": [
+              {
+                "type": "string",
+                "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Minimum Usd"
+          },
+          "applies_if": {
+            "type": "string",
+            "title": "Applies If"
+          },
+          "conditional": {
+            "type": "boolean",
+            "title": "Conditional",
+            "default": false
+          },
+          "damages": {
+            "type": "boolean",
+            "title": "Damages",
+            "default": false
+          },
+          "fees": {
+            "type": "boolean",
+            "title": "Fees",
+            "default": false
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "section",
+          "quote",
+          "fixed_usd",
+          "applies_if"
+        ],
+        "title": "OverCapPenalty",
+        "description": "A fixed penalty per violation for a late fee above the limit, quoted (Colorado\n38-12-105(3): $50 for each violation; 105(5)(b): $150 to $1,000 for each violation, after\nthe landlord fails to cure within seven days of notice). ``conditional``: it needs a step or\na finding the input cannot show (notice and no cure, a court)."
       },
       "PaymentInfo": {
         "properties": {
@@ -11390,6 +11499,16 @@
             "anyOf": [
               {
                 "$ref": "#/components/schemas/NotIfAbandoned"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "unsettled_rollover": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/UnsettledRollover"
               },
               {
                 "type": "null"
@@ -13973,6 +14092,45 @@
           "manufactured"
         ],
         "title": "UnitType"
+      },
+      "UnsettledRollover": {
+        "properties": {
+          "section": {
+            "type": "string",
+            "title": "Section"
+          },
+          "quote": {
+            "type": "string",
+            "maxLength": 1200,
+            "title": "Quote"
+          },
+          "source": {
+            "type": "string",
+            "title": "Source"
+          },
+          "start_rolls": {
+            "type": "boolean",
+            "title": "Start Rolls",
+            "default": false
+          },
+          "holidays": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Holidays",
+            "default": []
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "section",
+          "quote",
+          "source"
+        ],
+        "title": "UnsettledRollover",
+        "description": "A time-computation rule that may reach the state's periods but whose reach is unsettled\n(TEKTOLO-897, gate v33-896 V33-FL-08: Florida's 83.49 states no method of computing time, and\nFla. R. Gen. Prac. & Jud. Admin. 2.514(a) covers \"any ... statute that does not specify a\nmethod of computing time\", but it is a court rule and a landlord's notice is given out of\ncourt). Never applied to a date: the unmoved day stays the one to act by. A claim notice\nsent on a day only the rule would reach makes the claim 'depends'; a refund then is shown late\n(the safe reading) with a warning; the rule is quoted either way.\n\n``start_rolls``: counting begins on the next day that is not a Saturday, Sunday or legal\nholiday (2.514(a)(1)(A)); the last day then moves past one too ((1)(C)). ``holidays``: the\nlegal holidays it names, by their name in the federal list (``Day after Thanksgiving`` is the\nFriday after it), observed on the Friday before a Saturday and the Monday after a Sunday."
       },
       "Uom": {
         "type": "string",

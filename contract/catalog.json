@@ -91,14 +91,14 @@
       "capability": "deposit-settlement",
       "description": "The security deposit rules for all 50 US states and the District of Columbia, plus 9 city ordinances, as open data under CC BY 4.0: the deadline to return a deposit and what starts it, the itemized statement and documentation duties, the deductions each statute allows, interest, penalties, forfeiture and deposit caps. Every row cites the statute or ordinance, quotes the text and links to the official source with the date it was last read. Generated from the ruleset the Tektolo deposit settlement tool runs on.",
       "page": "https://tektolo.com/data/deposit-rules/",
-      "version": "sd-2026.12.20",
-      "ruleset_hash": "sha256:04c1290855dc681f17b0e09b01cee2e898142b74a83b71035f5e3e85fedeaff4",
-      "date_modified": "2026-10-20",
+      "version": "sd-2026.12.26",
+      "ruleset_hash": "sha256:c5dfd2ac2cc2167772e17b3a324e6816db0b5fac615961df565e14e34c75e09d",
+      "date_modified": "2026-10-23",
       "license": {
         "id": "CC-BY-4.0",
         "url": "https://creativecommons.org/licenses/by/4.0/"
       },
-      "citation": "Tektolo. Security deposit rules by US state and city, version sd-2026.12.20. https://tektolo.com/data/deposit-rules/. Licensed under CC BY 4.0.",
+      "citation": "Tektolo. Security deposit rules by US state and city, version sd-2026.12.26. https://tektolo.com/data/deposit-rules/. Licensed under CC BY 4.0.",
       "rows": 60,
       "files": {
         "csv": "https://tektolo.com/data/deposit-rules/latest/deposit-rules.csv",
@@ -2609,8 +2609,8 @@
         "Some rule text is summarised rather than quoted; each citation says which."
       ],
       "ruleset": {
-        "version": "sd-2026.12.20",
-        "hash": "sha256:04c1290855dc681f17b0e09b01cee2e898142b74a83b71035f5e3e85fedeaff4",
+        "version": "sd-2026.12.26",
+        "hash": "sha256:c5dfd2ac2cc2167772e17b3a324e6816db0b5fac615961df565e14e34c75e09d",
         "sources": [
           {
             "id": "al.code-35-9a-201",
@@ -2767,6 +2767,12 @@
             "title": "Florida Statutes 83.49 Deposit money or advance rent",
             "publisher": "Florida Legislature",
             "url": "https://www.leg.state.fl.us/statutes/index.cfm?App_mode=Display_Statute&URL=0000-0099/0083/Sections/0083.49.html"
+          },
+          {
+            "id": "fl.rgpja-2.514",
+            "title": "Florida Rules of General Practice and Judicial Administration, Rule 2.514 Computing and extending time",
+            "publisher": "The Florida Bar",
+            "url": "https://www-media.floridabar.org/uploads/2026/08/2027_01-JULY-Florida-Rules-of-General-Practice-and-Judicial-Administration-7-1-2026.pdf"
           },
           {
             "id": "fl.stat-83.491",
@@ -4102,9 +4108,15 @@
           },
           {
             "id": "wv.time-computation",
-            "title": "W. Va. Code 2-2-2(a); also 2-2-1(d)-(e) (computation of time)",
+            "title": "W. Va. Code 2-2-2(a)-(c), as amended by 2026 SB 793; also 2-2-1(d)-(e) (computation of time)",
             "publisher": "State legislature",
             "url": "https://code.wvlegislature.gov/2-2-2/"
+          },
+          {
+            "id": "wv.legal-holidays",
+            "title": "W. Va. Code 2-2-1 (legal holidays; computation of time) and 3-5-1 (primary election day)",
+            "publisher": "West Virginia Legislature",
+            "url": "https://code.wvlegislature.gov/2-2-1/"
           },
           {
             "id": "wi.time-computation",
