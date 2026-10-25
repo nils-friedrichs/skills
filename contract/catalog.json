@@ -91,14 +91,14 @@
       "capability": "deposit-settlement",
       "description": "The security deposit rules for all 50 US states and the District of Columbia, plus 9 city ordinances, as open data under CC BY 4.0: the deadline to return a deposit and what starts it, the itemized statement and documentation duties, the deductions each statute allows, interest, penalties, forfeiture and deposit caps. Every row cites the statute or ordinance, quotes the text and links to the official source with the date it was last read. Generated from the ruleset the Tektolo deposit settlement tool runs on.",
       "page": "https://tektolo.com/data/deposit-rules/",
-      "version": "sd-2026.12.26",
-      "ruleset_hash": "sha256:c5dfd2ac2cc2167772e17b3a324e6816db0b5fac615961df565e14e34c75e09d",
-      "date_modified": "2026-10-23",
+      "version": "sd-2027.1.3",
+      "ruleset_hash": "sha256:287f61e87d9f5e3275079528a71842c5964f9e4db29dab919dbd095ede0074b9",
+      "date_modified": "2026-10-24",
       "license": {
         "id": "CC-BY-4.0",
         "url": "https://creativecommons.org/licenses/by/4.0/"
       },
-      "citation": "Tektolo. Security deposit rules by US state and city, version sd-2026.12.26. https://tektolo.com/data/deposit-rules/. Licensed under CC BY 4.0.",
+      "citation": "Tektolo. Security deposit rules by US state and city, version sd-2027.1.3. https://tektolo.com/data/deposit-rules/. Licensed under CC BY 4.0.",
       "rows": 60,
       "files": {
         "csv": "https://tektolo.com/data/deposit-rules/latest/deposit-rules.csv",
@@ -963,8 +963,8 @@
         "This is not legal advice. Check the linked sources before you rely on it. You decide, sign and send."
       ],
       "ruleset": {
-        "version": "pt-2026.11.17",
-        "hash": "sha256:5594d448d1377223b0be60f0b25412966e522372035eff085d38b90f20561690",
+        "version": "pt-2026.11.22",
+        "hash": "sha256:18529c24a7667efdcc67250c3dac3fe7b956c1c4c6860e56bba0cef2359c054a",
         "sources": [
           {
             "id": "hud.nspire.index",
@@ -1007,12 +1007,6 @@
             "title": "NSPIRE compliance date extension for HCV/PBV/Mod Rehab to 2027-02-01 (FR 2025-19070)",
             "publisher": "HUD / Federal Register",
             "url": "https://www.govinfo.gov/content/pkg/FR-2025-09-30/html/2025-19070.htm"
-          },
-          {
-            "id": "cfr.24-982-404",
-            "title": "24 CFR 982.404 Maintenance: owner and family responsibility",
-            "publisher": "eCFR via Cornell LII",
-            "url": "https://www.law.cornell.edu/cfr/text/24/982.404"
           },
           {
             "id": "rihousing.wear-and-tear",
@@ -1157,12 +1151,6 @@
             "title": "North Carolina G.S. 42-52",
             "publisher": "NC General Assembly",
             "url": "https://www.ncleg.gov/EnactedLegislation/Statutes/HTML/BySection/Chapter_42/GS_42-52.html"
-          },
-          {
-            "id": "ga.ocga-44-7-34",
-            "title": "Georgia O.C.G.A. 44-7-34",
-            "publisher": "Georgia General Assembly",
-            "url": "https://codes.findlaw.com/ga/title-44-property/ga-code-sect-44-7-34/"
           },
           {
             "id": "az.ars-33-1321",
@@ -1315,12 +1303,6 @@
             "url": "https://www.fsis.usda.gov/sites/default/files/media_file/2021-02/Molds_on_Food.pdf"
           },
           {
-            "id": "cfr.40-745-rrp",
-            "title": "40 CFR 745.82, 745.83, 745.85, 745.103 (EPA Renovation, Repair and Painting rule)",
-            "publisher": "eCFR via Cornell LII",
-            "url": "https://www.law.cornell.edu/cfr/text/40/745.83"
-          },
-          {
             "id": "ecfr.40-745-103",
             "title": "40 CFR 745.103 Definitions (target housing, housing for the elderly, 0-bedroom dwelling)",
             "publisher": "Office of the Federal Register and Government Publishing Office (eCFR)",
@@ -1352,9 +1334,21 @@
           },
           {
             "id": "epa.rrp-program",
-            "title": "Renovation, Repair and Painting Program",
+            "title": "Lead Renovation, Repair and Painting Program",
             "publisher": "U.S. EPA",
-            "url": "https://www.epa.gov/lead/renovation-repair-and-painting-program"
+            "url": "https://www.epa.gov/lead/lead-renovation-repair-and-painting-program"
+          },
+          {
+            "id": "epa.rrp-contractors",
+            "title": "Lead Renovation, Repair and Painting Program for Contractors",
+            "publisher": "U.S. EPA",
+            "url": "https://www.epa.gov/lead/renovation-repair-and-painting-program-contractors"
+          },
+          {
+            "id": "epa.rrp-landlords",
+            "title": "If I rent out apartments built before 1978, do I need firm and renovator certification if I do my own work? (EPA frequent question)",
+            "publisher": "U.S. EPA",
+            "url": "https://www.epa.gov/lead/if-i-rent-out-apartments-built-1978-order-comply-lead-renovation-repair-and-painting-rrp-rule"
           },
           {
             "id": "epa.asbestos-protect-family",
@@ -2041,12 +2035,6 @@
             "url": "https://www.osha.gov/training/library/asbestos/construction"
           },
           {
-            "id": "hud.nspire.hvac-v2.2",
-            "title": "NSPIRE Standards v2.2, HVAC",
-            "publisher": "HUD REAC",
-            "url": "https://www.hud.gov/sites/dfiles/PIH/documents/NSPIRE-Standards-v2.2-HVAC.pdf"
-          },
-          {
             "id": "ncsl.co-detectors",
             "title": "Carbon Monoxide Detector Requirements (NCSL)",
             "publisher": "NCSL",
@@ -2059,16 +2047,10 @@
             "url": "https://www.cpsc.gov/Regulations-Laws--Standards/Voluntary-Standards/Topics/Free-Standing-Kitchen-Ranges"
           },
           {
-            "id": "tx.prop-code-92-156",
-            "title": "Texas Property Code § 92.156, Rekeying",
-            "publisher": "FindLaw (Texas statute)",
-            "url": "https://codes.findlaw.com/tx/property-code/prop-sect-92-156/"
-          },
-          {
-            "id": "ca.civ-1984",
-            "title": "Cal. Civ. Code § 1984 (abandoned property notice)",
-            "publisher": "California Public Law",
-            "url": "https://california.public.law/codes/civil_code_section_1984"
+            "id": "tx.prop-92-156",
+            "title": "Tex. Prop. Code 92.156, Rekeying or Change of Security Devices",
+            "publisher": "Texas Legislature (Texas Constitution and Statutes)",
+            "url": "https://tcss.legis.texas.gov/resources/PR/htm/PR.92.htm"
           },
           {
             "id": "rentcafe.apt-size-2024",
@@ -2609,20 +2591,20 @@
         "Some rule text is summarised rather than quoted; each citation says which."
       ],
       "ruleset": {
-        "version": "sd-2026.12.26",
-        "hash": "sha256:c5dfd2ac2cc2167772e17b3a324e6816db0b5fac615961df565e14e34c75e09d",
+        "version": "sd-2027.1.3",
+        "hash": "sha256:287f61e87d9f5e3275079528a71842c5964f9e4db29dab919dbd095ede0074b9",
         "sources": [
           {
             "id": "al.code-35-9a-201",
             "title": "Code of Alabama 35-9A-201 Security deposits; prepaid rent",
-            "publisher": "FindLaw (mirror)",
-            "url": "https://codes.findlaw.com/al/title-35-property/al-code-sect-35-9a-201/"
+            "publisher": "Alabama Legislature",
+            "url": "https://alison.legislature.state.al.us/code-of-alabama?section=35-9A-201&title=35"
           },
           {
             "id": "ak.as-34.03.070",
             "title": "Alaska Statutes 34.03.070 Security deposits and prepaid rent",
-            "publisher": "FindLaw (mirror)",
-            "url": "https://codes.findlaw.com/ak/title-34-property/ak-st-sect-34-03-070/"
+            "publisher": "Alaska Legislature",
+            "url": "https://www.akleg.gov/statutesPDF/Title-34.pdf"
           },
           {
             "id": "az.ars-33-1321",
@@ -2633,26 +2615,26 @@
           {
             "id": "ar.code-18-16-303",
             "title": "Arkansas Code 18-16-303 Applicability (small-landlord exemption)",
-            "publisher": "FindLaw (mirror)",
-            "url": "https://codes.findlaw.com/ar/title-18-property/ar-code-sect-18-16-303/"
+            "publisher": "LexisNexis public access for the State (linked from arkleg.state.ar.us)",
+            "url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A4WVF-V6X0-R03K-B00M-00008-00&pdcontentcomponentid=234170"
           },
           {
             "id": "ar.code-18-16-304",
             "title": "Arkansas Code 18-16-304 Limitation on amount",
-            "publisher": "FindLaw (mirror)",
-            "url": "https://codes.findlaw.com/ar/title-18-property/ar-code-sect-18-16-304/"
+            "publisher": "LexisNexis public access for the State (linked from arkleg.state.ar.us)",
+            "url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A4WVF-V6X0-R03K-B00N-00008-00&pdcontentcomponentid=234170"
           },
           {
             "id": "ar.code-18-16-305",
             "title": "Arkansas Code 18-16-305 Return of deposit",
-            "publisher": "FindLaw (mirror)",
-            "url": "https://codes.findlaw.com/ar/title-18-property/ar-code-sect-18-16-305/"
+            "publisher": "LexisNexis public access for the State (linked from arkleg.state.ar.us)",
+            "url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A4WVF-V6X0-R03K-B00P-00008-00&pdcontentcomponentid=234170"
           },
           {
             "id": "ar.code-18-16-306",
             "title": "Arkansas Code 18-16-306 Noncompliance by landlord",
-            "publisher": "FindLaw (mirror)",
-            "url": "https://codes.findlaw.com/ar/title-18-property/ar-code-sect-18-16-306/"
+            "publisher": "LexisNexis public access for the State (linked from arkleg.state.ar.us)",
+            "url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A4WVF-V6X0-R03K-B00R-00008-00&pdcontentcomponentid=234170"
           },
           {
             "id": "ar.ezel-survey",
@@ -2705,8 +2687,8 @@
           {
             "id": "co.crs-38-12-103",
             "title": "Colorado Revised Statutes 38-12-103 Return of security deposit (pre-2026 text)",
-            "publisher": "FindLaw (mirror)",
-            "url": "https://codes.findlaw.com/co/title-38-property-real-and-personal/co-rev-st-sect-38-12-103/"
+            "publisher": "Colorado General Assembly / Office of Legislative Legal Services",
+            "url": "https://olls.info/crs/crs2025-title-38.htm"
           },
           {
             "id": "ct.cgs-47a-21",
@@ -2769,6 +2751,12 @@
             "url": "https://www.leg.state.fl.us/statutes/index.cfm?App_mode=Display_Statute&URL=0000-0099/0083/Sections/0083.49.html"
           },
           {
+            "id": "fl.stat-83.49-2024",
+            "title": "2024 Florida Statutes 83.49 Deposit money or advance rent (before ch. 2025-16)",
+            "publisher": "Florida Senate",
+            "url": "https://www.flsenate.gov/Laws/Statutes/2024/83.49"
+          },
+          {
             "id": "fl.rgpja-2.514",
             "title": "Florida Rules of General Practice and Judicial Administration, Rule 2.514 Computing and extending time",
             "publisher": "The Florida Bar",
@@ -2805,40 +2793,40 @@
             "url": "https://laws.flrules.org/2023/181"
           },
           {
-            "id": "ga.code-44-7-34",
+            "id": "ga.ocga-44-7-34",
             "title": "O.C.G.A. 44-7-34 Return of security deposit",
-            "publisher": "FindLaw (mirror)",
-            "url": "https://codes.findlaw.com/ga/title-44-property/ga-code-sect-44-7-34/"
+            "publisher": "LexisNexis public access for the State (linked from legis.ga.gov)",
+            "url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A6348-FYW1-DYB7-W0XS-00008-00&pdcontentcomponentid=234186"
           },
           {
-            "id": "ga.code-44-7-33",
+            "id": "ga.ocga-44-7-33",
             "title": "O.C.G.A. 44-7-33 Move-in and move-out damage lists",
-            "publisher": "FindLaw (mirror)",
-            "url": "https://codes.findlaw.com/ga/title-44-property/ga-code-sect-44-7-33/"
+            "publisher": "LexisNexis public access for the State (linked from legis.ga.gov)",
+            "url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A6348-FYW1-DYB7-W0XR-00008-00&pdcontentcomponentid=234186"
           },
           {
-            "id": "ga.code-44-7-35",
+            "id": "ga.ocga-44-7-35",
             "title": "O.C.G.A. 44-7-35 Landlord's liability",
-            "publisher": "FindLaw (mirror)",
-            "url": "https://codes.findlaw.com/ga/title-44-property/ga-code-sect-44-7-35/"
+            "publisher": "LexisNexis public access for the State (linked from legis.ga.gov)",
+            "url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A6348-FYW1-DYB7-W0XT-00008-00&pdcontentcomponentid=234186"
           },
           {
-            "id": "ga.code-44-7-36",
+            "id": "ga.ocga-44-7-36",
             "title": "O.C.G.A. 44-7-36 Exemption for small owners",
-            "publisher": "FindLaw (mirror)",
-            "url": "https://codes.findlaw.com/ga/title-44-property/ga-code-sect-44-7-36/"
+            "publisher": "LexisNexis public access for the State (linked from legis.ga.gov)",
+            "url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A6348-FYW1-DYB7-W0XV-00008-00&pdcontentcomponentid=234186"
           },
           {
-            "id": "ga.hb404-2024",
-            "title": "HB 404 (2023-2024) Safe at Home Act, House Judiciary substitute",
-            "publisher": "Georgia General Assembly",
-            "url": "https://www.legis.ga.gov/api/legislation/document/20232024/216456"
+            "id": "ga.ocga-44-7-30.1",
+            "title": "O.C.G.A. 44-7-30.1 Limitation on amount of security deposit (HB 404)",
+            "publisher": "LexisNexis public access for the State (linked from legis.ga.gov)",
+            "url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A6BWC-RM23-RW01-C4CF-00008-00&pdcontentcomponentid=234186"
           },
           {
             "id": "hi.hrs-521-44",
             "title": "Hawaii Revised Statutes 521-44 Security deposits",
-            "publisher": "FindLaw (mirror)",
-            "url": "https://codes.findlaw.com/hi/division-3-property-family/hi-rev-st-sect-521-44/"
+            "publisher": "Hawaii Legislature",
+            "url": "https://www.capitol.hawaii.gov/hrscurrent/Vol12_Ch0501-0588/HRS0521/HRS_0521-0044.htm"
           },
           {
             "id": "id.code-6-321",
@@ -2885,32 +2873,32 @@
           {
             "id": "in.code-32-31-3-12",
             "title": "Indiana Code 32-31-3-12",
-            "publisher": "FindLaw (mirror)",
-            "url": "https://codes.findlaw.com/in/title-32-property/in-code-sect-32-31-3-12/"
+            "publisher": "Indiana General Assembly",
+            "url": "https://iga.in.gov/ic/2026/Title_32.html"
           },
           {
             "id": "in.code-32-31-3-13",
             "title": "Indiana Code 32-31-3-13",
-            "publisher": "FindLaw (mirror)",
-            "url": "https://codes.findlaw.com/in/title-32-property/in-code-sect-32-31-3-13/"
+            "publisher": "Indiana General Assembly",
+            "url": "https://iga.in.gov/ic/2026/Title_32.html"
           },
           {
             "id": "in.code-32-31-3-14",
             "title": "Indiana Code 32-31-3-14",
-            "publisher": "FindLaw (mirror)",
-            "url": "https://codes.findlaw.com/in/title-32-property/in-code-sect-32-31-3-14/"
+            "publisher": "Indiana General Assembly",
+            "url": "https://iga.in.gov/ic/2026/Title_32.html"
           },
           {
             "id": "in.code-32-31-3-15",
             "title": "Indiana Code 32-31-3-15",
-            "publisher": "FindLaw (mirror)",
-            "url": "https://codes.findlaw.com/in/title-32-property/in-code-sect-32-31-3-15/"
+            "publisher": "Indiana General Assembly",
+            "url": "https://iga.in.gov/ic/2026/Title_32.html"
           },
           {
             "id": "in.code-32-31-3-16",
             "title": "Indiana Code 32-31-3-16",
-            "publisher": "FindLaw (mirror)",
-            "url": "https://codes.findlaw.com/in/title-32-property/in-code-sect-32-31-3-16/"
+            "publisher": "Indiana General Assembly",
+            "url": "https://iga.in.gov/ic/2026/Title_32.html"
           },
           {
             "id": "ia.code-562a.12",
@@ -3125,8 +3113,8 @@
           {
             "id": "ms.89-8-21",
             "title": "Miss. Code Ann. 89-8-21",
-            "publisher": "FindLaw (Thomson Reuters)",
-            "url": "https://codes.findlaw.com/ms/title-89-real-and-personal-property/ms-code-sect-89-8-21/"
+            "publisher": "LexisNexis public access for the State (linked from legislature.ms.gov)",
+            "url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A8P6B-8962-D6RV-H4CS-00008-00&pdcontentcomponentid=234190"
           },
           {
             "id": "ezel.ms",
@@ -3215,26 +3203,32 @@
           {
             "id": "nj.46-8-19",
             "title": "N.J.S.A. 46:8-19 Security deposits; investment, interest, notice",
-            "publisher": "FindLaw (Thomson Reuters)",
-            "url": "https://codes.findlaw.com/nj/title-46-property/nj-st-sect-46-8-19/"
+            "publisher": "New Jersey Legislature",
+            "url": "https://pub.njleg.state.nj.us/statutes/STATUTES-TEXT.zip"
           },
           {
             "id": "nj.46-8-21.1",
             "title": "N.J.S.A. 46:8-21.1 Return of deposit; itemization; double damages",
-            "publisher": "FindLaw (Thomson Reuters)",
-            "url": "https://codes.findlaw.com/nj/title-46-property/nj-st-sect-46-8-21-1/"
+            "publisher": "New Jersey Legislature",
+            "url": "https://lis.njleg.state.nj.us/nxt/gateway.dll/statutes/1/44314/44504?f=templates$fn=document-frame.htm$3.0"
           },
           {
             "id": "nj.46-8-21.2",
             "title": "N.J.S.A. 46:8-21.2 Maximum security deposit",
-            "publisher": "FindLaw (Thomson Reuters)",
-            "url": "https://codes.findlaw.com/nj/title-46-property/nj-st-sect-46-8-21-2/"
+            "publisher": "New Jersey Legislature",
+            "url": "https://pub.njleg.state.nj.us/statutes/STATUTES-TEXT.zip"
           },
           {
             "id": "nj.46-8-26",
             "title": "N.J.S.A. 46:8-26 Applicability; owner-occupied exemption",
-            "publisher": "FindLaw (Thomson Reuters)",
-            "url": "https://codes.findlaw.com/nj/title-46-property/nj-st-sect-46-8-26/"
+            "publisher": "New Jersey Legislature",
+            "url": "https://pub.njleg.state.nj.us/statutes/STATUTES-TEXT.zip"
+          },
+          {
+            "id": "nj.dca-truth-in-renting",
+            "title": "Truth in Renting: A guide to the rights and responsibilities of residential tenants and landlords in New Jersey (Security Deposits)",
+            "publisher": "New Jersey Department of Community Affairs",
+            "url": "https://www.nj.gov/dca/codes/publications/pdf_lti/t_i_r.pdf"
           },
           {
             "id": "ezel.nj",
@@ -3245,8 +3239,8 @@
           {
             "id": "nm.47-8-18",
             "title": "NMSA 1978 47-8-18 Deposits",
-            "publisher": "FindLaw (Thomson Reuters)",
-            "url": "https://codes.findlaw.com/nm/chapter-47-property-law/nm-st-sect-47-8-18/"
+            "publisher": "New Mexico Compilation Commission (NMOneSource)",
+            "url": "https://nmonesource.com/nmos/nmsa/en/4408/1/document.do"
           },
           {
             "id": "ezel.nm",
@@ -3263,8 +3257,8 @@
           {
             "id": "ny.gol-7-103",
             "title": "N.Y. Gen. Oblig. Law 7-103",
-            "publisher": "public.law (reprint of nysenate.gov)",
-            "url": "https://newyork.public.law/laws/n.y._general_obligations_law_section_7-103"
+            "publisher": "New York State Senate",
+            "url": "https://www.nysenate.gov/legislation/laws/GOB/7-103"
           },
           {
             "id": "ezel.ny",
@@ -3370,15 +3364,15 @@
           },
           {
             "id": "tn.66-28-301",
-            "title": "Tenn. Code Ann. 66-28-301 Security deposits (FindLaw mirror)",
-            "publisher": "FindLaw (Thomson Reuters)",
-            "url": "https://codes.findlaw.com/tn/title-66-property/tn-code-sect-66-28-301.html"
+            "title": "Tenn. Code Ann. 66-28-301 Security deposits",
+            "publisher": "LexisNexis public access for the State (linked from capitol.tn.gov)",
+            "url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A4X8K-W720-R03N-S4MB-00008-00&pdcontentcomponentid=234179"
           },
           {
             "id": "tn.66-28-102",
-            "title": "Tenn. Code Ann. 66-28-102 Applicability (FindLaw mirror)",
-            "publisher": "FindLaw (Thomson Reuters)",
-            "url": "https://codes.findlaw.com/tn/title-66-property/tn-code-sect-66-28-102.html"
+            "title": "Tenn. Code Ann. 66-28-102 Applicability",
+            "publisher": "LexisNexis public access for the State (linked from capitol.tn.gov)",
+            "url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A62NR-T7R0-R03K-F1S1-00008-00&pdcontentcomponentid=234179"
           },
           {
             "id": "ezel.tn-deadline",
@@ -3627,22 +3621,22 @@
             "url": "https://www.irs.gov/publications/p527"
           },
           {
-            "id": "ca.civ-10-mirror",
+            "id": "ca.civ-10",
             "title": "Cal. Civ. Code 10 (computation of time)",
-            "publisher": "Public.Law (mirror of leginfo.legislature.ca.gov; official site returned 403)",
-            "url": "https://california.public.law/codes/ca_civ_code_section_10"
+            "publisher": "California Legislative Information",
+            "url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=CIV&sectionNum=10."
           },
           {
-            "id": "ca.civ-11-mirror",
+            "id": "ca.civ-11",
             "title": "Cal. Civ. Code 11 (act due on a holiday)",
-            "publisher": "Public.Law (mirror)",
-            "url": "https://california.public.law/codes/ca_civ_code_section_11"
+            "publisher": "California Legislative Information",
+            "url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=CIV&sectionNum=11."
           },
           {
-            "id": "ca.ccp-12a-mirror",
+            "id": "ca.ccp-12a",
             "title": "Cal. Code Civ. Proc. 12a (last day a holiday; Saturdays are holidays)",
-            "publisher": "Public.Law (mirror)",
-            "url": "https://california.public.law/codes/ca_civ_proc_code_section_12a"
+            "publisher": "California Legislative Information",
+            "url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=CCP&sectionNum=12a."
           },
           {
             "id": "ny.gcl-25-a",
@@ -3651,22 +3645,22 @@
             "url": "https://www.nysenate.gov/legislation/laws/GCN/25-A"
           },
           {
-            "id": "ny.gcl-20-mirror",
+            "id": "ny.gcl-20",
             "title": "N.Y. General Construction Law 20 (day, computation)",
-            "publisher": "Public.Law (mirror)",
-            "url": "https://newyork.public.law/laws/n.y._general_construction_law_section_20"
+            "publisher": "New York State Senate",
+            "url": "https://www.nysenate.gov/legislation/laws/GCN/20"
           },
           {
-            "id": "tx.gov-311.014-mirror",
+            "id": "tx.gov-311.014",
             "title": "Tex. Gov't Code 311.014 Computation of time",
-            "publisher": "Public.Law (mirror; statutes.capitol.texas.gov is script-rendered)",
-            "url": "https://texas.public.law/statutes/tex._gov't_code_section_311.014"
+            "publisher": "Texas Legislature",
+            "url": "https://statutes.capitol.texas.gov/docviewer?docName=GV.311.htm"
           },
           {
-            "id": "tx.prop-1.002-mirror",
+            "id": "tx.prop-1.002",
             "title": "Tex. Prop. Code 1.002 Code Construction Act",
-            "publisher": "Public.Law (mirror)",
-            "url": "https://texas.public.law/statutes/tex._prop._code_section_1.002"
+            "publisher": "Texas Legislature",
+            "url": "https://statutes.capitol.texas.gov/docviewer?docName=PR.1.htm"
           },
           {
             "id": "az.ars-33-1321-cities",
@@ -3965,14 +3959,14 @@
           {
             "id": "co.time-computation",
             "title": "C.R.S. 2-4-108 (computation of time)",
-            "publisher": "Mirror (official site blocked or script-rendered)",
-            "url": "https://codes.findlaw.com/co/title-2-legislative/co-rev-st-sect-2-4-108/"
+            "publisher": "Colorado General Assembly / Office of Legislative Legal Services",
+            "url": "https://olls.info/crs/crs2026-title-02.htm"
           },
           {
-            "id": "ga.time-computation",
+            "id": "ga.ocga-1-3-1",
             "title": "O.C.G.A. 1-3-1(d)(3) (computation of time)",
-            "publisher": "Mirror (official site blocked or script-rendered)",
-            "url": "https://codes.findlaw.com/ga/title-1-general-provisions/ga-code-sect-1-3-1/"
+            "publisher": "LexisNexis public access for the State (linked from legis.ga.gov)",
+            "url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A6348-FR61-DYB7-W4C0-00008-00&pdcontentcomponentid=234186"
           },
           {
             "id": "hi.time-computation",

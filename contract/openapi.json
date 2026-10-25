@@ -2795,6 +2795,80 @@
         ],
         "title": "Area"
       },
+      "BrokenLease": {
+        "properties": {
+          "requires_notice": {
+            "type": "boolean",
+            "title": "Requires Notice"
+          },
+          "section": {
+            "type": "string",
+            "title": "Section"
+          },
+          "quote": {
+            "type": "string",
+            "maxLength": 600,
+            "title": "Quote"
+          },
+          "source": {
+            "type": "string",
+            "title": "Source"
+          },
+          "note": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Note"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "requires_notice",
+          "section",
+          "quote",
+          "source"
+        ],
+        "title": "BrokenLease",
+        "description": "A tenant who moves out before the lease's scheduled end, without legal cause, does not end\nthe lease by leaving: it ends when the unit is re-rented or the term expires, whichever comes\nfirst (New Jersey: NJ DCA, Truth in Renting, citing Mitchell v. First Real Estate Equities,\n287 N.J. Super. 546 (App. Div. 1996); TEKTOLO-923). With no end date given, the return clock\nstarts at the scheduled end (a re-rental before it is the row's own alternative), and the\nmove-out is listed as the earlier date if a surrender was accepted."
+      },
+      "CapLimits": {
+        "properties": {
+          "months_rent": {
+            "anyOf": [
+              {
+                "type": "string",
+                "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Months Rent"
+          },
+          "furnished_months": {
+            "anyOf": [
+              {
+                "type": "string",
+                "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Furnished Months"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "title": "CapLimits",
+        "description": "The ordinary and furnished caps in force together: the value of one step of\n``DepositCap.cap_limits`` (None: no cap)."
+      },
       "Change": {
         "properties": {
           "effective_on": {
@@ -6067,7 +6141,8 @@
               "rating",
               "issue",
               "idea",
-              "unmatched"
+              "unmatched",
+              "wtp"
             ],
             "title": "Kind",
             "default": "issue"
@@ -6126,6 +6201,16 @@
             "anyOf": [
               {
                 "$ref": "#/components/schemas/EstimateContext"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "wtp": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/WtpAnswer"
               },
               {
                 "type": "null"
@@ -6709,6 +6794,26 @@
             "title": "Keeps Claim",
             "default": false
           },
+          "keeps_claim_section": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Keeps Claim Section"
+          },
+          "keeps_claim_for": {
+            "type": "string",
+            "enum": [
+              "all",
+              "damage"
+            ],
+            "title": "Keeps Claim For",
+            "default": "all"
+          },
           "address_relief_days": {
             "anyOf": [
               {
@@ -6725,6 +6830,42 @@
             "type": "boolean",
             "title": "Tenant Notice Relief",
             "default": false
+          },
+          "notice_relief": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/NoticeRelief"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "no_address_relief": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "unsettled",
+                  "stands"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "No Address Relief"
+          },
+          "no_address_note": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "No Address Note"
           },
           "not_if_abandoned": {
             "type": "boolean",
@@ -6994,6 +7135,19 @@
             ],
             "title": "Due By",
             "description": "The date the duty had to be met by."
+          },
+          "court_rule_due_by": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Court Rule Due By",
+            "description": "Missed by due_by on the plain count, but a court rule whose reach is unsettled (Florida's Rule 2.514) would run the period to this day; never applied. Omitted when no such rule extends it."
           },
           "scope": {
             "type": "string",
@@ -8939,6 +9093,46 @@
         "type": "object",
         "title": "NoteFormat"
       },
+      "NoticeRelief": {
+        "properties": {
+          "section": {
+            "type": "string",
+            "title": "Section"
+          },
+          "source": {
+            "type": "string",
+            "title": "Source"
+          },
+          "agreement": {
+            "type": "string",
+            "title": "Agreement"
+          },
+          "lease": {
+            "type": "string",
+            "title": "Lease"
+          },
+          "reach": {
+            "type": "string",
+            "title": "Reach"
+          },
+          "relief": {
+            "type": "string",
+            "title": "Relief"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "section",
+          "source",
+          "agreement",
+          "lease",
+          "reach",
+          "relief"
+        ],
+        "title": "NoticeRelief",
+        "description": "The relief behind ``Forfeiture.tenant_notice_relief`` in the subsection's own words\n(Florida 83.49(5)), quoted by the engine. On the row, so a ``history`` entry carries the\nearlier wording for tenancies that ended before an amendment (ch. 2025-16: \"written lease\",\n\"shall relieve\"; TEKTOLO-919)."
+      },
       "Occupants": {
         "properties": {
           "child_under_6": {
@@ -9688,6 +9882,17 @@
             ],
             "title": "Section"
           },
+          "source": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Source"
+          },
           "note": {
             "anyOf": [
               {
@@ -9721,6 +9926,17 @@
               }
             ],
             "title": "Earlier Note"
+          },
+          "earlier_section": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Earlier Section"
           }
         },
         "additionalProperties": false,
@@ -9978,6 +10194,18 @@
           },
           "floor_coverings": {
             "$ref": "#/components/schemas/FloorCoverings"
+          },
+          "pets": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Pets",
+            "description": "Did pets live in the unit? true adds an optional flea treatment. Omit if unknown."
           },
           "occupants": {
             "anyOf": [
@@ -10573,6 +10801,18 @@
             "title": "Carpet",
             "description": "Is there wall-to-wall carpet?"
           },
+          "pets": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Pets",
+            "description": "Did pets live in the unit? true adds an optional flea treatment."
+          },
           "walk_date": {
             "anyOf": [
               {
@@ -11096,6 +11336,28 @@
               }
             ],
             "title": "Section"
+          },
+          "enclosed_note": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Enclosed Note"
+          },
+          "own_work_note": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Own Work Note"
           }
         },
         "additionalProperties": false,
@@ -11509,6 +11771,26 @@
             "anyOf": [
               {
                 "$ref": "#/components/schemas/UnsettledRollover"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "unsettled_start": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/UnsettledStart"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "broken_lease": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/BrokenLease"
               },
               {
                 "type": "null"
@@ -12061,6 +12343,32 @@
               }
             ],
             "title": "Note"
+          },
+          "address_due": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "by_termination",
+                  "upon_termination"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Address Due"
+          },
+          "address_due_quote": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Address Due Quote"
           }
         },
         "additionalProperties": false,
@@ -14132,6 +14440,85 @@
         "title": "UnsettledRollover",
         "description": "A time-computation rule that may reach the state's periods but whose reach is unsettled\n(TEKTOLO-897, gate v33-896 V33-FL-08: Florida's 83.49 states no method of computing time, and\nFla. R. Gen. Prac. & Jud. Admin. 2.514(a) covers \"any ... statute that does not specify a\nmethod of computing time\", but it is a court rule and a landlord's notice is given out of\ncourt). Never applied to a date: the unmoved day stays the one to act by. A claim notice\nsent on a day only the rule would reach makes the claim 'depends'; a refund then is shown late\n(the safe reading) with a warning; the rule is quoted either way.\n\n``start_rolls``: counting begins on the next day that is not a Saturday, Sunday or legal\nholiday (2.514(a)(1)(A)); the last day then moves past one too ((1)(C)). ``holidays``: the\nlegal holidays it names, by their name in the federal list (``Day after Thanksgiving`` is the\nFriday after it), observed on the Friday before a Saturday and the Monday after a Sunday."
       },
+      "UnsettledStart": {
+        "properties": {
+          "event": {
+            "type": "string",
+            "enum": [
+              "vacate",
+              "termination",
+              "later_of_vacate_and_termination",
+              "forwarding_address",
+              "demand",
+              "later_of_termination_and_address",
+              "latest_of_termination_possession_and_address",
+              "earlier_of_termination_and_surrender",
+              "surrender_or_termination_first",
+              "new_tenant_occupancy",
+              "termination_possession_and_demand",
+              "claim_notice"
+            ],
+            "title": "Event"
+          },
+          "section": {
+            "type": "string",
+            "title": "Section"
+          },
+          "quote": {
+            "type": "string",
+            "maxLength": 600,
+            "title": "Quote"
+          },
+          "source": {
+            "type": "string",
+            "title": "Source"
+          },
+          "note": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Note"
+          },
+          "later_text_on": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Later Text On"
+          },
+          "later_text_note": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Later Text Note"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "event",
+          "section",
+          "quote",
+          "source"
+        ],
+        "title": "UnsettledStart",
+        "description": "A start event the statute's words leave open between two readings (TEKTOLO-939, gate\nv35-935 V35-FL-11/13: Florida 83.49(3)(a) before ch. 2025-16 ran both periods \"Upon the\nvacating of the premises for termination of the lease\", which leaves open whether a move-out\nbefore the lease ended starts them or the lease's termination does). The return rule's own\n``start`` leads; this is the other reading. Only when it falls later is it used: the dates it\ngives are listed as alternatives, and a notice of claim late on the leading reading but on\ntime on this one makes the claim 'depends'. Never applied to a date.\n\n``later_text_on``: a later text of the section, in force from this day, counts from this\nreading's event (Florida ch. 2025-16, from 2025-07-01: \"within 30 days after the termination\nof the rental agreement\"); a notice given on or after it may be judged by that text, which\n``later_text_note`` explains."
+      },
       "Uom": {
         "type": "string",
         "enum": [
@@ -14497,6 +14884,66 @@
           "message"
         ],
         "title": "VerifyResponse"
+      },
+      "WtpAnswer": {
+        "properties": {
+          "choice": {
+            "type": "string",
+            "enum": [
+              "per_move_out",
+              "monthly",
+              "not_at_all"
+            ],
+            "title": "Choice"
+          },
+          "amount_usd": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 12
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Amount Usd"
+          },
+          "payment_model": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "balance",
+                  "monthly",
+                  "no_preference"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Payment Model"
+          },
+          "minimum_topup_usd": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 12
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Minimum Topup Usd"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "choice"
+        ],
+        "title": "WtpAnswer",
+        "description": "Optional price evidence, never a quoted offer or a payment instruction."
       },
       "YearStatement": {
         "properties": {

@@ -74,7 +74,7 @@
         {
           "id": "deposit-settlement",
           "contract_version": "0.1.0",
-          "ruleset_hash": "sha256:c5dfd2ac2cc2167772e17b3a324e6816db0b5fac615961df565e14e34c75e09d",
+          "ruleset_hash": "sha256:287f61e87d9f5e3275079528a71842c5964f9e4db29dab919dbd095ede0074b9",
           "domain": "rental-property",
           "audiences": [
             "landlord_pm",
@@ -88,7 +88,7 @@
         {
           "id": "property-turnover",
           "contract_version": "1.0.0",
-          "ruleset_hash": "sha256:5594d448d1377223b0be60f0b25412966e522372035eff085d38b90f20561690",
+          "ruleset_hash": "sha256:18529c24a7667efdcc67250c3dac3fe7b956c1c4c6860e56bba0cef2359c054a",
           "domain": "rental-property",
           "audiences": [
             "landlord_pm",
